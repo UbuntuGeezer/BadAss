@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="TransEntry" dlg:left="139" dlg:top="12" dlg:width="283" dlg:height="255" dlg:closeable="true" dlg:moveable="true" dlg:title="Enter Transaction">
+ <dlg:bulletinboard>
+  <dlg:datefield dlg:id="DateField1" dlg:tab-index="0" dlg:left="33" dlg:top="22" dlg:width="34" dlg:height="14">
+   <script:event script:event-name="on-textchange" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETDateListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:datefield>
+  <dlg:text dlg:id="DateLbl" dlg:tab-index="3" dlg:left="9" dlg:top="24" dlg:width="20" dlg:height="12" dlg:value="Date" dlg:align="center"/>
+  <dlg:text dlg:id="DescLbl" dlg:tab-index="11" dlg:left="7" dlg:top="46" dlg:width="68" dlg:height="16" dlg:value="Transaction Description" dlg:align="center"/>
+  <dlg:textfield dlg:id="DescField" dlg:tab-index="1" dlg:left="84" dlg:top="46" dlg:width="182" dlg:height="16" dlg:maxlength="50">
+   <script:event script:event-name="on-textchange" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETDescListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:text dlg:id="AmountLbl" dlg:tab-index="12" dlg:left="5" dlg:top="77" dlg:width="68" dlg:height="16" dlg:value="Transaction Amount" dlg:align="center"/>
+  <dlg:radiogroup>
+   <dlg:radio dlg:id="SplitOption" dlg:tab-index="5" dlg:disabled="true" dlg:left="167" dlg:top="79" dlg:width="22" dlg:height="12" dlg:value="Split">
+    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETSplitRun?language=Basic&amp;location=application" script:language="Script"/>
+   </dlg:radio>
+  </dlg:radiogroup>
+  <dlg:text dlg:id="DebitLbl" dlg:tab-index="13" dlg:left="43" dlg:top="103" dlg:width="53" dlg:height="14" dlg:value="Debit Account" dlg:align="center"/>
+  <dlg:text dlg:id="CreditLbl" dlg:tab-index="14" dlg:left="131" dlg:top="103" dlg:width="53" dlg:height="14" dlg:value="Credit Account" dlg:align="center"/>
+  <dlg:textfield dlg:id="DebitField" dlg:tab-index="4" dlg:left="53" dlg:top="123" dlg:width="27" dlg:height="14" dlg:maxlength="5">
+   <script:event script:event-name="on-textchange" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETCOA1Listener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="CreditField" dlg:tab-index="6" dlg:left="145" dlg:top="123" dlg:width="27" dlg:height="14" dlg:maxlength="5">
+   <script:event script:event-name="on-textchange" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETCOA2Listener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:text dlg:id="RefLbl" dlg:tab-index="15" dlg:left="49" dlg:top="149" dlg:width="68" dlg:height="14" dlg:value="Reference Information" dlg:align="center" dlg:valign="center"/>
+  <dlg:textfield dlg:id="RefField" dlg:tab-index="7" dlg:left="119" dlg:top="149" dlg:width="71" dlg:height="14" dlg:maxlength="15">
+   <script:event script:event-name="on-textchange" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETRefListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:button dlg:id="CancelBtn" dlg:tab-index="10" dlg:left="186" dlg:top="180" dlg:width="51" dlg:height="18" dlg:value="Cancel" dlg:button-type="cancel">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETRecdDoneListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="COA2Cmd" dlg:tab-index="17" dlg:left="179" dlg:top="125" dlg:width="10" dlg:height="12" dlg:tabstop="false" dlg:value="...">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETCOA2ListListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="RefHelp" dlg:tab-index="19" dlg:left="200" dlg:top="149" dlg:width="10" dlg:height="12" dlg:tabstop="false" dlg:value="?">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETRefHelpListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="RecordContBtn" dlg:tab-index="8" dlg:disabled="true" dlg:left="16" dlg:top="180" dlg:width="57" dlg:height="18" dlg:default="true" dlg:value="Record &amp; Continue">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETRecdContListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="COA1List" dlg:tab-index="16" dlg:left="86" dlg:top="125" dlg:width="10" dlg:height="12" dlg:tabstop="false" dlg:value="...">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETCOA1ListListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="RecordBtn" dlg:tab-index="9" dlg:disabled="true" dlg:left="107" dlg:top="180" dlg:width="51" dlg:height="18" dlg:value="Record &amp; Finish">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETRecdDoneListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:numericfield dlg:id="AmtField1" dlg:tab-index="2" dlg:left="80" dlg:top="77" dlg:width="43" dlg:height="16" dlg:thousands-separator="true">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETAmountListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:numericfield>
+  <dlg:button dlg:id="ViewSplitBtn" dlg:tab-index="18" dlg:disabled="true" dlg:left="197" dlg:top="79" dlg:width="36" dlg:height="14" dlg:tabstop="false" dlg:value="View Split">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETViewSplitRun?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+ </dlg:bulletinboard>
+</dlg:window>

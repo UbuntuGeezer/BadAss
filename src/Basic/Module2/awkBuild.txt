@@ -1,0 +1,4 @@
+# awkBuild.txt
+BEGIN {print "#!/bin/bash\ncat \\"}
+{print "Module2/" $0}
+END {print " > Module2/Module2.bas"}

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="ViewSplit" dlg:left="160" dlg:top="32" dlg:width="339" dlg:height="207" dlg:closeable="true" dlg:moveable="true" dlg:title="View Split">
+ <dlg:styles>
+  <dlg:style dlg:style-id="0" dlg:background-color="0xeeeeee"/>
+  <dlg:style dlg:style-id="1" dlg:border="simple"/>
+ </dlg:styles>
+ <dlg:bulletinboard>
+  <dlg:button dlg:id="DoneBtn" dlg:tab-index="0" dlg:left="180" dlg:top="180" dlg:width="63" dlg:height="18" dlg:value="Done">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.VSDoneBtnRun?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="EditBtn" dlg:tab-index="1" dlg:left="58" dlg:top="182" dlg:width="63" dlg:height="18" dlg:value="Edit Splits">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.VSEditSplitBtnRun?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:titledbox dlg:id="FrameControl1" dlg:tab-index="2" dlg:left="28" dlg:top="25" dlg:width="53" dlg:height="30">
+   <dlg:title dlg:value="Ledger Account"/>
+  </dlg:titledbox>
+  <dlg:titledbox dlg:id="FrameControl2" dlg:tab-index="3" dlg:left="27" dlg:top="71" dlg:width="241" dlg:height="103">
+   <dlg:title dlg:value="Splits"/>
+  </dlg:titledbox>
+  <dlg:text dlg:id="Label1" dlg:tab-index="4" dlg:left="133" dlg:top="23" dlg:width="41" dlg:height="10" dlg:value="Total Amount" dlg:align="center"/>
+  <dlg:text dlg:id="Label2" dlg:tab-index="6" dlg:left="207" dlg:top="23" dlg:width="61" dlg:height="11" dlg:value="Source Account for Split"/>
+  <dlg:text dlg:id="Label3" dlg:tab-index="20" dlg:left="29" dlg:top="81" dlg:width="133" dlg:height="8" dlg:value="Description" dlg:align="center"/>
+  <dlg:text dlg:id="Label4" dlg:tab-index="31" dlg:left="172" dlg:top="82" dlg:width="26" dlg:height="8" dlg:value="Amount" dlg:align="center"/>
+  <dlg:text dlg:id="Label5" dlg:tab-index="42" dlg:left="205" dlg:top="81" dlg:width="15" dlg:height="8" dlg:value="Acct" dlg:align="center"/>
+  <dlg:text dlg:id="Label6" dlg:tab-index="53" dlg:left="230" dlg:top="81" dlg:width="37" dlg:height="8" dlg:value="Reference" dlg:align="center"/>
+  <dlg:radiogroup>
+   <dlg:radio dlg:id="DebitTotRB" dlg:tab-index="8" dlg:left="31" dlg:top="35" dlg:width="49" dlg:height="8" dlg:tabstop="false" dlg:value="Debit Total" dlg:checked="true"/>
+   <dlg:radio dlg:id="CreditTotRB" dlg:tab-index="9" dlg:disabled="true" dlg:left="31" dlg:top="45" dlg:width="49" dlg:height="8" dlg:tabstop="false" dlg:value="Credit Total"/>
+  </dlg:radiogroup>
+  <dlg:numericfield dlg:style-id="0" dlg:id="TotalAmt" dlg:tab-index="5" dlg:left="133" dlg:top="35" dlg:width="41" dlg:height="17" dlg:tabstop="false" dlg:readonly="true" dlg:thousands-separator="true"/>
+  <dlg:textfield dlg:style-id="0" dlg:id="TotalAcctFld" dlg:tab-index="7" dlg:left="226" dlg:top="37" dlg:width="24" dlg:height="14" dlg:tabstop="false" dlg:align="center" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="DescFld1" dlg:tab-index="10" dlg:left="29" dlg:top="89" dlg:width="133" dlg:height="8" dlg:tabstop="false" dlg:hide-inactive-selection="false" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="DescFld2" dlg:tab-index="11" dlg:disabled="true" dlg:left="29" dlg:top="97" dlg:width="133" dlg:height="8" dlg:tabstop="false" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="DescFld3" dlg:tab-index="12" dlg:disabled="true" dlg:left="29" dlg:top="105" dlg:width="133" dlg:height="8" dlg:tabstop="false" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="DescFld4" dlg:tab-index="13" dlg:disabled="true" dlg:left="29" dlg:top="113" dlg:width="133" dlg:height="8" dlg:tabstop="false"/>
+  <dlg:textfield dlg:id="DescFld6" dlg:tab-index="15" dlg:disabled="true" dlg:left="29" dlg:top="129" dlg:width="133" dlg:height="8" dlg:tabstop="false" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="DescFld7" dlg:tab-index="16" dlg:disabled="true" dlg:left="29" dlg:top="137" dlg:width="133" dlg:height="8" dlg:tabstop="false" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="DescFld8" dlg:tab-index="17" dlg:disabled="true" dlg:left="29" dlg:top="145" dlg:width="133" dlg:height="8" dlg:tabstop="false" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="DescFld9" dlg:tab-index="18" dlg:disabled="true" dlg:left="29" dlg:top="153" dlg:width="133" dlg:height="8" dlg:tabstop="false" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="DescFld10" dlg:tab-index="19" dlg:disabled="true" dlg:left="29" dlg:top="161" dlg:width="133" dlg:height="8" dlg:tabstop="false"/>
+  <dlg:numericfield dlg:style-id="1" dlg:id="AmtFld1" dlg:tab-index="21" dlg:left="172" dlg:top="90" dlg:width="26" dlg:height="8" dlg:tabstop="false" dlg:readonly="true" dlg:hide-inactive-selection="false" dlg:thousands-separator="true"/>
+  <dlg:numericfield dlg:style-id="1" dlg:id="AmtFld2" dlg:tab-index="22" dlg:disabled="true" dlg:left="172" dlg:top="98" dlg:width="26" dlg:height="8" dlg:tabstop="false" dlg:readonly="true" dlg:thousands-separator="true"/>
+  <dlg:numericfield dlg:style-id="1" dlg:id="AmtFld3" dlg:tab-index="23" dlg:disabled="true" dlg:left="172" dlg:top="105" dlg:width="26" dlg:height="8" dlg:tabstop="false" dlg:readonly="true" dlg:thousands-separator="true"/>
+  <dlg:numericfield dlg:style-id="1" dlg:id="AmtFld4" dlg:tab-index="24" dlg:disabled="true" dlg:left="172" dlg:top="113" dlg:width="26" dlg:height="8" dlg:tabstop="false" dlg:readonly="true" dlg:thousands-separator="true"/>
+  <dlg:numericfield dlg:style-id="1" dlg:id="AmtFld5" dlg:tab-index="25" dlg:disabled="true" dlg:left="172" dlg:top="121" dlg:width="26" dlg:height="8" dlg:tabstop="false" dlg:readonly="true" dlg:thousands-separator="true"/>
+  <dlg:numericfield dlg:style-id="1" dlg:id="AmtFld6" dlg:tab-index="26" dlg:disabled="true" dlg:left="172" dlg:top="129" dlg:width="26" dlg:height="8" dlg:tabstop="false" dlg:readonly="true" dlg:thousands-separator="true"/>
+  <dlg:numericfield dlg:style-id="1" dlg:id="AmtFld7" dlg:tab-index="27" dlg:disabled="true" dlg:left="172" dlg:top="137" dlg:width="26" dlg:height="8" dlg:tabstop="false" dlg:readonly="true" dlg:thousands-separator="true"/>
+  <dlg:numericfield dlg:style-id="1" dlg:id="AmtFld8" dlg:tab-index="28" dlg:disabled="true" dlg:left="172" dlg:top="145" dlg:width="26" dlg:height="8" dlg:tabstop="false" dlg:readonly="true" dlg:thousands-separator="true"/>
+  <dlg:numericfield dlg:style-id="1" dlg:id="AmtFld9" dlg:tab-index="29" dlg:disabled="true" dlg:left="172" dlg:top="153" dlg:width="26" dlg:height="8" dlg:tabstop="false" dlg:readonly="true" dlg:thousands-separator="true"/>
+  <dlg:numericfield dlg:style-id="1" dlg:id="AmtFld10" dlg:tab-index="30" dlg:disabled="true" dlg:left="172" dlg:top="161" dlg:width="26" dlg:height="8" dlg:tabstop="false" dlg:readonly="true" dlg:thousands-separator="true"/>
+  <dlg:textfield dlg:id="AcctFld1" dlg:tab-index="32" dlg:left="205" dlg:top="89" dlg:width="19" dlg:height="8" dlg:tabstop="false" dlg:hide-inactive-selection="false" dlg:maxlength="4" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="AcctFld2" dlg:tab-index="33" dlg:disabled="true" dlg:left="205" dlg:top="97" dlg:width="18" dlg:height="8" dlg:tabstop="false" dlg:maxlength="4" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="AcctFld3" dlg:tab-index="34" dlg:disabled="true" dlg:left="205" dlg:top="105" dlg:width="18" dlg:height="8" dlg:maxlength="4" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="AcctFld4" dlg:tab-index="35" dlg:disabled="true" dlg:left="205" dlg:top="113" dlg:width="18" dlg:height="8" dlg:maxlength="4" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="AcctFld5" dlg:tab-index="36" dlg:disabled="true" dlg:left="205" dlg:top="121" dlg:width="18" dlg:height="8" dlg:maxlength="4" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="AcctFld6" dlg:tab-index="37" dlg:disabled="true" dlg:left="205" dlg:top="129" dlg:width="18" dlg:height="8" dlg:maxlength="4" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="AcctFld7" dlg:tab-index="38" dlg:disabled="true" dlg:left="205" dlg:top="137" dlg:width="18" dlg:height="8" dlg:maxlength="4" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="AcctFld8" dlg:tab-index="39" dlg:disabled="true" dlg:left="205" dlg:top="145" dlg:width="18" dlg:height="8" dlg:maxlength="4" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="AcctFld9" dlg:tab-index="40" dlg:disabled="true" dlg:left="205" dlg:top="153" dlg:width="18" dlg:height="8" dlg:maxlength="4" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="AcctFld10" dlg:tab-index="41" dlg:disabled="true" dlg:left="205" dlg:top="161" dlg:width="18" dlg:height="8" dlg:maxlength="4" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="RefFld1" dlg:tab-index="43" dlg:left="229" dlg:top="89" dlg:width="37" dlg:height="11" dlg:tabstop="false" dlg:hide-inactive-selection="false" dlg:maxlength="12" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="RefFld2" dlg:tab-index="44" dlg:disabled="true" dlg:left="229" dlg:top="97" dlg:width="37" dlg:height="8" dlg:tabstop="false" dlg:maxlength="12" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="RefFld3" dlg:tab-index="45" dlg:disabled="true" dlg:left="229" dlg:top="105" dlg:width="37" dlg:height="8" dlg:maxlength="12" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="RefFld4" dlg:tab-index="46" dlg:disabled="true" dlg:left="229" dlg:top="113" dlg:width="37" dlg:height="8" dlg:maxlength="12" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="RefFld5" dlg:tab-index="47" dlg:disabled="true" dlg:left="229" dlg:top="121" dlg:width="37" dlg:height="8" dlg:maxlength="12" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="RefFld6" dlg:tab-index="48" dlg:disabled="true" dlg:left="229" dlg:top="129" dlg:width="37" dlg:height="8" dlg:maxlength="12" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="RefFld7" dlg:tab-index="49" dlg:disabled="true" dlg:left="229" dlg:top="137" dlg:width="37" dlg:height="8" dlg:maxlength="12" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="RefFld8" dlg:tab-index="50" dlg:disabled="true" dlg:left="229" dlg:top="145" dlg:width="37" dlg:height="8" dlg:maxlength="12" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="RefFld9" dlg:tab-index="51" dlg:disabled="true" dlg:left="229" dlg:top="153" dlg:width="37" dlg:height="8" dlg:maxlength="12" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="RefFld10" dlg:tab-index="52" dlg:disabled="true" dlg:left="229" dlg:top="161" dlg:width="37" dlg:height="8" dlg:maxlength="12" dlg:readonly="true"/>
+  <dlg:textfield dlg:id="DescFld5" dlg:tab-index="14" dlg:disabled="true" dlg:left="29" dlg:top="121" dlg:width="133" dlg:height="8" dlg:tabstop="false" dlg:readonly="true"/>
+ </dlg:bulletinboard>
+</dlg:window>

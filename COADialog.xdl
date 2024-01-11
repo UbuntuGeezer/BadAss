@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="COADialog" dlg:left="212" dlg:top="73" dlg:width="176" dlg:height="144" dlg:closeable="true" dlg:moveable="true" dlg:title="Chart of Accounts">
+ <dlg:bulletinboard>
+  <dlg:button dlg:id="SelectBtn" dlg:tab-index="1" dlg:left="24" dlg:top="119" dlg:width="51" dlg:height="16" dlg:value="Select">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.COASelectListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="CancelBtn" dlg:tab-index="2" dlg:left="114" dlg:top="119" dlg:width="43" dlg:height="16" dlg:value="Cancel" dlg:button-type="cancel">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.COACancelListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:menulist dlg:id="COAList" dlg:tab-index="0" dlg:left="40" dlg:top="10" dlg:width="105" dlg:height="101">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:BadAss.Module2.COAListBoxListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:menulist>
+ </dlg:bulletinboard>
+</dlg:window>

@@ -1,0 +1,14 @@
+<-- script.xlc - modified script.xlc to be save in path -->
+<-- C:\Users\Bill\AppData\Roaming\OpenOffice\4\basic -->
+<-- to point to .\BadAss\script.xlb which specifies the Basic -->
+<-- modules that belong with the BadAss library. -->
+<-- Modification History. -->
+<-- 6/28/20.	wmk.	copied from ..\basic           -->
+<-- 6/28/20.	wmk.	modified with library spec BadAss -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library:libraries PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "libraries.dtd">
+<library:libraries xmlns:library="http://openoffice.org/2000/library" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <library:library library:name="Standard" xlink:href="$(USER)/basic/Standard/script.xlb/" xlink:type="simple" library:link="false"/>
+ <library:library library:name="XrayTool" xlink:href="$(USER)/basic/XrayTool/script.xlb/" xlink:type="simple" library:link="false"/>
+ <library:library library:name="BadAss" xlink:href="$(USER)/basic/BadAss/script.xlb/" xlink:type="simple" library:link="false"/>
+</library:libraries>

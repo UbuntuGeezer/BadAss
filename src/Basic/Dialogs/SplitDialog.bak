@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="SplitDialog" dlg:left="212" dlg:top="34" dlg:width="233" dlg:height="231" dlg:closeable="true" dlg:moveable="true" dlg:title="Split Transaction">
+ <dlg:styles>
+  <dlg:style dlg:style-id="0" dlg:background-color="0xeeeeee"/>
+  <dlg:style dlg:style-id="1" dlg:background-color="0xffffff"/>
+ </dlg:styles>
+ <dlg:bulletinboard>
+  <dlg:text dlg:id="TotalAmtLbl" dlg:tab-index="0" dlg:left="101" dlg:top="17" dlg:width="41" dlg:height="10" dlg:value="Total Amount" dlg:align="center"/>
+  <dlg:titledbox dlg:id="SplitsFrame" dlg:tab-index="47" dlg:left="0" dlg:top="59" dlg:width="230" dlg:height="124">
+   <dlg:title dlg:value="Splits"/>
+  </dlg:titledbox>
+  <dlg:text dlg:id="DescLbl" dlg:tab-index="48" dlg:left="4" dlg:top="92" dlg:width="133" dlg:height="8" dlg:value="Description" dlg:align="center"/>
+  <dlg:text dlg:id="AmountLbl" dlg:tab-index="49" dlg:left="140" dlg:top="93" dlg:width="26" dlg:height="8" dlg:value="Amount" dlg:align="center"/>
+  <dlg:text dlg:id="COALbl" dlg:tab-index="50" dlg:left="167" dlg:top="93" dlg:width="15" dlg:height="8" dlg:value="Acct" dlg:align="center"/>
+  <dlg:button dlg:id="COAListBtn" dlg:tab-index="43" dlg:left="170" dlg:top="77" dlg:width="12" dlg:height="12" dlg:tabstop="false" dlg:value="...">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.STCOAListBtnListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:textfield dlg:id="DescFld1" dlg:tab-index="3" dlg:left="4" dlg:top="100" dlg:width="133" dlg:height="8" dlg:hide-inactive-selection="false">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STDesc1LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="DescFld2" dlg:tab-index="7" dlg:disabled="true" dlg:left="4" dlg:top="108" dlg:width="133" dlg:height="8">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STDesc2LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="DescFld3" dlg:tab-index="11" dlg:disabled="true" dlg:left="4" dlg:top="116" dlg:width="133" dlg:height="8">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STDesc3LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="DescFld4" dlg:tab-index="15" dlg:disabled="true" dlg:left="4" dlg:top="124" dlg:width="133" dlg:height="8">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STDesc4LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="DescFld5" dlg:tab-index="19" dlg:disabled="true" dlg:left="4" dlg:top="132" dlg:width="133" dlg:height="8">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STDesc5LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="DescFld6" dlg:tab-index="23" dlg:disabled="true" dlg:left="4" dlg:top="140" dlg:width="133" dlg:height="8">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STDesc6LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="DescFld7" dlg:tab-index="27" dlg:disabled="true" dlg:left="4" dlg:top="148" dlg:width="133" dlg:height="8">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STDesc7LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="DescFld8" dlg:tab-index="31" dlg:disabled="true" dlg:left="4" dlg:top="156" dlg:width="133" dlg:height="8">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STDesc8LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="DescFld9" dlg:tab-index="35" dlg:disabled="true" dlg:left="4" dlg:top="164" dlg:width="133" dlg:height="8">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STDesc9LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="DescFld10" dlg:tab-index="39" dlg:disabled="true" dlg:left="4" dlg:top="172" dlg:width="133" dlg:height="8">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STDesc10LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="AcctFld1" dlg:tab-index="5" dlg:left="167" dlg:top="101" dlg:width="19" dlg:height="8" dlg:hide-inactive-selection="false" dlg:maxlength="4">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcctLostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcct1FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="AcctFld2" dlg:tab-index="9" dlg:disabled="true" dlg:left="167" dlg:top="109" dlg:width="18" dlg:height="8" dlg:maxlength="4">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcctLostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcct2FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="AcctFld3" dlg:tab-index="13" dlg:disabled="true" dlg:left="167" dlg:top="117" dlg:width="18" dlg:height="8" dlg:maxlength="4">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcctLostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcct3FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="AcctFld4" dlg:tab-index="17" dlg:disabled="true" dlg:left="167" dlg:top="125" dlg:width="18" dlg:height="8" dlg:maxlength="4">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcctLostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcct4FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="AcctFld5" dlg:tab-index="21" dlg:disabled="true" dlg:left="167" dlg:top="133" dlg:width="18" dlg:height="8" dlg:maxlength="4">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcctLostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcct5FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="AcctFld6" dlg:tab-index="25" dlg:disabled="true" dlg:left="167" dlg:top="141" dlg:width="18" dlg:height="8" dlg:maxlength="4">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcctLostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcct6FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="AcctFld7" dlg:tab-index="29" dlg:disabled="true" dlg:left="167" dlg:top="149" dlg:width="18" dlg:height="8" dlg:maxlength="4">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcctLostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcct7FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="AcctFld8" dlg:tab-index="33" dlg:disabled="true" dlg:left="167" dlg:top="157" dlg:width="18" dlg:height="8" dlg:maxlength="4">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcctLostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcct8FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="AcctFld9" dlg:tab-index="37" dlg:disabled="true" dlg:left="167" dlg:top="165" dlg:width="18" dlg:height="8" dlg:maxlength="4">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcctLostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcct9FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="AcctFld10" dlg:tab-index="41" dlg:disabled="true" dlg:left="167" dlg:top="173" dlg:width="18" dlg:height="8" dlg:maxlength="4">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcctLostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcct10FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:button dlg:id="DoneBtn" dlg:tab-index="44" dlg:disabled="true" dlg:left="4" dlg:top="210" dlg:width="36" dlg:height="14" dlg:value="Done">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.STDoneBtnRun?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="CancelBtn" dlg:tab-index="46" dlg:left="138" dlg:top="210" dlg:width="48" dlg:height="14" dlg:value="Cancel Split">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.STCancelBtnRun?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:titledbox dlg:id="DebCredRB" dlg:tab-index="51" dlg:left="14" dlg:top="14" dlg:width="53" dlg:height="30">
+   <dlg:title dlg:value="Ledger Column"/>
+  </dlg:titledbox>
+  <dlg:radiogroup>
+   <dlg:radio dlg:id="CreditTotRB" dlg:tab-index="2" dlg:left="18" dlg:top="35" dlg:width="49" dlg:height="8" dlg:value="Credit Total">
+    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.STDebtRBListener?language=Basic&amp;location=application" script:language="Script"/>
+   </dlg:radio>
+   <dlg:radio dlg:id="DebitTotRB" dlg:tab-index="1" dlg:left="18" dlg:top="25" dlg:width="49" dlg:height="8" dlg:value="Debit Total" dlg:checked="true">
+    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.STDebtRBListener?language=Basic&amp;location=application" script:language="Script"/>
+   </dlg:radio>
+  </dlg:radiogroup>
+  <dlg:text dlg:id="SplitTotLbl" dlg:tab-index="52" dlg:left="74" dlg:top="190" dlg:width="58" dlg:height="10" dlg:value="Accumulated Split Total" dlg:align="right"/>
+  <dlg:numericfield dlg:style-id="0" dlg:id="AccumTot" dlg:tab-index="53" dlg:left="135" dlg:top="186" dlg:width="41" dlg:height="16" dlg:tabstop="false" dlg:readonly="true" dlg:thousands-separator="true"/>
+  <dlg:numericfield dlg:style-id="0" dlg:id="TotalAmt" dlg:tab-index="54" dlg:left="101" dlg:top="27" dlg:width="41" dlg:height="17" dlg:tabstop="false" dlg:readonly="true" dlg:thousands-separator="true"/>
+  <dlg:numericfield dlg:id="AmtFld1" dlg:tab-index="4" dlg:left="140" dlg:top="101" dlg:width="26" dlg:height="8" dlg:hide-inactive-selection="false" dlg:thousands-separator="true">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt1LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt1FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:numericfield>
+  <dlg:numericfield dlg:id="AmtFld2" dlg:tab-index="8" dlg:disabled="true" dlg:left="140" dlg:top="109" dlg:width="26" dlg:height="10" dlg:thousands-separator="true">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt2LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt2FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:numericfield>
+  <dlg:numericfield dlg:id="AmtFld3" dlg:tab-index="12" dlg:disabled="true" dlg:left="140" dlg:top="116" dlg:width="26" dlg:height="10" dlg:thousands-separator="true">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt3LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt3FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:numericfield>
+  <dlg:numericfield dlg:id="AmtFld4" dlg:tab-index="16" dlg:disabled="true" dlg:left="140" dlg:top="124" dlg:width="26" dlg:height="8" dlg:thousands-separator="true">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt4LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt4FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:numericfield>
+  <dlg:numericfield dlg:id="AmtFld5" dlg:tab-index="20" dlg:disabled="true" dlg:left="140" dlg:top="132" dlg:width="26" dlg:height="8" dlg:thousands-separator="true">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt5LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt5FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:numericfield>
+  <dlg:numericfield dlg:id="AmtFld6" dlg:tab-index="24" dlg:disabled="true" dlg:left="140" dlg:top="140" dlg:width="26" dlg:height="8" dlg:thousands-separator="true">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt6LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAcct6FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:numericfield>
+  <dlg:numericfield dlg:id="AmtFld7" dlg:tab-index="28" dlg:disabled="true" dlg:left="140" dlg:top="148" dlg:width="26" dlg:height="8" dlg:thousands-separator="true">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt7LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt7FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:numericfield>
+  <dlg:numericfield dlg:id="AmtFld8" dlg:tab-index="32" dlg:disabled="true" dlg:left="140" dlg:top="156" dlg:width="26" dlg:height="8" dlg:thousands-separator="true">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt8LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt8FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:numericfield>
+  <dlg:numericfield dlg:id="AmtFld9" dlg:tab-index="36" dlg:disabled="true" dlg:left="140" dlg:top="164" dlg:width="26" dlg:height="8" dlg:thousands-separator="true">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt9LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt9FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:numericfield>
+  <dlg:numericfield dlg:id="AmtFld10" dlg:tab-index="40" dlg:disabled="true" dlg:left="140" dlg:top="172" dlg:width="26" dlg:height="8" dlg:thousands-separator="true">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt10LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:BadAss.Module2.STAmt10FocusListener?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:numericfield>
+  <dlg:button dlg:id="ResetBtn" dlg:tab-index="45" dlg:left="68" dlg:top="210" dlg:width="39" dlg:height="14" dlg:value="Reset Form">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.STDialogReset?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:text dlg:id="UnsplitLbl" dlg:tab-index="55" dlg:left="155" dlg:top="30" dlg:width="29" dlg:height="10" dlg:value="Unsplit"/>
+  <dlg:numericfield dlg:style-id="0" dlg:id="UnsplitTot" dlg:tab-index="56" dlg:left="187" dlg:top="27" dlg:width="37" dlg:height="16" dlg:tabstop="false" dlg:readonly="true"/>
+  <dlg:text dlg:id="RefLbl" dlg:tab-index="57" dlg:left="189" dlg:top="93" dlg:width="37" dlg:height="8" dlg:value="Reference" dlg:align="center"/>
+  <dlg:textfield dlg:id="RefFld1" dlg:tab-index="6" dlg:left="187" dlg:top="101" dlg:width="37" dlg:height="11" dlg:hide-inactive-selection="false" dlg:maxlength="15">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STRef1LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="RefFld2" dlg:tab-index="10" dlg:disabled="true" dlg:left="187" dlg:top="109" dlg:width="37" dlg:height="8" dlg:maxlength="15">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STRef2LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="RefFld3" dlg:tab-index="14" dlg:disabled="true" dlg:left="187" dlg:top="117" dlg:width="37" dlg:height="8" dlg:maxlength="15">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STRef3LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="RefFld4" dlg:tab-index="18" dlg:disabled="true" dlg:left="187" dlg:top="125" dlg:width="37" dlg:height="8" dlg:maxlength="15">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STRef4LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="RefFld7" dlg:tab-index="30" dlg:disabled="true" dlg:left="187" dlg:top="149" dlg:width="37" dlg:height="8" dlg:maxlength="15">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STRef7LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="RefFld8" dlg:tab-index="34" dlg:disabled="true" dlg:left="187" dlg:top="157" dlg:width="37" dlg:height="8" dlg:maxlength="15">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STRef8LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="RefFld10" dlg:tab-index="42" dlg:disabled="true" dlg:left="187" dlg:top="173" dlg:width="37" dlg:height="8" dlg:maxlength="15">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STRef10LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="RefFld9" dlg:tab-index="38" dlg:disabled="true" dlg:left="187" dlg:top="165" dlg:width="37" dlg:height="8" dlg:maxlength="15">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STRef9LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="RefFld6" dlg:tab-index="26" dlg:disabled="true" dlg:left="187" dlg:top="141" dlg:width="37" dlg:height="8" dlg:maxlength="15">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STRef6LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:id="RefFld5" dlg:tab-index="22" dlg:disabled="true" dlg:left="187" dlg:top="133" dlg:width="37" dlg:height="8" dlg:maxlength="15">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STRef5LostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:style-id="1" dlg:id="TotalAcctFld" dlg:tab-index="58" dlg:left="70" dlg:top="45" dlg:width="24" dlg:height="14" dlg:tabstop="false" dlg:align="center">
+   <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.script:BadAss.Module2.STTotalAcctLostFocus?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:text dlg:id="SourceAcctLbl" dlg:tab-index="59" dlg:left="7" dlg:top="47" dlg:width="61" dlg:height="11" dlg:value="Source Account for Split"/>
+ </dlg:bulletinboard>
+</dlg:window>

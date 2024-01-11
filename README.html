@@ -1,0 +1,101 @@
+<p>README - BadAssLibrary project documentation.<br>
+10/23/22.    wmk.</p>
+
+<h3>Modification History.</h3>
+
+<pre><code>8/23/22.    wmk.   original document.
+10/23/22.   wmk.   Project Overview section documentation.
+11/5/22.    wmk.   Project Overview section updated.
+</code></pre>
+
+<h3 id="IX">Document Sections.</h3>
+
+<pre><code><a href="#1.0">link</a> 1.0 Project Overview - overall project description.
+<a href="#2.0">link</a> 2.0 Project Files - files comprising the project.
+<a href="#3.0">link</a> 3.0 Build Process - step-by-step library build instructions.
+</code></pre>
+
+<h3 id="1.0">1.0 Project Overview.</h3>
+
+<p>The BadAssLibrary project contains all files that Calc or Excel need in order
+to be incorporated into a library for either app. The primary files required
+for building the library are in the project folder. The individual macros'
+source code is in the subfolders /Module1 and /Module2, and /Dialogs.</p>
+
+<p>The /BadAss folder within the project is the current BadAss Library exported from
+Calc. For now, the "build" process does not touch that folder. Any build of the
+BadAss Library from the Geany project builds the resultant Module1 or Module2
+.xba file in the BadAssLibrary project folder. This provides a level of separation
+where a new build is separated from the existing library code.</p>
+
+<p>In other words, the /BadAss folder is used for "export" operations from Calc
+back into the project. The parent folder /BadAssLibrary is used for "import"
+operations to Calc for testing/integrating new code. Once the code has been
+tested, it should then be exported to the /BadAss folder completing the cycle.</p>
+
+<p>The library .xba files that contain all of the formalized macro definition
+code may be built from the source code files by using the <em>make</em> utility.
+The makefile for the build is <em>MakeBadAssLibrary.tmp</em> which is modified
+by a DoSed.sh shell prior to executing the build.<br>
+<strong>Caution:</strong> The library .xba or .dlg files may be overwritten by exporting
+the running library from the Calc Macros/Organizer. This will make the "build"
+source .bas files out-of-date with the running library. Whenever this is
+done it will be necessary to re-sync the .bas source files to the code that
+was exported into the .xba files for the build process to correctly regenerate
+the library code.<br><a href="#IX">Index</a></p>
+
+<h3 id="2.0">2.0 Project Files.</h3>
+
+<p>The files fall into 4 categories:
+1) macro source code, 2) dialog source files, 3) library definition files, 
+4) library Build files.</p>
+
+<p><b>Macro Source Code.</b>
+The macro source code for the library is spread across multiple Basic source code
+files having the <em>.bas</em> file extension. This allows for easy maintenance of each
+macro without having to edit in either the Calc or Excel app macro interface. The
+<em>.bas</em> files are Basic code files without any XML markup (as needed by a "loaded"
+library in the spreadsheet apps). Each module <module-name> has its source code
+stored in its own BadAss/&lt; module-name > folder.</p>
+
+<p>The actual library source code that gets installed into the apps with the >macros>Organizer
+extension is in "module" files that are collections of <em>.bas</em> files organized into
+single files that are in XML Basic markup language. These files follow the naming
+convention <em>&lt; module-name >.xba</em>. They have an XML markup header preceding the Basic
+code, and an XML markup footer following the Basic code. The Basic code within the
+<em>.xba</em> file is recognizable, but has special characters "marked up" with XML coding
+(e.g. the apostrophe (') character is marked up as (&amp;)apos;). A shell utility is
+provided that converts between the <em>.xba</em> file format and the <em>.bas</em> file format
+for ease of editing.</p>
+
+<p>The files XBAHeader.txt and XBAFooter.txt are stored with the project to provide
+the Build process with the appropriate XML code wrapper for the <em>.xba</em> file that
+the <em>make</em> utility creates for the BadAss library. <em>&lt; module-name ></em> is edited into
+the XBAHeader.txt file XML so the resultant .xba is properly tagged.</p>
+
+<p><b>Dialog Source Files.</b>
+The dialog source files are stored in folder BadAss/Dialogs. All dialog source files
+have the <em>.xdl</em> filename extension. There is no <em>frame</em> interface for interactively
+editing dialogs outside of Calc. The dialog source files stored in BadAss/Dialogs
+are images of the *WINGIT_PATH/Libraries-Project/BadAss/*.xdl files. All editing
+of the <em>.xdl</em> files is done interactively within the Calc/Edit Macros facility.</p>
+
+<p>The <em>.xdl</em> files are XML DOCTYPE dlg:Window markup files. It is possible to make
+manual changes to the .xdl files within the BadAssLibrary/Dialogs folder using
+an editor. The CopyToGit.sh shell file may be used to copy the ./Dialogs folder
+to the *WINGIT_PATH/Libraries-Project/BadAss *.xdl files. All bets are off
+if this is done, as the editing is much easier performed in the graphic environment
+of the Calc/Edit Macros tools.</p>
+
+<p><b>Library Definition Files.</b>
+The library definition files are stored in the BadAss project folder. These files have
+the filename extensions <em>.xlb</em> and <em>.xlc</em>.<br><a href="#IX">Index</a></p>
+
+<p><b>Library Build Files.</b>
+The library build files are stored in the BadAss project folder. These files are
+of multiple types with filenames <i>Make*</i>, *.sh, *.txt and are used by the utility
+apps <em>make</em>, <em>sed</em>, and <em>awk</em>.<br><a href="#IX">Index</a></p>
+
+<h3 id="3.0">3.0 Build Process.</h3>
+
+<p><br><a href="#IX">Index</a></p>

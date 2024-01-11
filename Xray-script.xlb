@@ -1,0 +1,12 @@
+<-- XRay-script.xlb base model for ..\BadAss\script.xlb -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library:library PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "library.dtd">
+<library:library xmlns:library="http://openoffice.org/2000/library" library:name="XrayTool" library:readonly="false" library:passwordprotected="false">
+ <library:element library:name="Mod4"/>
+ <library:element library:name="Mod3"/>
+ <library:element library:name="Mod2"/>
+ <library:element library:name="_Main"/>
+ <library:element library:name="_UITexts"/>
+ <library:element library:name="_Utilities"/>
+ <library:element library:name="Xutils"/>
+</library:library>
