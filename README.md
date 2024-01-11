@@ -1,9 +1,10 @@
-README - BadAssLibrary project documentation.<br>
-10/23/22.    wmk.
+README - BadAss Library project documentation.<br>
+1/11/24.    wmk.
 ###Modification History.
 <pre><code>8/23/22.    wmk.   original document.
-10/23/22.	wmk.   Project Overview section documentation.
-11/5/22.    wmk.   Project Overview section updated.
+10/23/22.	wmk.    Project Overview section documentation.
+11/5/22.    wmk.    Project Overview section updated.
+1/11/24.    wmk.    Updated for Accounting/BadAss *git project.
 </code></pre>
 <h3 id="IX">Document Sections.</h3>
 <pre><code><a href="#1.0">link</a> 1.0 Project Overview - overall project description.
@@ -11,21 +12,27 @@ README - BadAssLibrary project documentation.<br>
 <a href="#3.0">link</a> 3.0 Build Process - step-by-step library build instructions.
 </code></pre>
 <h3 id="1.0">1.0 Project Overview.</h3>
-The BadAssLibrary project contains all files that Calc or Excel need in order
-to be incorporated into a library for either app. The primary files required
+The BadAss project contains all files that Calc or Excel need in order
+to build the BadAss library for either app. The primary files required
 for building the library are in the project folder. The individual macros'
 source code is in the subfolders /Module1 and /Module2, and /Dialogs.
 
 The /BadAss folder within the project is the current BadAss Library exported from
 Calc. For now, the "build" process does not touch that folder. Any build of the
 BadAss Library from the Geany project builds the resultant Module1 or Module2
-.xba file in the BadAssLibrary project folder. This provides a level of separation
-where a new build is separated from the existing library code.
+.xba file in the src/Releae folder folder. This provides a level of separation
+where any new build is separated from the existing library code.
 
 In other words, the /BadAss folder is used for "export" operations from Calc
-back into the project. The parent folder /BadAssLibrary is used for "import"
+back into the \*git project. The folder /BadAss/Release is used for "import"
 operations to Calc for testing/integrating new code. Once the code has been
-tested, it should then be exported to the /BadAss folder completing the cycle.
+tested, it should then be exported to the /BadAss parent folder completing the
+cycle.
+
+The EditBas geany project is used for extracting, modifying, and re-integrating
+macros within the BadAss Calc library. It uses its own shells in addition to
+those defined in the Accounting/BadAss/Procs-Dev folder. The EditBas project is
+managed from the Accounting/BadAss/Projects-Geany folder.
 
 The library .xba files that contain all of the formalized macro definition
 code may be built from the source code files by using the *make* utility.
