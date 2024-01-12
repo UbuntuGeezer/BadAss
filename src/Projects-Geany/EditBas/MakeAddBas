@@ -1,0 +1,67 @@
+# MakeAddBas.tmp - Makefile (template) for MakeAddBas.
+# 2023-11-13.	wmk.	(automated) Version 3.0.6 Make old paths removed.
+# 2023-11-13.	wmk.	(automated) Version 3.0.6 Make old paths removed.
+# 2023-11-13.	wmk.	(automated) Version 3.0.6 Make old paths removed.
+#	6/25/23.	wmk.
+#
+# This makefile is edited by DoSed.sh with CenterUnitHstead3 Module1 substituted
+# throughout. CenterUnitHstead3 will be the name of a .bas source file with no
+# filename extension; Module1 will be the complete name of an XBA file with
+# the .xba filename extension.
+#
+# Modification History.
+# ---------------------
+# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
+# 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath support added.
+# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
+# 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath support added.
+# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
+# 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath support added.
+# 6/25/23.	wmk.	original makefile; edited for FLsara86777.
+# Legacy mods.
+# 3/8/22.	wmk.	original makefile; adapted from MakeExtractBas;
+#			 add ampersand conversion to sed; note & conversion must come
+#			 first to avoid screwing up other XML & fields.
+
+
+
+AWK = mawk
+.PHONY : Always JustDoIt
+
+fsuffx = Bas.txt
+projpath = $(codebase)/Projects-Geany/EditBas
+
+# <filepath>/<filebase>.sql
+#=======================================================
+Always : JustDoIt
+	cd $(projpath)
+	printf '%s\n' "xxxxx" > $$TEMP_PATH/basname.txt
+	if [ -z "TerrHelp" ];then\
+	 mawk 'END{print "xxxxx"}{print}' $(pathbase)/Basic/Module1/Module1$(fsuffx);\
+	else \
+	 mawk '/TerrHelp/{print "xxxxx"}{print}' $(pathbase)/Basic/Module1/Module1$(fsuffx) \
+	  > $$TEMP_PATH/Module1$(fsuffx);cp -pv $$TEMP_PATH/Module1$(fsuffx) \
+	  $(pathbase)/Basic/Module1/Module1$(fsuffx);fi
+ifeq (1,0)	
+	sed '/TerrHelp/r $TEMP_PATH/basname.txt'
+	
+	cp $(pathbase)/Basic/Module1/CenterUnitHstead3.bas $$TEMP_PATH/scratch.bas
+	sed -i "s?\&?\&amp\;?g;s?'?\&apos\;?g;s?\"?\&quot\;?g;s?\&lt;?<?g;s?&gt;?>?g" $$TEMP_PATH/scratch.bas
+	# delete 1st and last lines of new .bas
+	sed -i "/\/\ CenterUnitHstead3.bas/d;/\/\*\*\//d" $$TEMP_PATH/scratch.bas
+	cp $(pathbase)/Module1/Module1.xba $TEMP_PATH/scratch.xba
+	sed -i "1,4d" scratch.xba
+	# find module.bas in scratch.xba file; read lines from stripped .bas file
+	mawk "/\/\/ CenterUnitHstead3.bas/{f=1;print;while(getline < \"$$TEMP_PATH/scratch.bas\")\
+	 {print}}/\/\*\*\//{f=0}!f" $TEMP_PATH/scratch.xba > $TEMP_PATH/newModule1.xba
+	sed -i '1i newline\;' $TEMP_PATH/newModule1.xba
+	sed -i "1r ModuleHdr.xba" $TEMP_PATH/newModule1.xba
+	sed -i "1d" $TEMP_PATH/newModule1.xba
+	mv $(pathbase)/Module1/Module1.xba $(pathbase)/Module1/oldModule1.xba
+	mv $TEMP_PATH/newModule1 $(pathbase)/Module1/Module1.xba
+	echo "module CenterUnitHstead3.bas replaced into Module1..."
+	echo "use PutXBAModule.sh to copy the new Module1 over GitHub/Module1 after changes checked."
+endif
+
+#=======================================================
+JustDoIt: ;

@@ -1,0 +1,8 @@
+# awkbaslist1.txt
+BEGIN{endline=ENVIRON["last_line"]}
+{if(NR == endline)
+ if(index($NF,"\\") > 0)print $1 " " $2 " " substr($3,1,length($3)-1)
+  else print}
+ else
+  print}
+

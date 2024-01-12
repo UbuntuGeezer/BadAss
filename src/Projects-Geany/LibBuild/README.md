@@ -1,0 +1,89 @@
+README.md - LibBuild (BadAss) project documentation.<br>
+1/12/24.	wmk.
+###Modification History.
+<pre><code>1/12/24.     wmk.    original; adapted from FLsara86777lib.
+Legacy mods.
+6/20/23.    wmk.   original document.
+8/21/23.	wmk.	Description udpated with project residency information.
+</code></pre>
+<h3 id="IX">Documentation Sections.</h3>
+<pre><code><a href="#1.0">link</a> 1.0 Project Description - overall project description.
+<a href="#2.0">link</a> 2.0 Library Disassembly - disassembling the library for maintenance.
+<a href="#3.0">link</a> 3.0 Dependencies - project dependencies.
+<a href="#4.0">link</a> 4.0 Project Build - step-by-step build instructions.
+<a href="#5.0">link</a> 5.0 Significant Notes - important stuff not documented elsewhere.
+</code></pre>
+<h3 id="1.0">1.0 Project Description.</h3>
+While it is possible to maintain the Calc libraries using the Calc macro
+organizer, this requires editing the libary macros within Calc, then saving
+the changes by exporting the library. This has the disadvantage of jeopardizing
+the code in the running library with inadvertant mistakes when modifying code.
+
+The LibBuild project is common to all Calc libraries and keeps the source code
+for each library with its Libraries-Project folders. It organizes the
+library source code into folders for maintenance operations and provides the
+tools to edit individual macros and rebuild the library from source code after
+the maintenance operations are complete.
+
+The source code folders are /src/Basic, ../Module1, ../Module2, and Dialogs
+under the BadAss parent folder. The maintenance tools are in the
+src/Projects-Geany folder. The EditBas project manages the extraction of
+source code for editing and maintenance. The LibBuild project manages the build
+of the library module(s) from the source code. The source code for the library
+is exported by Calc into the files Module1.xba, Module2.xba and < dialog > in
+the BadAss folder.
+
+The maintenance operations only apply to the macros portion of the library. The
+dialog portion of the library is maintained directly within Calc with the library
+loaded. The Basic macros that support the dialog portion are contained
+within their own Module2.xba module. The dialog support macros are also handled by the
+LibBuild project.
+
+To avoid muddling the Module1.xba, or Module2.xba runtime library code resident
+in the parent folder BadAss, the EditBas project stages a copy of
+the .xba file into the folder src/Basic/Import. When editing and/or maintenance
+of the library macros is complete, the LibBuild project places the new .xba file
+in the folder src/Release folder.
+<a href="#IX">Index</a>
+<h3 id="2.0">2.0 Library Disassembly.</h3>
+The GenFolders shell is run first to create all the required folders within
+BadAss for extraction, disassembly, editing and releasing code for the BadAss
+macro library.
+
+To perform maintenance or editing of the BadAss library the source code is
+first cloned into the /Import folder. That code is again copied into the
+/Basic/Modulex folder in its original .xba format. Within the /Basic/Modulex
+folder the .xba code is extracted into separate .bas files for each macro code
+section within the .xba file. See
+the [EditBas project](file:///media/fuse/crostini_3fac4a47f4dfeaba4a2d4047746d89ee1a8b215c_termina_penguin/Accounting/BadAss/src/Projects-Geany/EditBas/README.html) documentation.
+
+The individual .bas files are edited in place within the /Basic/Modulex folder.
+Once complete, the .bas files are combined into a new Modulex.xba file in the
+folder /Basic/Release. This folder may be accessed by Calc to load the new
+"release" version of the library for testing.
+
+The EditBas project starts by cloning and disassembling the library into 
+module folders and .bas macro source files. Library disassembly is a two-step
+process. The first step is copying the Modulelx.xba code from the runtime
+library. The second step is performed by the EditBas project.
+
+LibBuild creates separate folders for each .xba module within the libary, and
+initializes them with the .xba block list for that module. The second step is
+performed within the EditBas project which splits the .xba module into separate
+.bas source files using the .xba block list created by LibBuild.
+
+The \*GenFolders.sh shell scans the Libraries-Project/< libname > repository,
+finding all files with an .xba filename extension. For each .xba file found, a
+copy is made in the /Import folder. From these .xba files GenFolders creates a
+Basic/< xbafile > folder under the < libname > repository main folder. Within
+each < xbafile > folder it also creates a file named < xbafile >Bas.txt which
+is a listing of all .bas blocks found within the .xba module.
+
+Once this file structure has been established, the library is now ready for
+maintenance and modification. All maintenance and modification of the library
+source is performed by the EditBas project. See the [EditBas](file:///media/fuse/crostini_3fac4a47f4dfeaba4a2d4047746d89ee1a8b215c_termina_penguin/Accounting/BadAss/src/Projects-Geany/EditBas/README.html) project documentation
+for library maintenance and modification.
+<a href="#IX">Index</a>
+<h3 id="3.0">3.0 Dependencies.</h3>
+<h3 id="4.0">4.0 Project Build.</h3>
+<h3 id="5.0">5.0 Significant Notes.</h3>

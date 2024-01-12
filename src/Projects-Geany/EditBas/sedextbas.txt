@@ -1,0 +1,3 @@
+# sedextbas.tmp - extract .bas module from .xba file.
+#   8/13/23.   wmk.
+/sGenWhtPgesURL.bas/,/\/\*\*\//p

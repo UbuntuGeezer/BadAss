@@ -1,0 +1,71 @@
+[editor]
+line_wrapping=false
+line_break_column=72
+auto_continue_multiline=true
+
+[file_prefs]
+final_new_line=true
+ensure_convert_new_lines=false
+strip_trailing_spaces=false
+replace_tabs=false
+
+[indentation]
+indent_width=4
+indent_type=1
+indent_hard_tab_width=8
+detect_indent=false
+detect_indent_width=false
+indent_mode=2
+
+[project]
+name=EditBas
+base_path=/home/vncmk3/GitHub/Libraries-Project/FLsara86777/Projects-Geany/EditBas/
+description=
+file_patterns=
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=72
+
+[files]
+current_page=20
+FILE_NAME_0=6034;Markdown;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FREADME.md;0;4
+FILE_NAME_1=1354;None;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FMakeExtractBas.tmp;0;4
+FILE_NAME_2=1095;Sh;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FDoSed.sh;0;4
+FILE_NAME_3=1108;None;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FMakeExtractBas;0;4
+FILE_NAME_4=0;Sh;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FCopyXBAoverBAS.sh;0;4
+FILE_NAME_5=1299;Sh;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FGetXBAModule.sh;0;4
+FILE_NAME_6=76;None;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FMakeDeleteXBAbas.tmp;0;4
+FILE_NAME_7=666;None;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FMakeDeleteXBAbas;0;4
+FILE_NAME_8=1924;None;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FMakeReplaceBas.tmp;0;4
+FILE_NAME_9=2047;None;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FMakeReplaceBas;0;4
+FILE_NAME_10=271;XML;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FModuleHdr.xba;0;4
+FILE_NAME_11=1;Sh;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FPutXBAModule.sh;0;4
+FILE_NAME_12=969;Sh;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FUpdateBasicFiles.sh;0;4
+FILE_NAME_13=0;Sh;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FExtractAllBas.sh;0;4
+FILE_NAME_14=1786;Sh;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FExtractBas.sh;0;4
+FILE_NAME_15=240;None;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2Fawkxba2xba1.tmp;0;4
+FILE_NAME_16=1930;Sh;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FDoSedBuild.sh;0;4
+FILE_NAME_17=0;Sh;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FDoSedAdd.sh;0;4
+FILE_NAME_18=2289;None;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FMakeBuildLib.tmp;0;4
+FILE_NAME_19=1367;None;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FMakeAddBas.tmp;0;4
+FILE_NAME_20=1045;None;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FMakeDelBas.tmp;0;4
+FILE_NAME_21=1675;Sh;0;EUTF-8;1;1;0;%2Fhome%2Fvncwmk3%2FGitHub%2FLibraries-Project%2FFLsara86777%2FProjects-Geany%2FEditBas%2FDoSedDel.sh;0;4
+
+[build-menu]
+NF_03_LB=sed
+NF_03_CM=./DoSed.sh Module1Common  Module1.xba
+NF_03_WD=/home/vncmk3/GitHub/Libraries-Project/FLsara86777/Projects-Geany/EditBas
+NF_00_LB=Extract XBA Module
+NF_00_CM=make -f MakeExtractBas
+NF_00_WD=/home/vncmk3/GitHub/Libraries-Project/FLsara86777/Projects-Geany/EditBas
+XMLFT_01_LB=Delete XBA Module
+XMLFT_01_CM=make -f MakeDeleteXBAbas
+XMLFT_01_WD=/home/vncmk3/GitHub/Libraries-Project/FLsara86777/Projects-Geany/EditBas
+filetypes=XML;
+XMLFT_00_LB=Replace XBA Module
+XMLFT_00_CM=make -f MakeReplaceBas
+XMLFT_00_WD=/home/vncmk3/GitHub/Libraries-Project/FLsara86777/Projects-Geany/EditBas
+
+[VTE]
+last_dir=/home/vncwmk3/TerritoriesCB/Projects-Geany

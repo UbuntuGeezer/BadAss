@@ -43,7 +43,7 @@
   <dlg:button dlg:id="COA1List" dlg:tab-index="16" dlg:left="86" dlg:top="125" dlg:width="10" dlg:height="12" dlg:tabstop="false" dlg:value="...">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETCOA1ListListener?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
-  <dlg:button dlg:id="RecordBtn" dlg:tab-index="9" dlg:disabled="true" dlg:left="107" dlg:top="180" dlg:width="51" dlg:height="18" dlg:value="Record &amp; Finish">
+  <dlg:button dlg:id="RecordBtn" dlg:tab-index="9" dlg:disabled="true" dlg:left="107" dlg:top="180" dlg:width="51" dlg:height="18" dlg:value="Record &amp; Finish" dlg:button-type="ok">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETRecdDoneListener?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
   <dlg:numericfield dlg:id="AmtField1" dlg:tab-index="2" dlg:left="80" dlg:top="77" dlg:width="43" dlg:height="16" dlg:thousands-separator="true">

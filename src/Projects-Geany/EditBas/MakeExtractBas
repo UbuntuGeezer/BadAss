@@ -1,0 +1,59 @@
+# MakeExtractBas.tmp - Makefile (template) for FLsara86777 MakeExtractBas.
+#	11/12/23.	wmk.
+#
+# MakeAnySHtoSQL takes a <file base>.sh file and move it through the
+# reverse process to de-shell it into a .sql file of straight SQL. An
+# intermediate file <file base>.sq is the SQL shell echo,s stripped out
+# of the .sh file.
+#
+# Dependencies. GetXBAModule (Module1.xba extracted to /Import folder)	
+#	CopyXBAoverBAS
+#	 (Module1.xba copied over /Basic/Module1/Module1.xba)
+#	DoSed.sh  basmodule xbafile
+#   *libbase environment var set.
+#
+# Modification History.
+# ---------------------
+# 8/31/23.	wmk.	modified for HPPavilion branch; *folderbase unconditional.
+# 9/17/23.	wmk.	corrections to comments for FLsara86777 from MNcrwg44586;
+#			 dependencies documented.
+# 11/12/23.	wmk.	*libbase environment var implemented; change from
+#			 from *codebase to *srcpath for recipe paths.
+# Legacy mods.
+# 8/22/23.	wmk.	modified for FLsara86777; *pathbase updated; *srcpath used
+#			 throughout.
+# 8/23/23.	wmk.	ver2.0 mods to use /src as parent folder.
+# Legacy mods.
+# 8/13/23.	wmk.	edited for MNcrwg44586; *pathbase unconditional;
+#		 	 "complete" message improved.
+# Legacy mods.
+# 6/24/23.	wmk.	original makefile for FLsara86777; adapted from Territories.
+# 6/25/23.	wmk.	/Basic added into all target paths.
+# Legacy mods.
+# 3/7/22.	wmk.	original makefile; adapted from MakeAnySHtoSQL.
+# 3/8/22.	wmk.	completion message added; add conversion for &amp; to
+#			 ampersand (&).
+
+AWK = mawk
+.PHONY : Always JustDoIt
+
+srcpath=$(libbase)/src
+
+# <filepath>/<filebase>.sql
+#=======================================================
+Always : JustDoIt
+	export awkdate=
+	export awktime=
+	#$(AWK) -v awkdate=  -v awktime= -f awkxba2xba1.txt \
+	# $(srcpath)/Basic/Module1/Module1.xba \
+	#   > $(srcpath)/Basic/Module1/sGenWhtPgesURL.ba1
+	 #echo "end sub     &apos;// end sGenWhtPgesURL.bas   $$awkdate   $$awktime" >> sGenWhtPgesURL.ba1
+	 #exit 1
+	 sed -n -f sedextbas.txt $(srcpath)/Basic/Module1/Module1.xba \
+	  > $(srcpath)/Basic/Module1/sGenWhtPgesURL.ba1
+	 sed "s?&apos;?\'?g;s?&quot;?\"?g;s?&lt;?<?g;s?&gt;?>?g;s?&amp;?\x26?g" \
+	  $(srcpath)/Basic/Module1/sGenWhtPgesURL.ba1 > $(srcpath)/Basic/Module1/sGenWhtPgesURL.bas
+	 echo "Basic/sGenWhtPgesURL.bas available for editing"
+
+#=======================================================
+JustDoIt: ;

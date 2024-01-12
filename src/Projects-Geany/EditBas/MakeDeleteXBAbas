@@ -1,0 +1,32 @@
+# MakeDeleteXBAbas.tmp - Makefile (template) for MakeDeleteXBAbas.
+$(error out-of-date)
+#	6/24/23.	wmk.
+#
+# MakeDeleteXBAbas deletes a module from the specified .xba file.
+# the module must be bounded by '<modulename>.bas' at the beginning
+# and '/**/' at the end.
+#
+# Modification History.
+# ---------------------
+# 6/24/23.	wmk. 	modified for FLsara86777.
+# 3/7/22.	wmk.	original makefile; adapted from MakeAnySHtoSQL.
+
+ifeq ($(USER),ubuntu)
+ folderbase = /media/ubuntu/Windows/Users/Bill
+else
+ folderbase = $(HOME)
+endif
+AWK = mawk
+.PHONY : Always JustDoIt
+projpath = $(folderbase)/GitHub/Libraries/FLsara86777/EditBas
+
+# <filepath>/<filebase>.sql
+#=======================================================
+Always : JustDoIt
+	sed -i '/\/\/ sGenWhtPgesURL.bas/,/\/\*\*\//d' \
+	 $pathbase/Basic/Module1/Module1.xba
+	echo "sGenWhtPgesURL deleted from Module1.xba"
+	~\sysprocs/LOGMSG "  sGenWhtPgesURL deleted from Module1."
+
+#=======================================================
+JustDoIt: ;

@@ -1,0 +1,50 @@
+Module1Hdr
+8
+	5
+	5
+errhandling
+errhandling
+	errhandling
+-----------------end errhandling
+publics
+---------------------------publics
+publics
+(mirrored in file publics
+----------------------end publics
+Main
+CheckDoubleEntry
+CheckInserts
+CheckSplitTrans
+CreateReverseTrans
+D
+DayName
+E
+ErrLogDisable
+ErrLogGetCellInfo
+ErrLogGetCellName
+ErrLogGetDisplay
+ErrLogGetModule
+ErrLogGetRecording
+ErrLogGetSheet
+ErrLogMakeEntry
+ErrLogSetCellInfo
+ErrLogSetDisplay
+ErrLogSetModule
+ErrLogSetRecording
+ErrLogSetSheet
+ErrLogSetup
+GetInsRow
+GetMonthName
+GetTransSheetName
+LogError
+PlaceSplitTotal
+PlaceSplitTrans
+PlaceTransM
+ReverseDETrans
+ReverseSplitTrans
+ReverseTrans
+SetProcessed
+SetSheetDate
+SetSumFormula
+SplitOutCOAs
+StoreTrans

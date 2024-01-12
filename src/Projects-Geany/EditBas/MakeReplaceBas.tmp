@@ -1,0 +1,51 @@
+# MakeReplaceBas.tmp - Makefile (template) for MakeReplaceBas.
+$(error out-of-date)
+#	3/8/22.	wmk.
+#
+# This makefile is edited by DoSed.sh with <basmodule> <xbafile> substituted
+# throughout. <basmodule> will be the name of a .bas source file with no
+# filename extension; <xbafile> will be the complete name of an XBA file with
+# the .xba filename extension.
+#
+# Modification History.
+# ---------------------
+# 3/8/22.	wmk.	original makefile; adapted from MakeExtractBas;
+#			 add ampersand conversion to sed; note & conversion must come
+#			 first to avoid screwing up other XML & fields.
+
+ifeq ($(USER),ubuntu)
+ folderbase = /media/ubuntu/Windows/Users/Bill
+else
+ folderbase = $(HOME)
+endif
+
+ifndef pathbase
+ pathbase=$(folderbase)/GitHub/Libraries-Project/FLsara86777
+endif
+
+AWK = mawk
+.PHONY : Always JustDoIt
+
+# <filepath>/<filebase>.sql
+#=======================================================
+Always : JustDoIt
+	cd $(projpath)
+	cp $(pathbase)/Basic/<xbafile>/<basmodule>.bas $$TEMP_PATH/scratch.bas
+	sed -i "s?\&?\&amp\;?g;s?'?\&apos\;?g;s?\"?\&quot\;?g;s?\&lt;?<?g;s?&gt;?>?g" $$TEMP_PATH/scratch.bas
+	# delete 1st and last lines of new .bas
+	sed -i "/\/\ <basmodule>.bas/d;/\/\*\*\//d" $$TEMP_PATH/scratch.bas
+	cp $(pathbase)/<xbafile>/<xbafile>.xba $TEMP_PATH/scratch.xba
+	sed -i "1,4d" scratch.xba
+	# find module.bas in scratch.xba file; read lines from stripped .bas file
+	mawk "/\/\/ <basmodule>.bas/{f=1;print;while(getline < \"$$TEMP_PATH/scratch.bas\")\
+	 {print}}/\/\*\*\//{f=0}!f" $TEMP_PATH/scratch.xba > $TEMP_PATH/new<xbafile>.xba
+	sed -i '1i newline\;' $TEMP_PATH/new<xbafile>.xba
+	sed -i "1r ModuleHdr.xba" $TEMP_PATH/new<xbafile>.xba
+	sed -i "1d" $TEMP_PATH/new<xbafile>.xba
+	mv $(pathbase)/<xbafile>/<xbafile>.xba $(pathbase)/<xbafile>/old<xbafile>.xba
+	mv $TEMP_PATH/new<xbafile> $(pathbase)/<xbafile>/<xbafile>.xba
+	echo "module <basmodule>.bas replaced into <xbafile>..."
+	echo "use PutXBAModule.sh to copy the new <xbafile> over GitHub/<xbafile> after changes checked."
+
+#=======================================================
+JustDoIt: ;

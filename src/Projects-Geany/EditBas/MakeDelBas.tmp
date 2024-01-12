@@ -1,0 +1,42 @@
+# MakeDelBas.tmp - Makefile (template) for MakeDelBas.
+$(error out-of-date)
+#	6/25/23.	wmk.
+#
+# This makefile is edited by DoSed.sh with  Module1 substituted
+# throughout. CenterUnitHstead3 will be the name of a .bas source file with no
+# filename extension; Module1 will be the complete name of an XBA file with
+# the .xba filename extension.
+#
+# Modification History.
+# ---------------------
+# 6/25/23.	wmk.	original makefile; edited for FLsara86777.
+# Legacy mods.
+# 3/8/22.	wmk.	original makefile; adapted from MakeExtractBas;
+#			 add ampersand conversion to sed; note & conversion must come
+#			 first to avoid screwing up other XML & fields.
+
+ifeq ($(USER),ubuntu)
+ folderbase = /media/ubuntu/Windows/Users/Bill
+else
+ folderbase = $(HOME)
+endif
+
+ifndef pathbase
+ pathbase=$(folderbase)/GitHub/Libraries-Project/FLsara86777
+endif
+
+AWK = mawk
+.PHONY : Always JustDoIt
+
+fsuffx = Bas.txt
+projpath = $(pathbase)/Projects-Geany/EditBas
+
+# <filepath>/<filebase>.sql
+#=======================================================
+Always : JustDoIt
+	cd $(projpath)
+	sed  -i '/^<basname>$$/d' $(pathbase)/Basic/<xbafile>/<xbafile>$(fsuffx)
+	echo "  <basname> removed from <xbafile>$(fsuffx)."
+
+#=======================================================
+JustDoIt: ;

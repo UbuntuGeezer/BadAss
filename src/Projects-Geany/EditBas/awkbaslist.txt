@@ -1,0 +1,16 @@
+# awkbaslist.txt - combine list into baslist= var assignment.
+#	6/20/23.	wmk.	original script.
+#	8/21/23.	wmk.	ensure Module1Hdr.bas, publicsMM.bas first in baslist.
+#	8/24/23.	wmk.	revert to depending upon Module1Hdr and publicsMM in
+#				 Module1Bas.txt.
+BEGIN{buffer = "baslist = "}
+END{if( buffer != "" )print buffer;}
+{buffer = buffer "  " $0 ".bas"
+ if( NR%3 == 0)
+  {print buffer "\\"
+   buffer = ""};
+ }
+ENDFILE{if(NF == 3){
+ if(index($NF,"\\") > 0)print substr($3,1,length($3)-1)
+  else print buffer}}
+
