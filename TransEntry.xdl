@@ -24,7 +24,7 @@
   <dlg:textfield dlg:id="CreditField" dlg:tab-index="6" dlg:left="145" dlg:top="123" dlg:width="27" dlg:height="14" dlg:maxlength="5">
    <script:event script:event-name="on-textchange" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETCOA2Listener?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:textfield>
-  <dlg:text dlg:id="RefLbl" dlg:tab-index="15" dlg:left="51" dlg:top="149" dlg:width="53" dlg:height="14" dlg:value="Reference Information" dlg:align="center"/>
+  <dlg:text dlg:id="RefLbl" dlg:tab-index="15" dlg:left="49" dlg:top="149" dlg:width="68" dlg:height="14" dlg:value="Reference Information" dlg:align="center" dlg:valign="center"/>
   <dlg:textfield dlg:id="RefField" dlg:tab-index="7" dlg:left="119" dlg:top="149" dlg:width="71" dlg:height="14" dlg:maxlength="15">
    <script:event script:event-name="on-textchange" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETRefListener?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:textfield>
@@ -37,13 +37,13 @@
   <dlg:button dlg:id="RefHelp" dlg:tab-index="19" dlg:left="200" dlg:top="149" dlg:width="10" dlg:height="12" dlg:tabstop="false" dlg:value="?">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETRefHelpListener?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
-  <dlg:button dlg:id="RecordContBtn" dlg:tab-index="8" dlg:disabled="true" dlg:left="22" dlg:top="180" dlg:width="51" dlg:height="18" dlg:default="true" dlg:value="Record &amp; Continue">
+  <dlg:button dlg:id="RecordContBtn" dlg:tab-index="8" dlg:disabled="true" dlg:left="16" dlg:top="180" dlg:width="57" dlg:height="18" dlg:default="true" dlg:value="Record &amp; Continue">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETRecdContListener?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
   <dlg:button dlg:id="COA1List" dlg:tab-index="16" dlg:left="86" dlg:top="125" dlg:width="10" dlg:height="12" dlg:tabstop="false" dlg:value="...">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETCOA1ListListener?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
-  <dlg:button dlg:id="RecordBtn" dlg:tab-index="9" dlg:disabled="true" dlg:left="107" dlg:top="180" dlg:width="51" dlg:height="18" dlg:value="Record &amp; Finish">
+  <dlg:button dlg:id="RecordBtn" dlg:tab-index="9" dlg:disabled="true" dlg:left="107" dlg:top="180" dlg:width="51" dlg:height="18" dlg:value="Record &amp; Finish" dlg:button-type="ok">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:BadAss.Module2.ETRecdDoneListener?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
   <dlg:numericfield dlg:id="AmtField1" dlg:tab-index="2" dlg:left="80" dlg:top="77" dlg:width="43" dlg:height="16" dlg:thousands-separator="true">

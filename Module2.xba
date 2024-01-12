@@ -340,6 +340,9 @@ dim iSheet		As Integer
 		
 &apos;// Initialize ET dialog.
 	puoETDialog = CreateUnoDialog(GlobalScope.DialogLibraries.BadAss.TransEntry)
+if( 1 = 0 ) then
+Xray puoETDialog
+endif
 	pbETActive=true
 	pbETDebitList = false
 	pbETCreditList = false
@@ -1073,11 +1076,43 @@ dim iOption 	As Integer		&apos;// local copy of initialize option
 		GoTo ErrorHandler
 	endif
 
+if 1 = 0 then
 	&apos;// clear dialog object fields.
 	iRetValue = ETDlgCtrlsReset(iOption)	&apos;// clear dialog fields
 	if iRetValue &lt;&gt; 0 then
 		GoTo ErrorHandler
 	endif
+endif
+
+	&apos;// if reset all fields clear these; DateField1, DebitField, CreditField.
+	if iOption = 1 then
+dim oETDate			As Object
+		oETDate =  puoETDialog.getControl(&quot;DateField1&quot;)
+		oETDate.Text = &quot;&quot;
+	
+dim oETDebit		As Object
+		oETDebit =  puoETDialog.getControl(&quot;DebitField&quot;)
+		oETDebit.Text = &quot;&quot;
+
+dim oETCredit		As Object
+		oETCredit =  puoETDialog.getControl(&quot;CreditField&quot;)
+		oETCredit.Text = &quot;&quot;
+
+	endif
+
+	&apos;// Always clear description, amount, reference, splitoption.	
+dim oETDescText		As Object
+	oETDescText = puoETDialog.getControl(&quot;DescField&quot;)
+	oETDescText.Text = &quot;&quot;		&apos;// clear description
+dim oETAmount		As Object
+	oETAmount = puoETDialog.getControl(&quot;AmtField1&quot;)
+	oETAmount.Text = &quot;&quot;			&apos;// clear amount
+dim oETRefText		As Object
+	oETRefText = puoETDialog.getControl(&quot;RefField&quot;)
+	oETRefText.Text = &quot;&quot;
+dim oETSplit		As Object
+	oETSplit = puoETDialog.getControl(&quot;SplitOption&quot;)
+	oETSplit.Value = false
 	
 NormalExit:
 	ETDialogReset = iRetValue
@@ -1455,33 +1490,35 @@ dim iRetValue 	As Integer		&apos;// returned value
 	iRetValue = 0
 	ON ERROR GOTO ErrorHandler
 	
-	&apos;// conditionally reset Date field.
-	if piOpt &lt;&gt; 0 then
-		gbETDateEntered = false		
-		gsETDate = &quot;&quot;
-	endif
-
 &apos;// clear all fields and stored values
 	&apos;// clear field entry flags
+	&apos;// always clear these
 	gbETDescEntered = false		&apos;// description entered flag
-	gbETAmtEntered = false		&apos;// amount entered flag
-	gbETCOA1Entered = false		&apos;// Debit COA entered flag
-	gbETCOA2Entered = false		&apos;// Credit COA entered flag
-	gbETRefEntered = false		&apos;// refereince entered flag
-	gbETSplitTrans = false		&apos;// split transaction flag
-	gbETDebitIsTotal = true		&apos;// Debit is total; credits split
-	&apos;//	clear ET dialog stored values.
 	gsETDescription = &quot;&quot;		&apos;// description entered
+	gbETAmtEntered = false		&apos;// amount entered flag
 	gdETAmount = 0. 			&apos;// debit and credit amt entered
-	gsETAcct1  = &quot;&quot;			&apos;// COA1 account
-	gsETAcct2  = &quot;&quot;			&apos;// COA2 account
+	gbETRefEntered = false		&apos;// refereince entered flag
 	gsETRef  = &quot;&quot;			&apos;// reference text
+	gbETSplitTrans = false		&apos;// split transaction flag
  redim gsETSplitCOAs (0)		&apos;// list of COAs in split
  redim gsETSplitAmts (0)		&apos;// list of amounts in split
  redim gsETSplitDescs (0)		&apos;// list of descriptions in split
 	gsETSPlitCOAs(0) = &quot;&quot;
 	gsETSplitAmts(0) = &quot;&quot;
 	gsETSplitDescs(0) = &quot;&quot;
+
+	&apos;// if clear all do these too.
+	if piOpt &lt;&gt; 0 then
+	  gbETDateEntered = false		
+	  gsETDate = &quot;&quot;
+	  gbETCOA1Entered = false		&apos;// Debit COA entered flag
+	  gbETCOA2Entered = false		&apos;// Credit COA entered flag
+	  gbETDebitIsTotal = true		&apos;// Debit is total; credits split
+	  gsETAcct1  = &quot;&quot;			&apos;// COA1 account
+	  gsETAcct2  = &quot;&quot;			&apos;// COA2 account
+    endif
+    
+	&apos;//	clear ET dialog stored values.
 	
 NormalExit:
 	ETPubVarsReset = iRetValue
@@ -1493,6 +1530,82 @@ ErrorHandler:
 	
 
 end function 	&apos;// end ETPubVarsReset	6/24/20
+&apos;/**/
+&apos;// ETRecdContListener.bas
+&apos;//---------------------------------------------------------------------
+&apos;// ETRecdContListener - Event handler &lt;Record &amp; Continue&gt; from Enter Transaction.
+&apos;//		1/11/24.	wmk.	20:52
+&apos;//---------------------------------------------------------------------
+
+public sub ETRecdContListener()
+
+&apos;//	Usage.	macro call or
+&apos;//			call ETRecdContListener()
+&apos;//
+&apos;// Entry.	normal entry from event handler for dialogue where
+&apos;//			user clicked the [Record &amp; Finish] button in ET dialog
+&apos;//			puoETDialog = Enter Transaction dialog object
+&apos;//
+&apos;//	Exit.	Transaction data recorded in GL sheet at user selection
+&apos;//			Transaction data in public vars cleared
+&apos;//			ET dialog ended with flag = 2 (user closed)
+&apos;//
+&apos;// Calls.	ETDialogRecord, ETPubVarsReset, ETDialogReset.
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	1/11/24.	wmk.	original; adapted from ETRecdDoneListener.
+&apos;//
+&apos;//	6/16/20.	wmk.	original code; stub
+&apos;//	6/17/20.	wmk.	completed; waiting on ETDialogRecord functional
+&apos;//
+&apos;//	Notes. This sub is the linked macro to the changed status event linked
+&apos;// to the &lt;Record &amp; Continue&gt; cmd button in the Enter Transaction dialog. The
+&apos;// only differences between this and &lt;Record &amp; Done&gt; is the call to
+&apos;//	ETPubVarsReset(0) and the window not closing. 
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim oETRecordBtn	As Object		&apos;// Record &amp; Finish button
+dim oETRecordCont	As Object		&apos;// Record &amp; Continue button
+dim iStatus 		As Integer		&apos;// general status
+
+	&apos;// code.
+	iStatus = -1		&apos;// set error return
+	ON ERROR GoTo ErrorHandler
+
+if ( 1 = 0 ) then
+	msgbox(&quot;ETRecdContListener stubbed.. - exiting.&quot;)
+	GOTO NormalExit
+endif
+
+	&apos;// record transaction
+	iStatus = ETDialogRecord()
+	if iStatus &lt; 0 then
+		GoToErrorHandler
+	endif
+
+if ( 1 = 0 ) then	
+	&apos;// clear all fields entered and associated flags
+	iStatus = ETPubVarsReset(0)	&apos;// reset everything but date
+	if iStatus &lt; 0 then
+		GoTo ErrorHandler
+	endif
+endif
+	&apos;// reset dialog.
+	iStatus = ETDialogReset(0)	&apos;// reset everything but date
+	if istatus &lt; 0 then
+		GoTo ErrorHandler
+	endif
+	
+NormalExit:
+	exit sub
+	
+ErrorHandler:
+	GoTo NormalExit
+	
+end sub		&apos;// end ETRecdContListener	1/11/24.
 &apos;/**/
 &apos;// ETRecdDoneListener.bas
 &apos;//---------------------------------------------------------------------

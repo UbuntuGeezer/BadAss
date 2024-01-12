@@ -1,7 +1,7 @@
 '// ETRecdContListener.bas
 '//---------------------------------------------------------------------
 '// ETRecdContListener - Event handler <Record & Continue> from Enter Transaction.
-'//		1/11/24.	wmk.	12:30
+'//		1/11/24.	wmk.	20:52
 '//---------------------------------------------------------------------
 
 public sub ETRecdContListener()
@@ -27,7 +27,9 @@ public sub ETRecdContListener()
 '//	6/17/20.	wmk.	completed; waiting on ETDialogRecord functional
 '//
 '//	Notes. This sub is the linked macro to the changed status event linked
-'// to the <Record & Continue> cmd button in the Enter Transaction dialog.
+'// to the <Record & Continue> cmd button in the Enter Transaction dialog. The
+'// only differences between this and <Record & Done> is the call to
+'//	ETPubVarsReset(0) and the window not closing. 
 
 '//	constants.
 
@@ -40,9 +42,11 @@ dim iStatus 		As Integer		'// general status
 	iStatus = -1		'// set error return
 	ON ERROR GoTo ErrorHandler
 
+if ( 1 = 0 ) then
 	msgbox("ETRecdContListener stubbed.. - exiting."
 	GOTO NormalExit
-	
+endif
+
 	'// record transaction
 	iStatus = ETDialogRecord()
 	if iStatus < 0 then
@@ -50,17 +54,16 @@ dim iStatus 		As Integer		'// general status
 	endif
 	
 	'// clear all fields entered and associated flags
-	iStatus = ETPubVarsReset(1)	'// reset everything
+	iStatus = ETPubVarsReset(0)	'// reset everything but date
 	if iStatus < 0 then
 		GoTo ErrorHandler
 	endif
 
 NormalExit:
-	puoETDialog.endDialog(2)			'// end dialog
 	exit sub
 	
 ErrorHandler:
 	GoTo NormalExit
 	
-end sub		'// end ETRecdContListener	1/11/24
+end sub		'// end ETRecdContListener	1/11/24.
 '/**/
