@@ -1,5 +1,5 @@
 '// Module2Hdr.bas
-'// Module2 code (complete with publics_2.bas) for dialogs
+'// Module2 code (complete with publics_2) for dialogs
 '//	Module2 subs/functions index.	7/5/20.
 '//
 '//	Main - Module2 Main - clear pbDlgLibLoaded flag.

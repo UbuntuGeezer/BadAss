@@ -1,5 +1,6 @@
 # MakeDelBas.tmp - Makefile (template) for MakeDelBas.
 $(error out-of-date)
+$(error out-of-date)
 #	6/25/23.	wmk.
 #
 # This makefile is edited by DoSed.sh with  Module1 substituted

@@ -1,5 +1,6 @@
 # MakeExtractBas.tmp - Makefile (template) for MakeExtractBas.
 $(error out-of-date)
+$(error out-of-date)
 #	3/7/22.	wmk.
 #
 # MakeAnySHtoSQL takes a <file base>.sh file and move it through the

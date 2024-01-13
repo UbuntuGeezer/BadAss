@@ -29,8 +29,8 @@ public sub ETDescListener()
 '//	constants.
 dim bFormComplete	As Boolean		'// all fields complete flag
 dim oETDescText		As Object		'// Desc text field
-dim oETRecordBtn	As Object		'// Record & Finish button
-dim oETRecordCont	As Object		'// Record & Continue button
+dim oETRecordBtn	As Object		'// Record &' Finish button
+dim oETRecordCont	As Object		'// Record &' Continue button
 
 '//	local variables.
 

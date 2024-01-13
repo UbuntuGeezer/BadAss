@@ -44,33 +44,35 @@ dim iRetValue 	As Integer		'// returned value
 	iRetValue = 0
 	ON ERROR GOTO ErrorHandler
 	
-	'// conditionally reset Date field.
-	if piOpt <> 0 then
-		gbETDateEntered = false		
-		gsETDate = ""
-	endif
-
 '// clear all fields and stored values
 	'// clear field entry flags
+	'// always clear these
 	gbETDescEntered = false		'// description entered flag
-	gbETAmtEntered = false		'// amount entered flag
-	gbETCOA1Entered = false		'// Debit COA entered flag
-	gbETCOA2Entered = false		'// Credit COA entered flag
-	gbETRefEntered = false		'// refereince entered flag
-	gbETSplitTrans = false		'// split transaction flag
-	gbETDebitIsTotal = true		'// Debit is total; credits split
-	'//	clear ET dialog stored values.
 	gsETDescription = ""		'// description entered
+	gbETAmtEntered = false		'// amount entered flag
 	gdETAmount = 0. 			'// debit and credit amt entered
-	gsETAcct1  = ""			'// COA1 account
-	gsETAcct2  = ""			'// COA2 account
+	gbETRefEntered = false		'// refereince entered flag
 	gsETRef  = ""			'// reference text
+	gbETSplitTrans = false		'// split transaction flag
  redim gsETSplitCOAs (0)		'// list of COAs in split
  redim gsETSplitAmts (0)		'// list of amounts in split
  redim gsETSplitDescs (0)		'// list of descriptions in split
 	gsETSPlitCOAs(0) = ""
 	gsETSplitAmts(0) = ""
 	gsETSplitDescs(0) = ""
+
+	'// if clear all do these too.
+	if piOpt <> 0 then
+	  gbETDateEntered = false		
+	  gsETDate = ""
+	  gbETCOA1Entered = false		'// Debit COA entered flag
+	  gbETCOA2Entered = false		'// Credit COA entered flag
+	  gbETDebitIsTotal = true		'// Debit is total; credits split
+	  gsETAcct1  = ""			'// COA1 account
+	  gsETAcct2  = ""			'// COA2 account
+    endif
+    
+	'//	clear ET dialog stored values.
 	
 NormalExit:
 	ETPubVarsReset = iRetValue

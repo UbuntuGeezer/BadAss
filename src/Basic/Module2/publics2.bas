@@ -1,5 +1,5 @@
 '// publics2.bas
-'//---------------publics_2.bas---------------------------------
+'//---------------publics_2---------------------------------
 '// Module2 public vars and constants
 '//		7/6/20.		wmk.	07:15
 '//
@@ -87,9 +87,12 @@ public puoCOASelectBtn	As Object	'// <Select> button
 '// vars for dialogues interface to accounting package
 
 public puoCOAListBox As Object		'// COA list box object in active form
-public pusCOASelected As String		'// COA selected from list box (..Listener.bas)
+public pusCOASelected As String		'// COA selected from list box (..Listener)
+public pbETActive	 AS Boolean		'// ET dialog active flag
+public pbETDebitList	As Boolean	'// debit list COA button
+public pbETCreditList	As Boolean	'// credit list COA button
 
 OPTION EXPLICIT				'// code protection
 
-'//--------------end publics_2.bas----7/6/20--------------------------
+'//--------------end publics_2----7/6/20--------------------------
 '/**/

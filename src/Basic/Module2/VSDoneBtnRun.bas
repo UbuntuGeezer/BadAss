@@ -10,7 +10,7 @@ public sub VSDoneBtnRun()
 '//			call VSDoneBtnRun()
 '//
 '// Entry.	normal entry from event handler for dialogue where
-'//			user clicked the [Record & Finish] button in ET dialog
+'//			user clicked the [Record &' Finish] button in ET dialog
 '//			puoETDialog = Enter Transaction dialog object
 '//
 '//	Exit.	Transaction data recorded in GL sheet at user selection
@@ -29,7 +29,7 @@ public sub VSDoneBtnRun()
 '//	constants.
 
 '//	local variables.
-dim oVSDoneBtn	As Object		'// Record & Finish button
+dim oVSDoneBtn	As Object		'// Record &' Finish button
 dim iStatus 		As Integer		'// general status
 
 	'// code.

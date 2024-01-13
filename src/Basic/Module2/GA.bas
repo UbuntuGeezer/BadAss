@@ -2,7 +2,7 @@
 '//---------------------------------------------------------------
 '// GA - Store user selected COA in first cell in selected range
 '// (Shortcut for GetCOA(1)
-'//		7/5/20.	wmk.	22:00
+'//		9/7/22.	wmk.	17:30
 '//---------------------------------------------------------------
 
 public sub GA()
@@ -21,6 +21,8 @@ public sub GA()
 '//
 '//	Modification history.
 '//	---------------------
+'// 9/7/22.		wmk.	case corrected 1=OK, store selection.
+'// Legacy mods.
 '//	7/5/20.		wmk.	original code; adapted from GetCOA
 '//
 '//	Notes.
@@ -37,7 +39,7 @@ dim oSel		As Object	'// CellRangeAddress; current selection
 dim oAcct		As Object	'// COA cell user selected
 dim lColumn		As Long		'// selected column
 dim lRow		As Long		'// selected row
-dim oSheet		As Object	'// selected sheet
+static oSheet		As Object	'// selected sheet
 dim iSheetIx	As Integer	'/// sheet index
 
 	'// code.
@@ -70,13 +72,16 @@ dim iSheetIx	As Integer	'/// sheet index
 	puoCOAListBox.addItems(pusCOAList, 0)
 
 	'// run dialog and get user selection
-	Select Case puoCOADialog.Execute()
-	Case 2		'// Select clicked
+dim iDlgStatus	AS Integer
+	pbETActive = false
+	iDlgStatus = puoCOADialog.Execute()
+	Select Case iDlgStatus
+	Case 1		'// Select clicked
 '		msgBox("COA Selected: " + pusCOASelected)
 '			msgBox("Select clicked in Chart of Accounts")
 		'// store COA in first cell of oSel range
 		oAcct = oSheet.getCellByPosition(lColumn, lRow)
-		oAcct.String = Left(pusCOASelected,4)
+		oAcct.String = Left(oAcct.String,4)
 		oAcct.HoriJustify = CJUST
 		
 	Case 0		'// Cancel
@@ -98,5 +103,5 @@ ErrorHandler:
 	msgBox("In GA - unprocessed error.")
 	GoTo NormalExit
 	
-end sub		'// end GA		7/5/20
+end sub		'// end GA		9/7/22
 '/**/

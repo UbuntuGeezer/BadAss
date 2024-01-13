@@ -21,7 +21,7 @@ public sub H()
 '//	---------------------
 '//	6/18/20.	wmk.	original code; adapted from G. bas.
 '//	6/23/20.	wmk.	change to use fDialogReset.
-'// 8/26/22.	wmk.	add intervening space to G. bas and H .bas in comments.
+'// 8/26/22.	wmk.	add intervening space to G. bas and H . bas in comments.
 '//
 '//	Notes.
 '//
@@ -54,7 +54,7 @@ dim sDummy As String
 	oFld = puoSTDialog.getControl("HasFocusFld")
 	oFld.Text = "Gotcha"
 	Select Case puoSTDialog.Execute()
-	Case 2		'// Record & Finish clicked
+	Case 2		'// Record &' Finish clicked
 		msgBox("<Done>h clicked in Split Transaction")
 	Case 0		'// Cancel
 		iStatus = STPubVarsReset()	'// reset everything

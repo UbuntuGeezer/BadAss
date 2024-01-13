@@ -36,7 +36,7 @@ public function ETDlgSplitRecord() As Integer
 
 '//	constants.
 
-'//----------------constants borrowed from header.bas-------------------
+'//----------------constants borrowed from header-------------------
 const LTGREEN=10092390		'// decimal value of LTGREEN color
 
 '// column index values and string lengths for column data			
@@ -58,7 +58,7 @@ const CJUST=2		'// center HoriJustify						'// mod052020
 const RJUST=3		'// right-justify HoriJustify				'// mod052320
 const MAXTRANSL=50	'// maximum transaction text length			'// mod052020
 
-'//----------------end constants borrowed from publics.bas--------------
+'//----------------end constants borrowed from publics--------------
 
 '//	local variables
 dim iRetValue As Integer

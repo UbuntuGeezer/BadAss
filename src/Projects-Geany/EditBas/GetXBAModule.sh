@@ -1,8 +1,6 @@
 #!/bin/bash
-# 2023-11-12.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
-# 2023-11-12.	wmk.	(automated) Version 3.0.9 *libpath introduced (HPPavilion).
 # GetXBAModule - Copy /Libraries-Project/FLsara86777 .xba module to Import folder.
-#	11/12/23.	wmk.
+#	1/12/24.	wmk.
 #
 # Usage. bash  GetXBAModule.sh  <xbamodule>
 #
@@ -19,6 +17,7 @@
 #			 target path.
 # 11/12/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
 # 11/12/23.	wmk.	(automated) Version 3.0.9 *libpath introduced.
+# 1/12/24.	wmk.	code checked for Accounting/BadAss compatibility.
 # Legacy mods.
 # 8/13/23.	wmk.	edited for MNcrwg44586; *folderbase conditional.
 # Legacy mods.

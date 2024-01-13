@@ -33,7 +33,12 @@ public sub ETCancelListener()
 '//	local variables.
 
 	'// code.
-	puoETDialog.endDialog(0)	'// end dialog as though cancelled	
-
+'	puoETDialog.endDialog(0)	'// end dialog as though cancelled	
+	if anyNotNull(puoETDialog) then
+	 puoETDialog.dispose()
+	endif
+	if anyNotNull(puoCOADialog) then
+	 puoCOADialog.dispose()
+	endif
 end sub		'// end ETCancelListener	6/15/20
 '/**/

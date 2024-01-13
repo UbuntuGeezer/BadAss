@@ -30,8 +30,8 @@ public sub ETAmountListener()
 '//	constants.
 dim bFormComplete	As Boolean		'// all fields complete flag
 dim oETDlgCtrl		As Object		'// reusable field object
-dim oETRecordBtn	As Object		'// Record & Finish button
-dim oETRecordCont	As Object		'// Record & Continue button
+dim oETRecordBtn	As Object		'// Record &' Finish button
+dim oETRecordCont	As Object		'// Record &' Continue button
 
 '//	local variables.
 

@@ -15,6 +15,8 @@ public sub ETCOA1Listener()
 '//
 '//	Exit.	gsETAcct1 = entered amount
 '//			gbETCOA1Entered = true if nonempty string
+'//			pbETDebitList = true
+'//			pbETCreditList = false
 '//
 '// Calls.	ETCheckComplete
 '//
@@ -29,12 +31,14 @@ public sub ETCOA1Listener()
 '//	constants.
 dim bFormComplete	As Boolean		'// all fields complete flag
 dim oETCOA1Text	As Object			'// account text field
-dim oETRecordBtn	As Object		'// Record & Finish button
-dim oETRecordCont	As Object		'// Record & Continue button
+dim oETRecordBtn	As Object		'// Record &' Finish button
+dim oETRecordCont	As Object		'// Record &' Continue button
 
 '//	local variables.
 
 	'// code.
+	pbETDebitList = true
+	pbETCreditList = false
 	oETCOA1Text = puoETDialog.getControl("DebitField")
 	gsETAcct1 = oETCOA1Text.Text
 	gbETCOA1Entered = (Len(gsETAcct1)>0)

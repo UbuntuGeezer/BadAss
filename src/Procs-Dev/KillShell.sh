@@ -1,7 +1,7 @@
 #!/bin/bash
-echo " ** KillShell.sh out-of-date **";exit 1
+# 2024-01-13.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
 # KillShell.sh - Kill shell by inserting illegal command at start.
-#	11/15/23.	wmk.
+#	1/13/24.	wmk.
 #
 # Usage. bash  KillShell.sh <shell-name> [<path>]
 #
@@ -15,6 +15,8 @@ echo " ** KillShell.sh out-of-date **";exit 1
 #
 # Modification History.
 # ---------------------
+# 01/13/24.	wmk.	(automated) echo,s to printf,s throughout.
+# 01/13/24.	wmk.	(automated) Version 3.0.6 Make old paths removed.
 # 11/8/23.	wmk.	*folderbase, *pathbase, *codebase assumed on entry.
 # 11/12/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
 # 11/15/23.	wmk.	verified for Lenovo system.
@@ -33,7 +35,7 @@ echo " ** KillShell.sh out-of-date **";exit 1
 P1=$1
 P2=$2
 if [ -z "$P1" ];then
- echo "KillShell <shell-name> [<path>] missing parameter(s)"
+ printf "%s\n" "KillShell <shell-name> [<path>] missing parameter(s)"
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 1
 fi
@@ -47,19 +49,19 @@ if [ "${killpath:klen-1:1}" == "/" ];then
 else
  ksep=/
 fi
-echo $killpath$ksep$P1
+printf "%s\n" $killpath$ksep$P1
 pushd ./ > /dev/null
 cd $killpath
 if ! test -s $P1;then
- echo " KillShell - $P1 is empty or non-existent."
+ printf "%s\n" " KillShell - $P1 is empty or non-existent."
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 0
 fi
 sed -i -f $TEMP_PATH/sedkillsh.txt $P1
 if [ $? -eq 0 ];then
- echo "KillShell $P1 $P2 successful."
+ printf "%s\n" "KillShell $P1 $P2 successful."
 else
- echo "KillShell $P1 $P2 failed."
+ printf "%s\n" "KillShell $P1 $P2 failed."
 fi
 popd > /dev/null
 # end KillShell.sh

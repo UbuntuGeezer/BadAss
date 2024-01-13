@@ -1,5 +1,6 @@
 # MakeAnySHtoSQL.tmp - Makefile (template) for MakeAnySHtoSQL.
 $(error out-of-date)
+$(error out-of-date)
 #	12/26/21.	wmk.
 #
 # MakeAnySHtoSQL takes a <file base>.sh file and move it through the

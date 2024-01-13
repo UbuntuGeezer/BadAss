@@ -46,11 +46,43 @@ dim iOption 	As Integer		'// local copy of initialize option
 		GoTo ErrorHandler
 	endif
 
+if 1 = 0 then
 	'// clear dialog object fields.
 	iRetValue = ETDlgCtrlsReset(iOption)	'// clear dialog fields
 	if iRetValue <> 0 then
 		GoTo ErrorHandler
 	endif
+endif
+
+	'// if reset all fields clear these; DateField1, DebitField, CreditField.
+	if iOption = 1 then
+dim oETDate			As Object
+		oETDate =  puoETDialog.getControl("DateField1")
+		oETDate.Text = ""
+	
+dim oETDebit		As Object
+		oETDebit =  puoETDialog.getControl("DebitField")
+		oETDebit.Text = ""
+
+dim oETCredit		As Object
+		oETCredit =  puoETDialog.getControl("CreditField")
+		oETCredit.Text = ""
+
+	endif
+
+	'// Always clear description, amount, reference, splitoption.	
+dim oETDescText		As Object
+	oETDescText = puoETDialog.getControl("DescField")
+	oETDescText.Text = ""		'// clear description
+dim oETAmount		As Object
+	oETAmount = puoETDialog.getControl("AmtField1")
+	oETAmount.Text = ""			'// clear amount
+dim oETRefText		As Object
+	oETRefText = puoETDialog.getControl("RefField")
+	oETRefText.Text = ""
+dim oETSplit		As Object
+	oETSplit = puoETDialog.getControl("SplitOption")
+	oETSplit.Value = false
 	
 NormalExit:
 	ETDialogReset = iRetValue

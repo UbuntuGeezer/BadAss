@@ -1,4 +1,5 @@
 # MakeAddBas.tmp - Makefile (template) for MakeAddBas.
+$(error out-of-date)
 # 2023-11-13.	wmk.	(automated) Version 3.0.6 Make old paths removed.
 # 2023-11-13.	wmk.	(automated) Version 3.0.6 Make old paths removed.
 # 2023-11-13.	wmk.	(automated) Version 3.0.6 Make old paths removed.

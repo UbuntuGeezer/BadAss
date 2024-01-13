@@ -1,7 +1,6 @@
 #!/bin/bash
-# 2023-11-12.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
 # DoSed.sh - Run *sed to fix Make..Bas.tmp > Make..Bas.
-#	11/12/23.	wmk.
+#	1/13/24.	wmk.
 #
 # Usage. bash DoSed.sh <basmodule> <xbafile>
 #
@@ -16,8 +15,9 @@
 #
 # Modification History.
 # ----------------------
-# 11/12/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
 # 8/23/23.	wmk.	ver2.0 change to use /src as parent folder.
+# 11/12/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
+# 1/13/24.	wmk.	code checked for BadAss/src.
 # Legacy mods.
 # 8/13/23.	wmk.	edited for MNcrwg44586; change to *sed from *awk for
 #			 extraction from .xba file.

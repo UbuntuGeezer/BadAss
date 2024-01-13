@@ -1,5 +1,6 @@
 # MakeDeleteXBAbas.tmp - Makefile (template) for MakeDeleteXBAbas.
 $(error out-of-date)
+$(error out-of-date)
 #	6/24/23.	wmk.
 #
 # MakeDeleteXBAbas deletes a module from the specified .xba file.

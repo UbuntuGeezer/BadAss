@@ -36,11 +36,14 @@ dim sAcct2		As String			'// returned account from GetCOA
 	'// code.
 	sAcct2 = ""
 	ON ERROR GOTO ErrorHandler
-	
+
+	pbETDebitList=false
+	pbETCreditList=true
 	sAcct2 = GetCOA(1)			'// get COA from dialog
 	if Len(sAcct2)>0 then
-		oETCOA2Text = puoETDialog.getControl("CreditField")
-		oETCOA2Text.Text = sAcct2
+		puoETDialog.Model.CreditField.Text = sAcct2
+'		oETCOA2Text = puoETDialog.getControl("CreditField")
+'		oETCOA2Text.Text = sAcct2
 		gsETAcct2 = sAcct2
 	endif
 	

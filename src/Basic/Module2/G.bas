@@ -43,9 +43,9 @@ DialogLibraries.LoadLibrary("Standard")
 	puoETDialog = CreateUnoDialog(DialogLibraries.Standard.TransEntry)
 
 	Select Case puoETDialog.Execute()
-	Case 2		'// Record & Finish clicked
-'		msgBox("Record & Finish clicked in Enter Transaction")
-		'// iStatus = ETDialogRecord... called by [Record & Finish]
+	Case 2		'// Record &' Finish clicked
+'		msgBox("Record &' Finish clicked in Enter Transaction")
+		'// iStatus = ETDialogRecord... called by [Record &' Finish]
 	Case 0		'// Cancel
 '		pusCOASelected = ""		'// since cancel, Execute() event skipped
 		iStatus = ETPubVarsReset(1)	'// reset everything
@@ -65,4 +65,3 @@ puoETDialog.dispose()
 	
 end sub		'// end G	8/26/22
 '/**/
-

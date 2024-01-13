@@ -1,8 +1,6 @@
 #!/bin/bash
-# 2023-11-13.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
-# 2023-11-13.	wmk.	(automated) Version 3.0.9 *libpath introduced (HPPavilion).
-# ExtractAllBas.sh - Extract all FLsara86777 .bas blocks from .xba module.
-# 8/23/23.	wmk.
+# ExtractAllBas.sh - Extract all BadAss .bas blocks from .xba module.
+# 1/13/24.	wmk.
 #
 # Usage. bash  ExtractAllBas.sh <xbamodule>
 #
@@ -19,8 +17,9 @@
 # ---------------------
 # 8/22/23.	wmk.	*pathbase, *codebase unconditional.
 # 8/23/23.	wmk.	ver2.0 mods to use /src as parent folder.
-# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
+# 11/13/23.	wmk.	(automated) UnKillShell to reinstate shell.
 # 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath introduced.
+# 1/13/24.	wmk.	code checked for BadAss/src.
 # Legacy mods.	
 # 6/24/23.	wmk.	edited for FLsara86777 from Territories.
 # Legacy mods.

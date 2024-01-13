@@ -1,7 +1,6 @@
-# MakeBuildLib.tmp - Makefile (template) for FLsara86777 MakeBuildLib.
-# 2023-11-13.	wmk.	(automated) Version 3.0.6 Make old paths removed.
-# 2023-11-13.	wmk.	(automated) Version 3.0.9 *libbase introduced.
-#	11/13/23.	wmk.
+# MakeBuildLib.tmp - Makefile (template) for BadAss MakeBuildLib.
+# 2024-01-13.	wmk.	(automated) Version 3.0.6 (Lenovo) Make old paths removed.
+#	1/12/24.	wmk.
 #
 # MakeBuildLib takes the list of .bas blocks and
 # creates a <module>.xba from those blocks. 
@@ -19,6 +18,7 @@
 #			 unconditional.
 # 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
 # 11/13/23.	wmk.	(automated) Version 3.0.9 *libbase support added.
+# 1/13/24.	wmk.	(automated) UnKill to reinstate makefile.
 # Legacy mods.
 # 8/22/23.	wmk.	modified for use with FLsara86777.
 # 8/25/23.	wmk.	JustDoIt prerequisite removed from main recipe; *codebase

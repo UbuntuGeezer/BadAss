@@ -17,7 +17,7 @@ public sub ETRecdContListener()
 '//			Transaction data in public vars cleared
 '//			ET dialog ended with flag = 2 (user closed)
 '//
-'// Calls.	ETDialogRecord, ETPubVarsReset
+'// Calls.	ETDialogRecord, ETPubVarsReset, ETDialogReset.
 '//
 '//	Modification history.
 '//	---------------------
@@ -43,7 +43,7 @@ dim iStatus 		As Integer		'// general status
 	ON ERROR GoTo ErrorHandler
 
 if ( 1 = 0 ) then
-	msgbox("ETRecdContListener stubbed.. - exiting."
+	msgbox("ETRecdContListener stubbed.. - exiting.")
 	GOTO NormalExit
 endif
 
@@ -52,13 +52,20 @@ endif
 	if iStatus < 0 then
 		GoToErrorHandler
 	endif
-	
+
+if ( 1 = 0 ) then	
 	'// clear all fields entered and associated flags
 	iStatus = ETPubVarsReset(0)	'// reset everything but date
 	if iStatus < 0 then
 		GoTo ErrorHandler
 	endif
-
+endif
+	'// reset dialog.
+	iStatus = ETDialogReset(0)	'// reset everything but date
+	if istatus < 0 then
+		GoTo ErrorHandler
+	endif
+	
 NormalExit:
 	exit sub
 	

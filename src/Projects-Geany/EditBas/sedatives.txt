@@ -1,2 +1,2 @@
-s?<basmodule>?sGenWhtPgesURL?g
-s?<xbafile>?Module1?g
+s?<basmodule>?VSEditSplitBtnRun?g
+s?<xbafile>?Module2?g

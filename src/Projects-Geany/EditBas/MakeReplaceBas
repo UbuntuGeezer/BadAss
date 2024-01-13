@@ -1,10 +1,11 @@
 # MakeReplaceBas.tmp - Makefile (template) for MakeReplaceBas.
 $(error out-of-date)
+$(error out-of-date)
 #	3/8/22.	wmk.
 #
-# This makefile is edited by DoSed.sh with sGenWhtPgesURL Module1 substituted
-# throughout. sGenWhtPgesURL will be the name of a .bas source file with no
-# filename extension; Module1 will be the complete name of an XBA file with
+# This makefile is edited by DoSed.sh with VSEditSplitBtnRun Module2 substituted
+# throughout. VSEditSplitBtnRun will be the name of a .bas source file with no
+# filename extension; Module2 will be the complete name of an XBA file with
 # the .xba filename extension.
 #
 # Modification History.
@@ -30,22 +31,22 @@ AWK = mawk
 #=======================================================
 Always : JustDoIt
 	cd $(projpath)
-	cp $(pathbase)/Basic/Module1/sGenWhtPgesURL.bas $$TEMP_PATH/scratch.bas
+	cp $(pathbase)/Basic/Module2/VSEditSplitBtnRun.bas $$TEMP_PATH/scratch.bas
 	sed -i "s?\&?\&amp\;?g;s?'?\&apos\;?g;s?\"?\&quot\;?g;s?\&lt;?<?g;s?&gt;?>?g" $$TEMP_PATH/scratch.bas
 	# delete 1st and last lines of new .bas
-	sed -i "/\/\ sGenWhtPgesURL.bas/d;/\/\*\*\//d" $$TEMP_PATH/scratch.bas
-	cp $(pathbase)/Module1/Module1.xba $TEMP_PATH/scratch.xba
+	sed -i "/\/\ VSEditSplitBtnRun.bas/d;/\/\*\*\//d" $$TEMP_PATH/scratch.bas
+	cp $(pathbase)/Module2/Module2.xba $TEMP_PATH/scratch.xba
 	sed -i "1,4d" scratch.xba
 	# find module.bas in scratch.xba file; read lines from stripped .bas file
-	mawk "/\/\/ sGenWhtPgesURL.bas/{f=1;print;while(getline < \"$$TEMP_PATH/scratch.bas\")\
-	 {print}}/\/\*\*\//{f=0}!f" $TEMP_PATH/scratch.xba > $TEMP_PATH/newModule1.xba
-	sed -i '1i newline\;' $TEMP_PATH/newModule1.xba
-	sed -i "1r ModuleHdr.xba" $TEMP_PATH/newModule1.xba
-	sed -i "1d" $TEMP_PATH/newModule1.xba
-	mv $(pathbase)/Module1/Module1.xba $(pathbase)/Module1/oldModule1.xba
-	mv $TEMP_PATH/newModule1 $(pathbase)/Module1/Module1.xba
-	echo "module sGenWhtPgesURL.bas replaced into Module1..."
-	echo "use PutXBAModule.sh to copy the new Module1 over GitHub/Module1 after changes checked."
+	mawk "/\/\/ VSEditSplitBtnRun.bas/{f=1;print;while(getline < \"$$TEMP_PATH/scratch.bas\")\
+	 {print}}/\/\*\*\//{f=0}!f" $TEMP_PATH/scratch.xba > $TEMP_PATH/newModule2.xba
+	sed -i '1i newline\;' $TEMP_PATH/newModule2.xba
+	sed -i "1r ModuleHdr.xba" $TEMP_PATH/newModule2.xba
+	sed -i "1d" $TEMP_PATH/newModule2.xba
+	mv $(pathbase)/Module2/Module2.xba $(pathbase)/Module2/oldModule2.xba
+	mv $TEMP_PATH/newModule2 $(pathbase)/Module2/Module2.xba
+	echo "module VSEditSplitBtnRun.bas replaced into Module2..."
+	echo "use PutXBAModule.sh to copy the new Module2 over GitHub/Module2 after changes checked."
 
 #=======================================================
 JustDoIt: ;

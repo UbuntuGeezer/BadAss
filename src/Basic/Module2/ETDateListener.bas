@@ -29,8 +29,8 @@ public sub ETDateListener()
 '//	constants.
 dim bFormComplete	As Boolean		'// all fields complete flag
 dim oETDateText		As Object		'// Date text field
-dim oETRecordBtn	As Object		'// Record & Finish button
-dim oETRecordCont	As Object		'// Record & Continue button
+dim oETRecordBtn	As Object		'// Record &' Finish button
+dim oETRecordCont	As Object		'// Record &' Continue button
 
 '//	local variables.
 

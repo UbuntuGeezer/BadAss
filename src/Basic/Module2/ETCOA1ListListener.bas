@@ -38,10 +38,13 @@ dim sAcct1		As String			'// returned account from GetCOA
 	sAcct1 = ""
 	ON ERROR GOTO ErrorHandler
 	
+	pbETDebitList=true
+	pbETCreditList=false	
 	sAcct1 = GetCOA(1)			'// get COA from dialog
 	if Len(sAcct1)>0 then
-		oETCOA1Text = puoETDialog.getControl("DebitField")
-		oETCOA1Text.Text = sAcct1
+	    puoETDialog.Model.DebitField.Text = sAcct1
+'		oETCOA1Text = puoETDialog.getControl("DebitField")
+'		oETCOA1Text.Text = sAcct1
 		gsETAcct1 = sAcct1
 	endif
 	

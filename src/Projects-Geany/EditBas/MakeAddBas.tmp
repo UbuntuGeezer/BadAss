@@ -1,5 +1,6 @@
 # MakeAddBas.tmp - Makefile (template) for MakeAddBas.
 $(error out-of-date)
+$(error out-of-date)
 #	6/25/23.	wmk.
 #
 # This makefile is edited by DoSed.sh with CenterUnitHstead3 Module1 substituted

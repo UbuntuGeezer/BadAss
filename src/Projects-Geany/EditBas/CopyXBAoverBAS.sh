@@ -1,8 +1,6 @@
 #!/bin/bash
-# 2023-11-12.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
-# 2023-11-12.	wmk.	(automated) Version 3.0.9 *libpath introduced (HPPavilion).
-# CopyXBAoverBAS - Copy FLsara86777 Import module .xba code over to Basic folder.
-#	11/13/23.	wmk.
+# CopyXBAoverBAS - Copy BadAss Import module .xba code over to Basic folder.
+#	1/12/24.	wmk.
 #
 # Usage.	bash CopyXBAoverBAS.sh <basmodule>
 #
@@ -15,6 +13,7 @@
 # 11/12/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
 # 11/12/23.	wmk.	(automated) Version 3.0.9 *libpath introduced.
 # 11/13/23.	wmk.	*srcpath corrected.
+# 1/12/24.	wmk.	code checked for Accounting/BadAss compatibility.
 # Legacy mods.
 # 8/22/23.	wmk.	edited for FLsara86777; *codebase used throughout.
 # 8/23/23.	wmk.	ver2.0 change to use /src as parent folder.

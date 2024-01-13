@@ -1,5 +1,6 @@
 # MakeDeleteXBAbas.tmp - Makefile (template) for MakeDeleteXBAbas.
 $(error out-of-date)
+$(error out-of-date)
 #	6/24/23.	wmk.
 #
 # MakeDeleteXBAbas deletes a module from the specified .xba file.
@@ -23,10 +24,10 @@ projpath = $(folderbase)/GitHub/Libraries/FLsara86777/EditBas
 # <filepath>/<filebase>.sql
 #=======================================================
 Always : JustDoIt
-	sed -i '/\/\/ sGenWhtPgesURL.bas/,/\/\*\*\//d' \
-	 $pathbase/Basic/Module1/Module1.xba
-	echo "sGenWhtPgesURL deleted from Module1.xba"
-	~\sysprocs/LOGMSG "  sGenWhtPgesURL deleted from Module1."
+	sed -i '/\/\/ VSEditSplitBtnRun.bas/,/\/\*\*\//d' \
+	 $pathbase/Basic/Module2/Module2.xba
+	echo "VSEditSplitBtnRun deleted from Module2.xba"
+	~\sysprocs/LOGMSG "  VSEditSplitBtnRun deleted from Module2."
 
 #=======================================================
 JustDoIt: ;

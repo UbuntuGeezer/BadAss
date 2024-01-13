@@ -63,7 +63,7 @@ dim oDlgCtrlA	As Object		'// ET control object when accessing Debit/Credit
 	
 	Select Case puoSTDialog.Execute()
 	Case 2		'// Done clicked
-'		msgBox("Record & Finish clicked in Split Transaction")
+'		msgBox("Record &' Finish clicked in Split Transaction")
 		'// update DebitField or CreditField field with "split" based on flag
 '//		gbSTSplitCredits = true; split CreditField; else split DebitField
 		if gbSTSplitCredits then

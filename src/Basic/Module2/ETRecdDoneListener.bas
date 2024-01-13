@@ -1,7 +1,7 @@
 '// ETRecdDoneListener.bas
 '//---------------------------------------------------------------------
-'// ETRecdDoneListener - Event handler <Record & Continue> from Enter Transaction.
-'//		6/17/20.	wmk.	14:15
+'// ETRecdDoneListener - Event handler <Record &' Continue> from Enter Transaction.
+'//		9/7/22.	wmk.	11:39
 '//---------------------------------------------------------------------
 
 public sub ETRecdDoneListener()
@@ -10,7 +10,7 @@ public sub ETRecdDoneListener()
 '//			call ETRecdDoneListener()
 '//
 '// Entry.	normal entry from event handler for dialogue where
-'//			user clicked the [Record & Finish] button in ET dialog
+'//			user clicked the [Record &' Finish] button in ET dialog
 '//			puoETDialog = Enter Transaction dialog object
 '//
 '//	Exit.	Transaction data recorded in GL sheet at user selection
@@ -23,15 +23,16 @@ public sub ETRecdDoneListener()
 '//	---------------------
 '//	6/16/20.	wmk.	original code; stub
 '//	6/17/20.	wmk.	completed; waiting on ETDialogRecord functional
+'//	9/7/22.		wmk.	msgbox added to error handling.
 '//
 '//	Notes. This sub is the linked macro to the changed status event linked
-'// to the <Record & Continue> cmd button in the Enter Transaction dialog.
+'// to the <Record &' Continue> cmd button in the Enter Transaction dialog.
 
 '//	constants.
 
 '//	local variables.
-dim oETRecordBtn	As Object		'// Record & Finish button
-dim oETRecordCont	As Object		'// Record & Continue button
+dim oETRecordBtn	As Object		'// Record &' Finish button
+dim oETRecordCont	As Object		'// Record &' Continue button
 dim iStatus 		As Integer		'// general status
 
 	'// code.
@@ -55,6 +56,7 @@ NormalExit:
 	exit sub
 	
 ErrorHandler:
+    msgbox("ETRecdDoneListener - unprocessed error.")
 	GoTo NormalExit
 	
 end sub		'// end ETRecdDoneListener	6/17/20

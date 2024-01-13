@@ -1,9 +1,5 @@
 Module2Hdr
-Module2 code (complete with publics_2
 publics2
----------------publics_2
-COA selected from list box (
---------------end publics_2
 Main
 COACancelListener
 COAListBoxListener
@@ -19,13 +15,10 @@ ETCheckComplete
 ETDateListener
 ETDescListener
 ETDialogRecord
-----------------constants borrowed from header
-----------------end constants borrowed from publics
 ETDialogReset
 ETDlgSplitRecord
-----------------constants borrowed from header
-----------------end constants borrowed from publics
 ETPubVarsReset
+ETRecdContListener
 ETRecdDoneListener
 ETRefHelpListener
 ETRefListener
@@ -38,7 +31,6 @@ G
 GA
 GetCOA
 H
-8
 LoadBadAssLib
 LoadCOAs
 LoadStdLibrary

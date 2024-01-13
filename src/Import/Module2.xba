@@ -2,7 +2,7 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Module2" script:language="StarBasic">REM  *****  BASIC  *****
 &apos;// Module2Hdr.bas
-&apos;// Module2 code (complete with publics_2) for dialogs
+&apos;// Module2 code (complete with publics_2.bas) for dialogs
 &apos;//	Module2 subs/functions index.	7/5/20.
 &apos;//
 &apos;//	Main - Module2 Main - clear pbDlgLibLoaded flag.
@@ -16,7 +16,7 @@
 &apos;//
 &apos;/**/
 &apos;// publics2.bas
-&apos;//---------------publics_2---------------------------------
+&apos;//---------------publics_2.bas---------------------------------
 &apos;// Module2 public vars and constants
 &apos;//		7/6/20.		wmk.	07:15
 &apos;//
@@ -104,14 +104,14 @@ public puoCOASelectBtn	As Object	&apos;// &lt;Select&gt; button
 &apos;// vars for dialogues interface to accounting package
 
 public puoCOAListBox As Object		&apos;// COA list box object in active form
-public pusCOASelected As String		&apos;// COA selected from list box (..Listener)
+public pusCOASelected As String		&apos;// COA selected from list box (..Listener.bas)
 public pbETActive	 AS Boolean		&apos;// ET dialog active flag
 public pbETDebitList	As Boolean	&apos;// debit list COA button
 public pbETCreditList	As Boolean	&apos;// credit list COA button
 
 OPTION EXPLICIT				&apos;// code protection
 
-&apos;//--------------end publics_2----7/6/20--------------------------
+&apos;//--------------end publics_2.bas----7/6/20--------------------------
 &apos;/**/
 &apos;// Main.bas
 &apos;// COPY CODE FROM MAIN TO COASelectListener, COACancelListener
@@ -357,7 +357,7 @@ endif
 &apos;		msgBox(&quot;Cancel or FormClose clicked&quot;)
 	Case else
 &apos;		iStatus = ETPubVarsReset(1)	&apos;// reset everything
-&apos;		msgBox(&quot;ET - unevaluated dialog return&quot;)
+&apos;		msgBox(&quot;ET.bas - unevaluated dialog return&quot;)
 	End Select
 
 &apos;msgbox(&quot;Date entered: &quot; + gsETDate)
@@ -881,7 +881,7 @@ public function ETDialogRecord() As Integer
 
 &apos;//	constants.
 
-&apos;//----------------constants borrowed from header-------------------
+&apos;//----------------constants borrowed from header.bas-------------------
 const LTGREEN=10092390		&apos;// decimal value of LTGREEN color
 
 &apos;// column index values and string lengths for column data			
@@ -903,7 +903,7 @@ const CJUST=2		&apos;// center HoriJustify						&apos;// mod052020
 const RJUST=3		&apos;// right-justify HoriJustify				&apos;// mod052320
 const MAXTRANSL=50	&apos;// maximum transaction text length			&apos;// mod052020
 
-&apos;//----------------end constants borrowed from publics--------------
+&apos;//----------------end constants borrowed from publics.bas--------------
 
 &apos;//	local variables
 dim iRetValue As Integer
@@ -1163,7 +1163,7 @@ public function ETDlgSplitRecord() As Integer
 
 &apos;//	constants.
 
-&apos;//----------------constants borrowed from header-------------------
+&apos;//----------------constants borrowed from header.bas-------------------
 const LTGREEN=10092390		&apos;// decimal value of LTGREEN color
 
 &apos;// column index values and string lengths for column data			
@@ -1185,7 +1185,7 @@ const CJUST=2		&apos;// center HoriJustify						&apos;// mod052020
 const RJUST=3		&apos;// right-justify HoriJustify				&apos;// mod052320
 const MAXTRANSL=50	&apos;// maximum transaction text length			&apos;// mod052020
 
-&apos;//----------------end constants borrowed from publics--------------
+&apos;//----------------end constants borrowed from publics.bas--------------
 
 &apos;//	local variables
 dim iRetValue As Integer
@@ -2632,7 +2632,7 @@ public sub H()
 &apos;//	---------------------
 &apos;//	6/18/20.	wmk.	original code; adapted from G. bas.
 &apos;//	6/23/20.	wmk.	change to use fDialogReset.
-&apos;// 8/26/22.	wmk.	add intervening space to G. bas and H . bas in comments.
+&apos;// 8/26/22.	wmk.	add intervening space to G. bas and H .bas in comments.
 &apos;//
 &apos;//	Notes.
 &apos;//

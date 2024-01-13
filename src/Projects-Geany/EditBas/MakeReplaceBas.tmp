@@ -1,5 +1,6 @@
 # MakeReplaceBas.tmp - Makefile (template) for MakeReplaceBas.
 $(error out-of-date)
+$(error out-of-date)
 #	3/8/22.	wmk.
 #
 # This makefile is edited by DoSed.sh with <basmodule> <xbafile> substituted

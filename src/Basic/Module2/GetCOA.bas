@@ -1,7 +1,7 @@
 '// GetCOA.bas
 '//---------------------------------------------------------------
 '// GetCOA - Return user selected COA.
-'//		7/6/20.	wmk.	11:00
+'//		9/7/22.	wmk.	17:29
 '//---------------------------------------------------------------
 
 public function GetCOA(piFromOpt As Integer) As String
@@ -23,6 +23,8 @@ public function GetCOA(piFromOpt As Integer) As String
 '//
 '//	Modification history.
 '//	---------------------
+'// 9/7/22.		wmk.	case corrected 1=OK - record COA from dialog.
+'// Legacy mods.
 '//	6/14/20.	wmk.	original code
 '//	6/16/20.	wmk.	update to use new COADialog (formerly ListBox);
 '//	6/17/20.	wmk.	correct load dialog code to initialize
@@ -74,10 +76,11 @@ static sLastCOA As String	'// last COA selected
 
 		'// run dialog and get user selection
 		Select Case puoCOADialog.Execute()
-		Case 2		'// Select clicked
+		Case 1		'// Select clicked - same as OK
 '			msgBox("COA Selected: " + pusCOASelected)
 '			msgBox("Select clicked in Chart of Accounts")
 			sLastCOA = pusCOASelected
+			puoCOADialog.endDialog(2)
 		Case 0		'// Cancel
 			pusCOASelected = ""		'// since cancel, Execute() event skipped
 '			msgBox("Cancel or FormClose clicked")
@@ -101,5 +104,5 @@ ErrorHandler:
 	sRetValue = ""
 	GoTo NormalExit
 	
-end function 	'// end GetCOA		7/6/20
+end function 	'// end GetCOA		9/7/22
 '/**/

@@ -1,5 +1,6 @@
 # MakeExtractBas.tmp - Makefile (template) for FLsara86777 MakeExtractBas.
-#	11/12/23.	wmk.
+# 2024-01-13.	wmk.	(automated) Version 3.0.6 (Lenovo) Make old paths removed.
+#	1/13/24.	wmk.
 #
 # MakeAnySHtoSQL takes a <file base>.sh file and move it through the
 # reverse process to de-shell it into a .sql file of straight SQL. An
@@ -19,6 +20,7 @@
 #			 dependencies documented.
 # 11/12/23.	wmk.	*libbase environment var implemented; change from
 #			 from *codebase to *srcpath for recipe paths.
+# 1/13/24.	wmk.	(automated) Version 3.0.6 Make old paths removed.
 # Legacy mods.
 # 8/22/23.	wmk.	modified for FLsara86777; *pathbase updated; *srcpath used
 #			 throughout.

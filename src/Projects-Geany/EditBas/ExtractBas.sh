@@ -1,8 +1,6 @@
 #!/bin/bash
-# 2023-11-13.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
-# 2023-11-13.	wmk.	(automated) Version 3.0.9 *libpath introduced (HPPavilion).
-# ExtractBas.sh - Extract FLsara86777 .bas block from .xba module.
-#	11/13/23.	wmk.
+# ExtractBas.sh - Extract BadAss .bas block from .xba module.
+#	1/13/24.	wmk.
 #
 # Usage. bash  ExtractBas.sh <xbamodule> <basblock>
 #
@@ -15,8 +13,9 @@
 #
 # Modification History.
 # ---------------------
-# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
+# 11/13/23.	wmk.	(automated) UnKillShell to reinstate shell.
 # 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath introduced.
+# 1/13/24.	wmk.	code checked for BadAss/src.
 #
 # P1=<xbamodule> P2=<basblock>
 P1=$1

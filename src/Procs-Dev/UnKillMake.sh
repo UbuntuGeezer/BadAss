@@ -1,7 +1,7 @@
 #!/bin/bash
-echo " ** UnKillMake.sh out-of-date **";exit 1
+# 2024-01-13.	wmk.	(automated) Version 3.0.6 paths eliminated (Lenovo).
 # UnKillMake.sh - UnKill Make by removing illegal command at start.
-#	11/19/23.	wmk.
+#	1/13/24.	wmk.
 #
 # Usage. bash  UnKillMake.sh <Make-name> [<Make>]
 #
@@ -17,6 +17,11 @@ echo " ** UnKillMake.sh out-of-date **";exit 1
 #
 # Modification History.
 # ---------------------
+# 01/13/24.	wmk.	(automated) echo,s to printf,s throughout
+# 01/13/24.	wmk.	(automated) Version 3.0.6 Make old paths removed.
+# 1/13/24.	wmk.	SetToday corrected; *libbase replaces codebase; /src added
+#			 to *libbase paths; printf changed to 'UnKillMake to reinstate
+#			 makefile.'
 # 11/5/23.	wmk.	Version 3.0.0 path editing.
 # 11/8/23.	wmk.	Version 3.0.6 eliminate old *folderbase, *pathbase,
 #			 *codebase path definitions from makefile.
@@ -41,7 +46,7 @@ echo " ** UnKillMake.sh out-of-date **";exit 1
 P1=$1
 P2=$2
 if [ -z "$P1" ];then
- echo "UnKillMake <Make-name> [<path>] missing parameter(s)"
+ printf "%s\n" "UnKillMake <Make-name> [<path>] missing parameter(s)"
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 1
 fi
@@ -49,23 +54,25 @@ killMake=$PWD
 if [ ! -z "$P2" ];then
  killMake=$P2
 fi
-echo $killMake/$P1
+printf "%s\n" $killMake/$P1
 if ! test -s $killMake/$P1;then
- echo " UnKillMake - $P1 is empty or non-existent."
+ printf "%s\n" " UnKillMake - $P1 is empty or non-existent."
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 0
 fi
 if [ -z "$b" ];then
- export b=$WINGITPATH/TerrCode86777/FLsara86777cb/Procs-Dev
+ export b=$libbase/src/Procs-Dev
 fi
 if [ -z "$TODAY" ];then
- $b/SetToday.sh
+ . $b/SetToday.sh -v
 fi
 printf "%s\n" "/ndef.*folderbase/,/^endif/d"  > $TEMP_PATH/sedunkillmake.txt
 printf "%s\n" "/ifeq.*\$USER/,/endif/d"  >> $TEMP_PATH/sedunkillmake.txt
 printf "%s\n" "/ifndef.*pathbase/,/endif/d"  >> $TEMP_PATH/sedunkillmake.txt
 printf "%s\n" "/ifndef.*codebase/,/endif/d"  >> $TEMP_PATH/sedunkillmake.txt
-printf "%s\n%s\n" "/# -----/a# $TODAY1.\twmk.\t\(automated\) Version 3.0.6 Make old paths removed." >> $TEMP_PATH/sedunkillmake.txt
+printf "%s\n%s\n" "/# -----/a# $TODAY1.\twmk.\t\(automated\) UnKill to reinstate makefile." \
+  >> $TEMP_PATH/sedunkillmake.txt
+# 01/13/24.	wmk.	(automated) Version 3.0.6 Make old paths removed.
 
 printf "%s\n" "/(pathbase)\/include/s?(pathbase)?(codebase)?1" \
   >> $TEMP_PATH/sedunkillmake.txt
@@ -77,7 +84,8 @@ printf "%s\n" "/(pathbase)\/Procs-Dev/s?(pathbase)?(codebase)?1" \
   >> $TEMP_PATH/sedunkillmake.txt
 printf "%s\n" "/(codepath)/s?(codepath)?(codebase)?1" \
   >> $TEMP_PATH/sedunkillmake.txt
-printf "%s\n%s\n" "/.*(error out-of-date.*)/d"  "1a# $TODAY.\twmk.\t\(automated\) Version 3.0.6 (Lenovo) Make old paths removed." >> $TEMP_PATH/sedunkillmake.txt
+printf "%s\n%s\n" "/.*(error out-of-date.*)/d"  "1a# $TODAY.\twmk.\t\(automated\) UnKill (Lenovo) to reinstate makefile." \
+  >> $TEMP_PATH/sedunkillmake.txt
 if [ "$killMake" == "./" ];then
  sed -i -f $TEMP_PATH/sedunkillmake.txt $killMake$P1
 
@@ -85,8 +93,8 @@ else
  sed -i -f $TEMP_PATH/sedunkillmake.txt $killMake/$P1
 fi
 if [ $? -eq 0 ];then
- echo "UnKillMake $P1 $P2 successful."
+ printf "%s\n" "UnKillMake $P1 $P2 successful."
 else
- echo "UnKillMake $P1 $P2 failed."
+ printf "%s\n" "UnKillMake $P1 $P2 failed."
 fi
 # end UnKillMake.sh

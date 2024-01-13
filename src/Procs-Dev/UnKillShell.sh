@@ -1,6 +1,6 @@
 #!/bin/bash
 # UnKillShell.sh - UnKill shell by removing illegal command at start.
-#	1/12/24.	wmk.
+#	1/13/24.	wmk.
 #
 # Usage. bash  UnKillShell.sh <shell-name> [<path>]
 #
@@ -27,7 +27,9 @@
 # 11/11/23.	wmk.	*sed to remove *folderbase, *pathbase, *codebase definitions
 #			 from shell (11/8 mod lost).
 # 11/24/23.	wmk.	run EchosToPrintfs shell on all shells.
-# 1/12/24.	wmk.	*thisproj corrected for BadAss/src/Procs-Dev.
+# 1/12/24.	wmk.	*thispath corrected for BadAss/src/Procs-Dev.
+# 1/13/24.	wmk.	*thispath corrected to use *libbase; HPPavilion > Lenovo in
+#			 printf.
 # Legacy mods.
 # 10/11/23.	wmk.	revert to *WINGIT_PATH for HP2 system.
 # Legacy mods.
@@ -67,7 +69,7 @@ if ! test -s $killpath$msgsep$P1;then
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 0
 fi
-thispath=$codebase/BadAss/src/Procs-Dev
+thispath=$libbase/src/Procs-Dev
 if [ 1 -eq 0 ];then
 # ----- old block editing paths -----
 printf "%s\n" "/terrbase=.*\/Users\/Bill/s?\/Users\/Bill??1" > $TEMP_PATH/sedunkillsh.txt
@@ -99,7 +101,7 @@ printf "%s\n" "s?TerritoriesCB/FLsara86777?TerrCode86777/FLsara86777cb?g" \
   >> $TEMP_PATH/sedunkillsh.txt
 printf "%s\n" "s?TerritoriesCB/FLsara76777?TerrCode86777/FLsara86777cb?g" \
   >> $TEMP_PATH/sedunkillsh.txt
-printf "%s\n" "1a# $TODAY.\twmk.\t(automated) Version 3.0.6 paths eliminated (HPPavilion)." >> $TEMP_PATH/sedunkillsh.txt
+printf "%s\n" "1a# $TODAY.\twmk.\t(automated) Version 3.0.6 paths eliminated (Lenovo)." >> $TEMP_PATH/sedunkillsh.txt
 if [ "$killpath" == "./" ];then
  # sed -i -f $TEMP_PATH/sedunkillsh.txt $killpath$P1
  sed -i -f $thispath/sedkillpathdefs.txt $killpath$P1
