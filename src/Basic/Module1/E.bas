@@ -49,4 +49,3 @@ dim oRange As Object		'// CellRangeAddress object
 					
 end function	'// end E
 '/**/
-

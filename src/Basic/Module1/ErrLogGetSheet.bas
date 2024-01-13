@@ -29,4 +29,3 @@ public Function ErrLogGetSheet() As Integer
 	
 end Function		'// end ErrLogGetSheet
 '/**/
-

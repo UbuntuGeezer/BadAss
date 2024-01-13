@@ -1,2 +1,2 @@
-s?<basmodule>?VSEditSplitBtnRun?g
-s?<xbafile>?Module2?g
+s?<basmodule>?StoreTrans?g
+s?<xbafile>?Module1?g

@@ -40,4 +40,3 @@ public Function ErrLogDisable() As Void
 	
 end Function		'// end ErrLogDisable
 '/**/
-

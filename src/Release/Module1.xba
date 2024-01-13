@@ -1,39 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Module1" script:language="StarBasic">REM  *****  BASIC  *****
 &apos;// Module1Hdr.bas
 REM  *****  BASIC  *****
 &apos;// Module1Hdr - BadAss Library Module1 header.
 &apos;// Module1 (Beta Release) - Local macros for Chase Activity Download Spreadsheet and
 &apos;//	transaction processing in Production Alpha Clean Accounting spreadsheet.
-&apos;// 8/22/22.	wmk.	&apos;/**/ and // &lt;module-name&gt;.bas bracketing lines added; application
-&apos;//				 extended to general banking activity in Accounting subsystem.
-&apos;// Legacy Mods.
-&apos;//	5/14/20.	wmk.	original code with mods
-&apos;//	5/16/20.	wmk.	new functions and subs to span sheets for
-&apos;//						transaction mapping to accounts sheets
-&apos;//	5/17/20.	wmk.	correct test constant EXPSHEET to match this
-&apos;//						document &apos;Expense Accounts_2&apos;
-&apos;//	5/18/20.	wmk.	row data processing constants added.
-&apos;//	5/19/20.	wmk.	sheet name constants changed to match production
-&apos;//	5/20/20.	wmk.	added OPTION EXPLICIT for code control
-&apos;//	5/22/20.	wmk.	added PlaceSplitTrans function.
-&apos;//	5/23/20.	wmk.	added BeanField function; bug fix with ASTSHEET
-&apos;//	5/25/20.	wmk.	added errhandling.bas and associated subs
-&apos;//	5/26/20.	wmk.	errhandling.bas update resinserted
-&apos;//	6/28/20.	wmk.	Beta Release to BadAss Library
-
-&apos;// Code protection.
-OPTION EXPLICIT				&apos;// every variable must be declared before use
-
-&apos;/**/
-
+&apos;// 8/22/22.	wmk.	&apos;/**/ and // &lt;module-name&gt;bas bracketing lines added; application
 &apos;// errhandling.bas
 &apos;//---------------------------------------------------------------
-&apos;// errhandling.bas - Definitions for development error handling.
+&apos;// errhandling - Definitions for development error handling.
 &apos;//		wmk. 5/26/20.	17:30
 &apos;//---------------------------------------------------------------
 &apos;//
 &apos;// Header Description.
 &apos;// -------------------
-&apos;//	errhandling.bas contains definitions that may be inserted in any
+&apos;//	errhandling contains definitions that may be inserted in any
 &apos;// OOoBasic Module for handing error conditions. This is intended for
 &apos;// use with development modules, and should be removed for Production
 &apos;// spreadsheets. This will ensure clean code released into the
@@ -89,15 +71,14 @@ global goErrRangeAddress As Object				&apos;// cell range address
 &apos;// ErrLogGetSheet - Get sheet index from error log globals.
 &apos;// ErrLogSetSheet - Set sheet index in error log globals.
 &apos;// LogError - make error log entry([goCellRangeAddress], psErrName, psErrMsg)
-&apos;//-----------------end errhandling.bas header--------------------------
+&apos;//-----------------end errhandling header--------------------------
 &apos;/**/
-
 &apos;// publics.bas
-&apos;//---------------------------publics.bas----------------------------------------------
+&apos;//---------------------------publics----------------------------------------------
 &apos;//		6/6/20.	wmk.
-&apos;// publics.bas - module-wide vars for Module1 code in accounts sheets
+&apos;// publics - module-wide vars for Module1 code in accounts sheets
 &apos;// module-wide constants. (used in processing bank download sheets)
-&apos;// (mirrored in file publics.bas)
+&apos;// (mirrored in file publics)
 
 &apos;// Modification History.
 &apos;// ---------------------
@@ -168,9 +149,8 @@ public const LJUST=1		&apos;// left-justify HoriJustify				&apos;// mod052020
 public const CJUST=2		&apos;// center HoriJustify						&apos;// mod052020
 public const RJUST=3		&apos;// right-justify HoriJustify				&apos;// mod052320
 public const MAXTRANSL=50	&apos;// maximum transaction text length			&apos;// mod052020
-&apos;//----------------------end publics.bas---------------------------------------------
+&apos;//----------------------end publics---------------------------------------------
 &apos;/**/
-
 &apos;// Main.bas
 &apos;//---------------------------------------------------------------
 &apos;// Main - generic Main sub for module.
@@ -181,7 +161,6 @@ Sub Main
 
 End Sub
 &apos;/**/
-
 &apos;// CheckDoubleEntry.bas
 &apos;//---------------------------------------------------------------
 &apos;// CheckDoubleEntry - Check double entry transaction fields.
@@ -537,7 +516,6 @@ AdvanceTrans:
 
 end function 	&apos;// end CheckDoubleEntry	7/3/20
 &apos;/**/
-
 &apos;// CheckInserts.bas
 &apos;//------------------------------------------------------------------
 &apos;// CheckInserts - Check target COA sheet(s) for insertion available.
@@ -820,7 +798,6 @@ AdvanceTrans:
 	
 end function 	&apos;// end CheckInserts	7/3/20
 &apos;/**/
-
 &apos;// CheckSplitTrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// CheckSplitTrans - Check split transaction for validity.
@@ -1257,7 +1234,6 @@ ExitNormal:
 	
 end function 	&apos;// end CheckSplitTrans	7/4/20
 &apos;/**/
-
 &apos;// CreateReverseTrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// CreateReverseTrans - Create reversal transaction.
@@ -1420,7 +1396,6 @@ ErrorHandler:
 	
 end function 	&apos;// end CreateReverseTrans	6/28/20
 &apos;/**/
-
 &apos;// D.bas
 &apos;//------------------------------------------------------------------
 &apos;// D - stub function to enable calls to development subs/functions.
@@ -1519,7 +1494,6 @@ iBrkPt=1
 				
 end function	&apos;// end D
 &apos;/**/
-
 &apos;// DayName.bas
 &apos;// DayName - Return text name of day from week day number
 public Function DayName(nDay as integer) as string
@@ -1559,7 +1533,6 @@ end select
 DayName = strDay
 end function	&apos;// end Dayname
 &apos;/**/
-
 &apos;// E.bas
 &apos;//------------------------------------------------------------------
 &apos;// E - stub function to test error handling capabilities.
@@ -1611,7 +1584,6 @@ dim oRange As Object		&apos;// CellRangeAddress object
 					
 end function	&apos;// end E
 &apos;/**/
-
 &apos;// ErrLogDisable.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogDisable - Disable error logging.
@@ -1654,7 +1626,6 @@ public Function ErrLogDisable() As Void
 	
 end Function		&apos;// end ErrLogDisable
 &apos;/**/
-
 &apos;// ErrLogGetCellInfo.bas
 &apos;//-----------------------------------------------------------------
 &apos;// ErrLogGetCellInfo - Get cell information from error log globals.
@@ -1687,7 +1658,6 @@ public Function ErrLogGetCellInfo(rplColumn As Long, rplRow As Long) As Void
 	
 end Function		&apos;// end ErrLogGetCellnfo
 &apos;/**/
-
 &apos;// ErrLogGetCellName.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogGetCellName - Get cell name from error log globals.
@@ -1720,7 +1690,6 @@ dim sRetStr As String		&apos;// returned cell string
 	
 end Function		&apos;// end ErrLogGetCellName
 &apos;/**/
-
 &apos;// ErrLogGetDisplay.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogGetDisplay - Get msgBox error messaging on/off status.
@@ -1748,7 +1717,6 @@ public function ErrLogGetDisplay() As Boolean
 
 end function 	&apos;// end ErrLogGetDisplay
 &apos;/**/
-
 &apos;// ErrLogGetModule.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogGetModule - Get module name in error log globals.
@@ -1777,7 +1745,6 @@ public Function ErrLogGetModule() As String
 	
 end Function		&apos;// end ErrLogGetModule
 &apos;/**/
-
 &apos;// ErrLogGetRecording.bas
 &apos;//-----------------------------------------------------------------------
 &apos;// ErrLogGetRecording - Get error recording status from error log globals
@@ -1811,7 +1778,6 @@ dim bRetValue	as Boolean
 
 end function 	&apos;// end ErrLogGetRecording
 &apos;/**/
-
 &apos;// ErrLogGetSheet.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogGetSheet - Get sheet index from error log globals.
@@ -1843,7 +1809,6 @@ public Function ErrLogGetSheet() As Integer
 	
 end Function		&apos;// end ErrLogGetSheet
 &apos;/**/
-
 &apos;// ErrLogMakeEntry.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogMakeEntry - record entry in ERRLOGSHEET spreadsheet.
@@ -1972,7 +1937,6 @@ BailOut:
 
 end function 	&apos;// end ErrLogMakeEntry	6/3/20
 &apos;/**/
-
 &apos;// ErrLogSetCellInfo.bas
 &apos;//-----------------------------------------------------------------
 &apos;// ErrLogSetCellInfo - Set cell information in error log globals.
@@ -2005,7 +1969,6 @@ public Function ErrLogSetCellInfo(plColumn As Long, plRow As Long) As Void
 	
 end Function		&apos;// end ErrLogSetCellnfo
 &apos;/**/
-
 &apos;// ErrLogSetDisplay.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogSetDisplay - Set msgBox error messaging on/off.
@@ -2035,7 +1998,6 @@ public function ErrLogSetDisplay(pbDisplayOn As Boolean) As Void
 
 end function 	&apos;// end ErrLogSetDisplay
 &apos;/**/
-
 &apos;// ErrLogSetModule.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogSetModule - Set module name in error log globals.
@@ -2068,7 +2030,6 @@ public Function ErrLogSetModule(psName as String) As Void
 	
 end Function		&apos;// end ErrLogSetModule
 &apos;/**/
-
 &apos;// ErrLogSetRecording.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogSetRecording - Set error recording status in error log globals
@@ -2102,7 +2063,6 @@ public function ErrLogSetRecording(pbRecordingOn as Boolean) As Void
 
 end function 	&apos;// end ErrLogSetRecording
 &apos;/**/
-
 &apos;// ErrLogSetSheet.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogSetSheet - Set sheet index in error log globals.
@@ -2135,7 +2095,6 @@ public Function ErrLogSetSheet(piSheet as Integer) As Void
 	
 end Function		&apos;// end ErrLogSetSheet
 &apos;/**/
-
 &apos;// ErrLogSetup.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogSetup - set up error logging to ERRLOGSHEET.
@@ -2226,7 +2185,6 @@ Bailout:
 
 end sub		&apos;// end ErrLogSetup
 &apos;/**/
-
 &apos;// GetInsRow.bas
 &apos;//------------------------------------------------------------------
 &apos;// GetInsRow - Get insertion row given sheet, COA account, month.
@@ -2386,7 +2344,6 @@ iBrkpt = 1
 
 end function 	&apos;// end GetInsRow	6/8/20
 &apos;/**/
-
 &apos;// GetMonthName.bas
 &apos;//---------------------------------------------------------------
 &apos;// GetMonthName - return month name given date number.
@@ -2459,7 +2416,6 @@ dim sName as String		&apos;// returned name of month
 	
 end function 	&apos;// end GetMonthName 
 &apos;/**/
-
 &apos;// GetTransSheetName.bas
 &apos;//---------------------------------------------------------------
 &apos;// GetTransSheetName - Get sheet name where transaction belongs.
@@ -2529,7 +2485,6 @@ dim sDigit 	as String	&apos;// extracted 1st digit
 
 end function 	&apos;// end GetTransSheetName
 &apos;/**/
-
 &apos;// LogError.bas
 &apos;//---------------------------------------------------------------
 &apos;// LogError - Make error log entry to ERRLOGSHEET.
@@ -2598,7 +2553,6 @@ dim iStatus As Integer		&apos;// recording status
 			
 end sub		&apos;// end LogError	6/2/20
 &apos;/**/
-
 &apos;// PlaceSplitTotal.bas
 &apos;//------------------------------------------------------------------
 &apos;// PlaceSplitTotal - Itemize split transaction in total COA account.
@@ -2941,7 +2895,6 @@ NormalExit:
 
 end Function		&apos;// end PlaceSplitTotal		7/8/20
 &apos;/**/
-
 &apos;// PlaceSplitTrans.bas
 &apos;//------------------------------------------------------------------
 &apos;// PlaceSplitTrans - Place split transaction into multiple accounts.
@@ -3268,7 +3221,6 @@ iBrkPt = 1
 	
 end function		&apos;// end PlaceSplitTrans	7/8/20
 &apos;/**/
-
 &apos;// PlaceTransM.bas
 &apos;//-------------------------------------------------------------------
 &apos;// PlaceTransM - place multiple transactions into appropriate sheets.
@@ -3647,11 +3599,10 @@ DontCheck:
 
 end sub		&apos;// end PlaceTransM		6/12/20
 &apos;/**/
-
 &apos;// ReverseDETrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// ReverseDETrans - Reverse double-entry transaction.
-&apos;//		6/12/20.	wmk.	17:30
+&apos;//		11/14/22.	wmk.	08:04
 &apos;//---------------------------------------------------------------
 
 public function ReverseDETrans(poGLRange As Object) As Integer
@@ -3677,7 +3628,7 @@ public function ReverseDETrans(poGLRange As Object) As Integer
 &apos;//	6/11/20.	wmk.	original code
 &apos;//	6/12/20.	wmk.	documentaton updated; code updated to call
 &apos;//						CheckDoubleEntry and CreateReverseTrans
-&apos;//
+&apos;// 11/14/22.	wmk.	clear Ref cell background color
 &apos;//	Notes. Method: For double-entry transaction,insert 2 lines at first
 &apos;// row position with &quot;ROWS&quot; option; copy original transaction to 2 new
 &apos;// rows; swap Debit and Credit columns in old transaction by copying
@@ -3775,8 +3726,10 @@ dim oLogRange as new com.sun.star.table.CellRangeAddress
 	&apos;// document &quot;reversal&quot; in REF column
 	oCellRef = oGLSheet.getCellByPosition(COLREF, lGLOrigRow)
 	oCellRef.String = &quot;reversal&quot;
+	oCellRef.CellBackColor = 0			&apos;// no background
 	oCellRef = oGLSheet.getCellByPosition(COLREF, lGLOrigRow+1)
 	oCellRef.String = &quot;reversal&quot;
+	oCellRef.CellBackColor = 0			&apos;// no background
 	
 	&apos;// set normal return
 	iRetValue = 0
@@ -3788,13 +3741,12 @@ NormalExit:
 ErrorHandler:
 	ReverseDETrans = iRetValue
 	
-end function 	&apos;// end ReverseDETrans	6/12/20
+end function 	&apos;// end ReverseDETrans	11/14/22
 &apos;/**/
-
 &apos;// ReverseSplitTrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// ReverseSplitTrans - Reverse split transaction.
-&apos;//		7/9/20.	wmk.	07:45
+&apos;//		11/14/22.	wmk.	08:16
 &apos;//---------------------------------------------------------------
 
 public function ReverseSplitTrans(poGLRange As Object) As Integer
@@ -3819,6 +3771,7 @@ public function ReverseSplitTrans(poGLRange As Object) As Integer
 &apos;//	6/11/20.	wmk.	original code; stub
 &apos;//	6/12/20.	wmk.	original complete
 &apos;//	7/9/20.		wmk.	bug fix where &quot;reversal&quot; field LTGREEN
+&apos;// 11/14/22.	wmk.	change Ref field background color to 0 (black).
 &apos;//
 &apos;//	Notes. Method. For &quot;split&quot; entry transaction, verify with
 &apos;// CheckSplitTrans which will return the last &quot;split&quot; row of the
@@ -3915,7 +3868,7 @@ dim oLogRange as new com.sun.star.table.CellRangeAddress
 		oCellDate.CellBackColor = LTGREEN
 		oCellRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow)
 		oCellRef.String = &quot;reversal&quot;
-		oCellRef.CellBackColor = NOFILL
+		oCellRef.CellBackColor = 0
 		lGLCurrRow = lGLCurrRow + 1
 	next i		&apos;// end loop on transaction rows
 
@@ -3950,7 +3903,168 @@ ErrorHandler:
 
 end function 	&apos;// end ReverseSplitTrans 7/9/20
 &apos;/**/
+&apos;// CreateReverseTrans.bas
+&apos;//---------------------------------------------------------------
+&apos;// CreateReverseTrans - Create reversal transaction.
+&apos;//		6/28/20.	wmk.	23:15
+&apos;//---------------------------------------------------------------
 
+public function CreateReverseTrans(poGLSheet As Object, _
+					plStartRow As Long, plRowCount As Long) as Integer
+
+&apos;// Usage.	iVal = CreateReverseTrans(oGLSheet, lStartRow, lRowCount)
+&apos;//
+&apos;//		oGLSheet = ledger sheet object
+&apos;//		lStartRow = first row of transaction; if &quot;split&quot;, 1st &quot;split&quot; row
+&apos;//		lRowCount = last row of transaction; if &quot;split&quot;, last &quot;split&quot; row
+&apos;//
+&apos;// Entry.	lStartRow points to the first row of either a &quot;split&quot; or
+&apos;//			double entry transaction.
+&apos;//			lRowCount = the total row count of the transaction
+&apos;//
+&apos;//	Exit.	iVal = 0 - normal exit
+&apos;//				 = -1 - reverse transaction issue
+&apos;//			if normal exit, original transaction is duplicated, with
+&apos;//			the reversal transaction below it in the ledger sheet
+&apos;//
+&apos;// Calls.	none.
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/12/20.	wmk.	original code
+&apos;//	6/28/20.	wmk.	ErrLogSetModule call corrected
+&apos;//
+&apos;//	Notes. 
+&apos;//
+
+&apos;//	constants.
+const COLSPLIT=5			&apos;// column index looking for &quot;split&quot;
+const ERRREVERSE=-1			&apos;// error in reverse transaction
+const sERRREVERSE=&quot;ERRREVERSE&quot;
+
+&apos;//	local variables.
+dim iRetValue As Integer	&apos;// returned value
+dim iSheetIx As Integer		&apos;// GL sheet index
+
+&apos;//	CellRange content variables for GL sheet.
+dim oGLRange as Object		&apos;// RangeAddress object of two rows processing
+dim lGLStartRow as long
+dim lGLEndRow as long
+dim lGLCurrRow as long		&apos;// current row in GL
+dim lGLOrigRow As Long		&apos;// original transaction row index
+dim oDateCell As Object		&apos;// Date field cell
+dim lRowCount As Long		&apos;// local row count
+
+&apos;// error handling setup------------------------------------------------
+const sMyName=&quot;CreateReverseTrans&quot;
+dim sErrCode as String	&apos;// error code string for user code
+Dim sErrMsg As String	&apos;// error message for LogError
+dim lLogRow as long		&apos;// cell row working on
+dim lLogCol as Long		&apos;// cell column working on
+dim iLogSheetIx as Integer	&apos;// sheet index module working on
+
+dim iErrSheetIx As Integer	&apos;// entry error sheet index
+dim lErrColumn As Long		&apos;// entry error column ptr
+dim lErrRow As Long			&apos;// entry error row
+dim sErrCallerMod As String	&apos;// caller module name
+&apos;// end error handling setup--------------------------------------------
+
+
+	&apos;// code.
+	
+	iRetValue = -1			&apos;// set abnormal return
+	ON ERROR GOTO ErrorHandler
+&apos;//*
+	&apos;// preserve entry error settings.
+	iErrSheetIx = ErrLogGetSheet()
+	ErrLogGetCellInfo(lErrColumn, lErrRow)
+	sErrCallerMod = ErrLogGetModule()
+&apos;//*	
+	&apos;// set local error settings.
+	ErrLogSetModule(sMyName)
+	ErrLogSetSheet(poGLSheet.RangeAddress.Sheet)
+	ErrLogSetCellInfo(COLSPLIT, plStartRow)
+&apos;//*----------end error handling setup---------------------------
+	
+&apos;//---------------CreateReverseTrans starts here -----------------------
+&apos;// CreateReverseTrans starts here
+&apos;// Usage.	iVal = CreateReverseTrans(poGLSheet, lStartRow, lRowCount)
+&apos;//
+&apos;//		poGLSheet = ledger sheet object
+&apos;//		lStartRow = first row of transaction; if &quot;split&quot;, 1st &quot;split&quot; row
+&apos;//		lRowCount = last row of transaction; if &quot;split&quot;, last &quot;split&quot; row
+
+	&apos;// insert lRowCount new rows above 1st transaction row in ledger
+	iSheetIx = poGLSheet.RangeAddress.Sheet
+	lGLStartRow = plStartRow
+	lRowCount = plRowCount
+	poGLSheet.Rows.insertByIndex(lGLStartRow, lRowCount)	&apos;// insert new transaction rows
+	lGLOrigRow = lGLStartRow + lRowCount				&apos;// old rows moved down
+	
+	&apos;// copy old transaction to new rows above.
+dim oTargetCellAddress As new com.sun.star.table.CellAddress
+	oTargetCellAddress.Sheet = iSheetIx
+	oTargetCellAddress.Column = COLDATE
+	oTargetCellAddress.Row = lGLStartRow
+		
+dim oGLCellRange As new com.sun.star.table.CellRangeAddress
+	oGLCellRange.Sheet = iSheetIx
+	oGLCellRange.StartColumn = COLDATE
+	oGLCellRange.EndColumn = COLREF
+	oGLCellRange.StartRow = lGLOrigRow
+	oGLCellRange.EndRow = lGLOrigRow + lRowCount - 1
+
+	poGLSheet.copyRange(oTargetCellAddress, oGLCellRange)
+
+	&apos;// now swap Debit and Credit columns in 2nd double-entry
+	&apos;// to emulate transaction reversal
+	&apos;// copy Debit Column to Credit column below first
+	oGLCellRange.StartColumn = COLDEBIT
+	oGLCellRange.StartRow = lGLStartRow
+	oGLCellRange.EndColumn = COLDEBIT
+	oGLCellRange.EndRow = lGLStartRow + lRowCount - 1
+	
+	oTargetCellAddress.Column = COLCREDIT
+	oTargetCellAddress.Row = lGLOrigRow
+	poGLSheet.copyRange(oTargetCellAddress, oGLCellRange)
+	
+	&apos;// copy Credit column to Debit column below
+	
+	oGLCellRange.StartColumn = COLCREDIT
+	oGLCellRange.StartRow = lGLStartRow
+	oGLCellRange.EndColumn = COLCREDIT
+	oGLCellRange.EndRow = lGLStartRow + lRowCount - 1
+	
+	oTargetCellAddress.Column = COLDEBIT
+	oTargetCellAddress.Row = lGLOrigRow
+	poGLSheet.copyRange(oTargetCellAddress, oGLCellRange)
+
+&apos;//end CreateReverseTrans-----------------------------------------
+	iRetValue = 0		&apos;// set normal return
+	
+NormalExit:
+	&apos;// restore caller error handling setup
+	&apos;// set local error settings.
+	ErrLogSetModule(sErrCallerMod)
+	ErrLogSetSheet(iErrSheetIx)
+	ErrLogSetCellInfo(lErrColumn, lErrRow)
+	
+	CreateReverseTrans = iRetValue
+	exit function
+	
+ErrorHandler:
+	&apos;// log error and highlight date field in 1st row
+	sErrCode = sERRREVERSE
+	sErrMsg = &quot;Error in reverse transaction...&quot; _
+			+ CHR(13)+CHR(10) + &quot;Reverse transaction failed.&quot;
+	Call LogError(sErrCode, sErrMsg)
+	oDateCell = poGLSheet.getCellByPosition(COLDATE, lGLStartRow)
+	oDateCell.String = oDateCell.String
+	oDateCell.CellBackColor = YELLOW
+	GoTo NormalExit
+	
+end function 	&apos;// end CreateReverseTrans	6/28/20
+&apos;/**/
 &apos;// ReverseTrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// ReverseTrans - Reverse transaction.
@@ -4086,7 +4200,6 @@ ErrorHandler:
 
 end sub		&apos;// end ReverseTrans	6/12/20
 &apos;/**/
-
 &apos;// SetProcessed.bas
 &apos;//---------------------------------------------------------------
 &apos;// SetProcessed - Set double-entry transaction processed.
@@ -4125,7 +4238,6 @@ dim iRetValue As Integer
 
 end function 	&apos;// end SetProcessed  6/1/20
 &apos;/**/
-
 &apos;// SetSheetDate.bas
 &apos;//---------------------------------------------------------------
 &apos;// SetSheetDate - Set date/time stamp in common sheet date field.
@@ -4207,7 +4319,6 @@ NormalExit:
 
 end function 	&apos;// end SetSheetDate	6/8/20
 &apos;/**/
-
 &apos;// SetSumFormula.bas
 &apos;//---------------------------------------------------------------
 &apos;// SetSumFormula - Create SUM formula for last split account cell.
@@ -4347,7 +4458,6 @@ NormalExit:
 	
 end function 	&apos;// end SetSumFormula
 &apos;/**/
-
 &apos;// SplitOutCOAs.bas
 &apos;//-----------------------------------------------------------------
 &apos;// SplitOutCOAs - Split out COA transaction lines from split entry.
@@ -4650,7 +4760,6 @@ NormalExit:
 
 end function 	&apos;// end SplitOutCOAs	8/22/22.
 &apos;/**/
-
 &apos;// StoreTrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// StoreTrans - Store double-entry transaction.
@@ -4958,4 +5067,4 @@ iBrkpt=1
 
 end function 	&apos;// end StoreTrans	6/11/20
 &apos;/**/
-
+</script:module>

@@ -31,4 +31,3 @@ dim bRetValue	as Boolean
 
 end function 	'// end ErrLogGetRecording
 '/**/
-

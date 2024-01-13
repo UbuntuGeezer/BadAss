@@ -37,4 +37,3 @@ end select
 DayName = strDay
 end function	'// end Dayname
 '/**/
-

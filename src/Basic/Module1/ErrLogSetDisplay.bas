@@ -27,4 +27,3 @@ public function ErrLogSetDisplay(pbDisplayOn As Boolean) As Void
 
 end function 	'// end ErrLogSetDisplay
 '/**/
-

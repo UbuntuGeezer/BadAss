@@ -70,4 +70,3 @@ dim sName as String		'// returned name of month
 	
 end function 	'// end GetMonthName 
 '/**/
-

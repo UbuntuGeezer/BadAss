@@ -30,4 +30,3 @@ public Function ErrLogSetCellInfo(plColumn As Long, plRow As Long) As Void
 	
 end Function		'// end ErrLogSetCellnfo
 '/**/
-

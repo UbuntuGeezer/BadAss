@@ -30,4 +30,3 @@ public Function ErrLogSetSheet(piSheet as Integer) As Void
 	
 end Function		'// end ErrLogSetSheet
 '/**/
-

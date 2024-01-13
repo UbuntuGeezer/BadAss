@@ -25,4 +25,3 @@ public function ErrLogGetDisplay() As Boolean
 
 end function 	'// end ErrLogGetDisplay
 '/**/
-

@@ -24,10 +24,10 @@ projpath = $(folderbase)/GitHub/Libraries/FLsara86777/EditBas
 # <filepath>/<filebase>.sql
 #=======================================================
 Always : JustDoIt
-	sed -i '/\/\/ VSEditSplitBtnRun.bas/,/\/\*\*\//d' \
-	 $pathbase/Basic/Module2/Module2.xba
-	echo "VSEditSplitBtnRun deleted from Module2.xba"
-	~\sysprocs/LOGMSG "  VSEditSplitBtnRun deleted from Module2."
+	sed -i '/\/\/ StoreTrans.bas/,/\/\*\*\//d' \
+	 $pathbase/Basic/Module1/Module1.xba
+	echo "StoreTrans deleted from Module1.xba"
+	~\sysprocs/LOGMSG "  StoreTrans deleted from Module1."
 
 #=======================================================
 JustDoIt: ;

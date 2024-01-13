@@ -1,12 +1,12 @@
 '// errhandling.bas
 '//---------------------------------------------------------------
-'// errhandling.bas - Definitions for development error handling.
+'// errhandling - Definitions for development error handling.
 '//		wmk. 5/26/20.	17:30
 '//---------------------------------------------------------------
 '//
 '// Header Description.
 '// -------------------
-'//	errhandling.bas contains definitions that may be inserted in any
+'//	errhandling contains definitions that may be inserted in any
 '// OOoBasic Module for handing error conditions. This is intended for
 '// use with development modules, and should be removed for Production
 '// spreadsheets. This will ensure clean code released into the
@@ -62,6 +62,5 @@ global goErrRangeAddress As Object				'// cell range address
 '// ErrLogGetSheet - Get sheet index from error log globals.
 '// ErrLogSetSheet - Set sheet index in error log globals.
 '// LogError - make error log entry([goCellRangeAddress], psErrName, psErrMsg)
-'//-----------------end errhandling.bas header--------------------------
+'//-----------------end errhandling header--------------------------
 '/**/
-

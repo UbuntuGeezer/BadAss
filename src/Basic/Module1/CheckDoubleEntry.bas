@@ -154,7 +154,7 @@ dim iStatus As Integer		'// general status var
 		oCellAcct = oGLSheet.getCellByPosition( COLACCT, lGLCurrRow)
 		oCellRef = oGLSheet.getCellByPosition( COLREF, lGLCurrRow)
 
-		'// extract date & transaction information from 1st row
+		'// extract date &' transaction information from 1st row
 		sDate = oCellDate.String
 		sTrans = oCellTrans.String
 	'//	Ensure nonempty date field before GetMonthName call
@@ -353,4 +353,3 @@ AdvanceTrans:
 
 end function 	'// end CheckDoubleEntry	7/3/20
 '/**/
-

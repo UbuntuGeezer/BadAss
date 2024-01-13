@@ -1,16 +1,6 @@
 Module1Hdr
-8
-	5
-	5
 errhandling
-errhandling
-	errhandling
------------------end errhandling
 publics
----------------------------publics
-publics
-(mirrored in file publics
-----------------------end publics
 Main
 CheckDoubleEntry
 CheckInserts

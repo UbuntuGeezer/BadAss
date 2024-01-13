@@ -1,9 +1,9 @@
 '// publics.bas
-'//---------------------------publics.bas----------------------------------------------
+'//---------------------------publics----------------------------------------------
 '//		6/6/20.	wmk.
-'// publics.bas - module-wide vars for Module1 code in accounts sheets
+'// publics - module-wide vars for Module1 code in accounts sheets
 '// module-wide constants. (used in processing bank download sheets)
-'// (mirrored in file publics.bas)
+'// (mirrored in file publics)
 
 '// Modification History.
 '// ---------------------
@@ -74,6 +74,5 @@ public const LJUST=1		'// left-justify HoriJustify				'// mod052020
 public const CJUST=2		'// center HoriJustify						'// mod052020
 public const RJUST=3		'// right-justify HoriJustify				'// mod052320
 public const MAXTRANSL=50	'// maximum transaction text length			'// mod052020
-'//----------------------end publics.bas---------------------------------------------
+'//----------------------end publics---------------------------------------------
 '/**/
-

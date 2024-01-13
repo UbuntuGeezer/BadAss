@@ -1,5 +1,5 @@
 #!/bin/bash
-# 2023-11-12.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
+# 2023-11-12.	wmk.	(automated) Updated for BadAss library (Lenovo).
 # 2023-11-12.	wmk.	(automated) Version 3.0.9 *libpath introduced (HPPavilion).
 # DoSedBuild.sh - Run sed to fix FLsara86777 MakeBuildLib.tmp > MakeBuildLib.
 #	11/12/23.	wmk.
@@ -11,7 +11,7 @@
 # Entry. *projpath/MakeBuildLib.tmp = MakeBuildLib template
 #		contains line with 'insertbaslist'
 #
-# Exit.	*pathbase/Basic/<xbafile>/MakeBuildLib = makefile to build
+# Exit.	*libbase/src/Basic/<xbafile>/MakeBuildLib = makefile to build
 #			<xbafile>.xba
 #
 # Modification History.
@@ -19,7 +19,7 @@
 # 8/24/23.	wmk.	ver2.0 mods for using /src as parent folder.
 # 8/31/23.	wmk.	*folderbase definition made unconditional for HPPavilion
 #			 branch of project.
-# 11/12/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
+# 11/12/23.	wmk.	(automated) Updated for BadAss library (Lenovo).
 # 11/12/23.	wmk.	(automated) Version 3.0.9 *libpath introduced.
 # Legacy mods.
 # 8/22/23.	wmk.	modified for FLsara86777 libary.
@@ -35,8 +35,6 @@
 # 3/8/22.	wmk.	original code.
 # 4/24/22.	wmk.	*pathbase* env var included.
 # 9/23/22.  wmk.    (automated) CB *codebase env var support.
-export codebase=$folderbase/GitHub/Libraries-Project/FLsara86777/src
-export pathbase=$codebase
 #
 P1=$1
 if [ -z "$P1" ];then

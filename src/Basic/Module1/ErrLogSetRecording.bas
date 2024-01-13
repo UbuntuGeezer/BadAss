@@ -31,4 +31,3 @@ public function ErrLogSetRecording(pbRecordingOn as Boolean) As Void
 
 end function 	'// end ErrLogSetRecording
 '/**/
-

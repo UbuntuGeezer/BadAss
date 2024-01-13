@@ -30,4 +30,3 @@ public Function ErrLogSetModule(psName as String) As Void
 	
 end Function		'// end ErrLogSetModule
 '/**/
-

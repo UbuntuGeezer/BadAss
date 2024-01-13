@@ -1,7 +1,7 @@
 '// ReverseSplitTrans.bas
 '//---------------------------------------------------------------
 '// ReverseSplitTrans - Reverse split transaction.
-'//		7/9/20.	wmk.	07:45
+'//		11/14/22.	wmk.	08:16
 '//---------------------------------------------------------------
 
 public function ReverseSplitTrans(poGLRange As Object) As Integer
@@ -26,6 +26,7 @@ public function ReverseSplitTrans(poGLRange As Object) As Integer
 '//	6/11/20.	wmk.	original code; stub
 '//	6/12/20.	wmk.	original complete
 '//	7/9/20.		wmk.	bug fix where "reversal" field LTGREEN
+'// 11/14/22.	wmk.	change Ref field background color to 0 (black).
 '//
 '//	Notes. Method. For "split" entry transaction, verify with
 '// CheckSplitTrans which will return the last "split" row of the
@@ -122,7 +123,7 @@ dim oLogRange as new com.sun.star.table.CellRangeAddress
 		oCellDate.CellBackColor = LTGREEN
 		oCellRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow)
 		oCellRef.String = "reversal"
-		oCellRef.CellBackColor = NOFILL
+		oCellRef.CellBackColor = 0
 		lGLCurrRow = lGLCurrRow + 1
 	next i		'// end loop on transaction rows
 
@@ -157,4 +158,3 @@ ErrorHandler:
 
 end function 	'// end ReverseSplitTrans 7/9/20
 '/**/
-

@@ -30,4 +30,3 @@ dim sRetStr As String		'// returned cell string
 	
 end Function		'// end ErrLogGetCellName
 '/**/
-

@@ -1,7 +1,7 @@
 '// ReverseDETrans.bas
 '//---------------------------------------------------------------
 '// ReverseDETrans - Reverse double-entry transaction.
-'//		6/12/20.	wmk.	17:30
+'//		11/14/22.	wmk.	08:04
 '//---------------------------------------------------------------
 
 public function ReverseDETrans(poGLRange As Object) As Integer
@@ -27,7 +27,7 @@ public function ReverseDETrans(poGLRange As Object) As Integer
 '//	6/11/20.	wmk.	original code
 '//	6/12/20.	wmk.	documentaton updated; code updated to call
 '//						CheckDoubleEntry and CreateReverseTrans
-'//
+'// 11/14/22.	wmk.	clear Ref cell background color
 '//	Notes. Method: For double-entry transaction,insert 2 lines at first
 '// row position with "ROWS" option; copy original transaction to 2 new
 '// rows; swap Debit and Credit columns in old transaction by copying
@@ -125,8 +125,10 @@ dim oLogRange as new com.sun.star.table.CellRangeAddress
 	'// document "reversal" in REF column
 	oCellRef = oGLSheet.getCellByPosition(COLREF, lGLOrigRow)
 	oCellRef.String = "reversal"
+	oCellRef.CellBackColor = 0			'// no background
 	oCellRef = oGLSheet.getCellByPosition(COLREF, lGLOrigRow+1)
 	oCellRef.String = "reversal"
+	oCellRef.CellBackColor = 0			'// no background
 	
 	'// set normal return
 	iRetValue = 0
@@ -138,6 +140,5 @@ NormalExit:
 ErrorHandler:
 	ReverseDETrans = iRetValue
 	
-end function 	'// end ReverseDETrans	6/12/20
+end function 	'// end ReverseDETrans	11/14/22
 '/**/
-

@@ -67,4 +67,3 @@ dim sDigit 	as String	'// extracted 1st digit
 
 end function 	'// end GetTransSheetName
 '/**/
-

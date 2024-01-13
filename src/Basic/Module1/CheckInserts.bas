@@ -280,4 +280,3 @@ AdvanceTrans:
 	
 end function 	'// end CheckInserts	7/3/20
 '/**/
-

@@ -6,7 +6,7 @@ REM  *****  BASIC  *****
 &apos;// Module1Hdr - BadAss Library Module1 header.
 &apos;// Module1 (Beta Release) - Local macros for Chase Activity Download Spreadsheet and
 &apos;//	transaction processing in Production Alpha Clean Accounting spreadsheet.
-&apos;// 8/22/22.	wmk.	&apos;/**/ and // &lt;module-name&gt;.bas bracketing lines added; application
+&apos;// 8/22/22.	wmk.	&apos;/**/ and // &lt;module-name&gt;bas bracketing lines added; application
 &apos;//				 extended to general banking activity in Accounting subsystem.
 &apos;// Legacy Mods.
 &apos;//	5/14/20.	wmk.	original code with mods
@@ -19,8 +19,8 @@ REM  *****  BASIC  *****
 &apos;//	5/20/20.	wmk.	added OPTION EXPLICIT for code control
 &apos;//	5/22/20.	wmk.	added PlaceSplitTrans function.
 &apos;//	5/23/20.	wmk.	added BeanField function; bug fix with ASTSHEET
-&apos;//	5/25/20.	wmk.	added errhandling.bas and associated subs
-&apos;//	5/26/20.	wmk.	errhandling.bas update resinserted
+&apos;//	5/25/20.	wmk.	added errhandling and associated subs
+&apos;//	5/26/20.	wmk.	errhandling update resinserted
 &apos;//	6/28/20.	wmk.	Beta Release to BadAss Library
 
 &apos;// Code protection.
@@ -30,13 +30,13 @@ OPTION EXPLICIT				&apos;// every variable must be declared before use
 
 &apos;// errhandling.bas
 &apos;//---------------------------------------------------------------
-&apos;// errhandling.bas - Definitions for development error handling.
+&apos;// errhandling - Definitions for development error handling.
 &apos;//		wmk. 5/26/20.	17:30
 &apos;//---------------------------------------------------------------
 &apos;//
 &apos;// Header Description.
 &apos;// -------------------
-&apos;//	errhandling.bas contains definitions that may be inserted in any
+&apos;//	errhandling contains definitions that may be inserted in any
 &apos;// OOoBasic Module for handing error conditions. This is intended for
 &apos;// use with development modules, and should be removed for Production
 &apos;// spreadsheets. This will ensure clean code released into the
@@ -92,15 +92,15 @@ global goErrRangeAddress As Object				&apos;// cell range address
 &apos;// ErrLogGetSheet - Get sheet index from error log globals.
 &apos;// ErrLogSetSheet - Set sheet index in error log globals.
 &apos;// LogError - make error log entry([goCellRangeAddress], psErrName, psErrMsg)
-&apos;//-----------------end errhandling.bas header--------------------------
+&apos;//-----------------end errhandling header--------------------------
 &apos;/**/
 
 &apos;// publics.bas
-&apos;//---------------------------publics.bas----------------------------------------------
+&apos;//---------------------------publics----------------------------------------------
 &apos;//		6/6/20.	wmk.
-&apos;// publics.bas - module-wide vars for Module1 code in accounts sheets
+&apos;// publics - module-wide vars for Module1 code in accounts sheets
 &apos;// module-wide constants. (used in processing bank download sheets)
-&apos;// (mirrored in file publics.bas)
+&apos;// (mirrored in file publics)
 
 &apos;// Modification History.
 &apos;// ---------------------
@@ -171,7 +171,7 @@ public const LJUST=1		&apos;// left-justify HoriJustify				&apos;// mod052020
 public const CJUST=2		&apos;// center HoriJustify						&apos;// mod052020
 public const RJUST=3		&apos;// right-justify HoriJustify				&apos;// mod052320
 public const MAXTRANSL=50	&apos;// maximum transaction text length			&apos;// mod052020
-&apos;//----------------------end publics.bas---------------------------------------------
+&apos;//----------------------end publics---------------------------------------------
 &apos;/**/
 
 &apos;// Main.bas
@@ -3654,7 +3654,7 @@ end sub		&apos;// end PlaceTransM		6/12/20
 &apos;// ReverseDETrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// ReverseDETrans - Reverse double-entry transaction.
-&apos;//		6/12/20.	wmk.	17:30
+&apos;//		11/14/22.	wmk.	08:04
 &apos;//---------------------------------------------------------------
 
 public function ReverseDETrans(poGLRange As Object) As Integer
@@ -3680,7 +3680,7 @@ public function ReverseDETrans(poGLRange As Object) As Integer
 &apos;//	6/11/20.	wmk.	original code
 &apos;//	6/12/20.	wmk.	documentaton updated; code updated to call
 &apos;//						CheckDoubleEntry and CreateReverseTrans
-&apos;//
+&apos;// 11/14/22.	wmk.	clear Ref cell background color
 &apos;//	Notes. Method: For double-entry transaction,insert 2 lines at first
 &apos;// row position with &quot;ROWS&quot; option; copy original transaction to 2 new
 &apos;// rows; swap Debit and Credit columns in old transaction by copying
@@ -3778,8 +3778,10 @@ dim oLogRange as new com.sun.star.table.CellRangeAddress
 	&apos;// document &quot;reversal&quot; in REF column
 	oCellRef = oGLSheet.getCellByPosition(COLREF, lGLOrigRow)
 	oCellRef.String = &quot;reversal&quot;
+	oCellRef.CellBackColor = 0			&apos;// no background
 	oCellRef = oGLSheet.getCellByPosition(COLREF, lGLOrigRow+1)
 	oCellRef.String = &quot;reversal&quot;
+	oCellRef.CellBackColor = 0			&apos;// no background
 	
 	&apos;// set normal return
 	iRetValue = 0
@@ -3791,13 +3793,13 @@ NormalExit:
 ErrorHandler:
 	ReverseDETrans = iRetValue
 	
-end function 	&apos;// end ReverseDETrans	6/12/20
+end function 	&apos;// end ReverseDETrans	11/14/22
 &apos;/**/
 
 &apos;// ReverseSplitTrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// ReverseSplitTrans - Reverse split transaction.
-&apos;//		7/9/20.	wmk.	07:45
+&apos;//		11/14/22.	wmk.	08:16
 &apos;//---------------------------------------------------------------
 
 public function ReverseSplitTrans(poGLRange As Object) As Integer
@@ -3822,6 +3824,7 @@ public function ReverseSplitTrans(poGLRange As Object) As Integer
 &apos;//	6/11/20.	wmk.	original code; stub
 &apos;//	6/12/20.	wmk.	original complete
 &apos;//	7/9/20.		wmk.	bug fix where &quot;reversal&quot; field LTGREEN
+&apos;// 11/14/22.	wmk.	change Ref field background color to 0 (black).
 &apos;//
 &apos;//	Notes. Method. For &quot;split&quot; entry transaction, verify with
 &apos;// CheckSplitTrans which will return the last &quot;split&quot; row of the
@@ -3918,7 +3921,7 @@ dim oLogRange as new com.sun.star.table.CellRangeAddress
 		oCellDate.CellBackColor = LTGREEN
 		oCellRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow)
 		oCellRef.String = &quot;reversal&quot;
-		oCellRef.CellBackColor = NOFILL
+		oCellRef.CellBackColor = 0
 		lGLCurrRow = lGLCurrRow + 1
 	next i		&apos;// end loop on transaction rows
 

@@ -53,20 +53,34 @@ endif
 .ONESHELL : ;
 
  projpath = $(libbase)/src/Projects-Geany/EditBas
- srcpath = $(libbase)/src/Basic/<xbafile>
+ srcpath = $(libbase)/src/Basic/Module1
  targpath = $(libbase)/src/Release
 
 #insertbaslist
+baslist =   Module1Hdr.bas  errhandling.bas  publics.bas\
+  Main.bas  CheckDoubleEntry.bas  CheckInserts.bas\
+  CheckSplitTrans.bas  CreateReverseTrans.bas  D.bas\
+  DayName.bas  E.bas  ErrLogDisable.bas\
+  ErrLogGetCellInfo.bas  ErrLogGetCellName.bas  ErrLogGetDisplay.bas\
+  ErrLogGetModule.bas  ErrLogGetRecording.bas  ErrLogGetSheet.bas\
+  ErrLogMakeEntry.bas  ErrLogSetCellInfo.bas  ErrLogSetDisplay.bas\
+  ErrLogSetModule.bas  ErrLogSetRecording.bas  ErrLogSetSheet.bas\
+  ErrLogSetup.bas  GetInsRow.bas  GetMonthName.bas\
+  GetTransSheetName.bas  LogError.bas  PlaceSplitTotal.bas\
+  PlaceSplitTrans.bas  PlaceTransM.bas  ReverseDETrans.bas\
+  ReverseSplitTrans.bas  ReverseTrans.bas  SetProcessed.bas\
+  SetSheetDate.bas  SetSumFormula.bas  SplitOutCOAs.bas\
+  StoreTrans.bas
 
 # <filepath>/<filebase>.sql
 #=======================================================
 Always :
 	cd $(srcpath)
-	cat $(baslist) > $(targpath)/<xbafile>.xba
-	sed -i "s?\x26?\&amp\;?g;s?'?\&apos\;?g;s?\"?\&quot\;?g;s?<?\&lt\;?g;s?>?\&gt\;?g" $(targpath)/<xbafile>.xba
-	cat $(srcpath)/<xbafile>Hdr.xba $(targpath)/<xbafile>.xba $(projpath)/ModuleEnd.xba > $$TEMP_PATH/<xbafile>.xba
-	cp -pv $$TEMP_PATH/<xbafile>.xba $(targpath)/<xbafile>.xba
-	 echo "<xbafile>.xba build on $(pathbase)/Release"
+	cat $(baslist) > $(targpath)/Module1.xba
+	sed -i "s?\x26?\&amp\;?g;s?'?\&apos\;?g;s?\"?\&quot\;?g;s?<?\&lt\;?g;s?>?\&gt\;?g" $(targpath)/Module1.xba
+	cat $(srcpath)/Module1Hdr.xba $(targpath)/Module1.xba $(projpath)/ModuleEnd.xba > $$TEMP_PATH/Module1.xba
+	cp -pv $$TEMP_PATH/Module1.xba $(targpath)/Module1.xba
+	 echo "Module1.xba build on $(pathbase)/Release"
 
 #=======================================================
 JustDoIt: ;

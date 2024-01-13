@@ -26,4 +26,3 @@ public Function ErrLogGetModule() As String
 	
 end Function		'// end ErrLogGetModule
 '/**/
-
