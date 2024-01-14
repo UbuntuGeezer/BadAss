@@ -1,9 +1,7 @@
 #!/bin/bash
-echo " ** UnKillMultMakes.sh out-of-date **";exit 1
-# 2023-11-12.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
-# 2023-11-03   wmk.   (automated) Version 3.0.0 path fixes (HPPavilion).
+# 2024-01-14.	wmk.	(automated) UnKillShell to reinstate shell (Lenovo).
 # UnKillMakes.sh - UnKill multiple *make files removing error at start.
-#	11/3/23.	wmk.
+#	1/14/23.	wmk.
 #
 # Usage. bash  UnKillMultMakes.sh <path> [-a]
 #
@@ -19,6 +17,9 @@ echo " ** UnKillMultMakes.sh out-of-date **";exit 1
 #
 # Modification History.
 # ---------------------
+# 1/14/24.	wmk.	(automated) echo,s to printf,s throughout
+# 1/14/24.	wmk.	(automated) UnKillShell to reinstate shell.
+# 1/14/24.	wmk.	*b changed to use *codebase.
 # 11/12/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
 # 11/3/23.	wmk.	Version 3.0.0 path updates.
 # Legacy mods.
@@ -36,14 +37,14 @@ echo " ** UnKillMultMakes.sh out-of-date **";exit 1
 P1=$1
 P2=${2,,}
 if [ -z "$P1" ];then
- echo "UnKillMultMakes <path> [-a] missing parameter(s) - abandoned."
+ printf "%s\n" "UnKillMultMakes <path> [-a] missing parameter(s) - abandoned."
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 1
 fi
 isall=0
 if [ ! -z "$P2" ];then
  if [ "$P2" != "-a" ];then
-  echo "UnKillMultMakes <path> [-a] unrecognized '$P2' - abandoned."
+  printf "%s\n" "UnKillMultMakes <path> [-a] unrecognized '$P2' - abandoned."
   read -p "Enter ctrl-c to remain in Terminal: "
   exit 1
  else
@@ -54,19 +55,19 @@ killMake=$PWD
 if [ ! -z "$P1" ];then
  killMake=$P1
 fi
-echo $killMake
+printf "%s\n" $killMake
 #procbodyhere
 pushd ./ > /dev/null
 if [ "$killmake" != "./" ];then
  cd $killMake
 fi
-echo $PWD
+printf "%s\n" $PWD
 t=$TEMP_PATH
 if [ $isall -eq 0 ];then
  grep -rle "error.*out-of-date" --include "Make*" > $t/killedmakes.txt
- echo "  back from grep..."
+ printf "%s\n" "  back from grep..."
  if [ $? -ne 0 ];then
-  echo " no out-of-date files found - UnKillMultMakes.sh exiting."
+  printf "%s\n" " no out-of-date files found - UnKillMultMakes.sh exiting."
   read -p "Enter ctrl-c to remain in Terminal: "
   exit 0
  fi
@@ -85,16 +86,16 @@ if [ 1 -eq 0 ];then
  read -p "Enter ctrl-c to interrupt :"
  touch $t/killedmakes.txt	# rewind killedmakes.txt
 fi
-b=$WINGIT_PATH/TerrCode86777/FLsara86777cb/Procs-Dev
+b=$codebase/src/Procs-Dev
 file=$t/killedmakes.txt
 while read -e;do
  fn=$REPLY
- echo "   processing $fn .."
+ printf "%s\n" "   processing $fn .."
  $b/UnKillMake.sh $fn
  if [ $? -eq 0 ];then
-  echo "UnKillMake $fn successful."
+  printf "%s\n" "UnKillMake $fn successful."
  else
-  echo "UnKillMake $fn failed."
+  printf "%s\n" "UnKillMake $fn failed."
  fi
 done < $file
 popd > /dev/null

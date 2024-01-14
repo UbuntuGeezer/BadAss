@@ -1,8 +1,7 @@
 #!/bin/bash
-echo " ** UnKillMultShells.sh out-of-date **";exit 1
-# 2023-11-12.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
+# 2024-01-14.	wmk.	(automated) UnKillShell to reinstate shell (Lenovo).
 # UnKillMultShells.sh - UnKill multiple .sh files removing exit at start.
-#	11/8/23.	wmk.
+#	1/14/24.	wmk.
 #
 # Usage. bash  UnKillMultShells.sh <path> [-a]
 #
@@ -20,6 +19,9 @@ echo " ** UnKillMultShells.sh out-of-date **";exit 1
 #
 # Modification History.
 # ---------------------
+# 1/14/24.	wmk.	(automated) echo,s to printf,s throughout
+# 1/14/24.	wmk.	(automated) UnKillShell to reinstate shell.
+# 1/14/24.	wmk.	*b path changed to use *codebase.
 # 11/12/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
 # 11/3/23.	wmk.	Version 3.0.0 path updates.
 # 11/3/23.	wmk.	replace missing *grep at line 96.
@@ -33,7 +35,7 @@ echo " ** UnKillMultShells.sh out-of-date **";exit 1
 P1=$1
 P2=${2,,}
 if [ -z "$P1" ];then
- echo "UnKillMultShells <path> [-a] missing parameter(s)"
+ printf "%s\n" "UnKillMultShells <path> [-a] missing parameter(s)"
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 1
 fi
@@ -42,7 +44,7 @@ if [ ! -z "$P2" ];then
  if [ "$P2" == "-a" ];then
   doall=1
  else
-  echo "UnKillMultShells <path> [-a] unrecognized option $P2 - abandoned."
+  printf "%s\n" "UnKillMultShells <path> [-a] unrecognized option $P2 - abandoned."
   read -p "Enter ctrl-c to remain in Terminal: "
   exit 1
  fi
@@ -51,24 +53,24 @@ killShell=$PWD
 if [ ! -z "$P1" ];then
  killShell=$P1
 fi
-echo $killShell
+printf "%s\n" $killShell
 pushd ./ > /dev/null
 if [ "$killShell" != "./" ];then
  cd $killShell
 fi
-echo $PWD
+printf "%s\n" $PWD
 t=$TEMP_PATH
 if [ $doall -eq 0 ];then
- grep -rle "echo.*out-of-date.*exit" > $TEMP_PATH/killedshells.txt
+ grep -rle "printf "%s\n".*out-of-date.*exit" > $TEMP_PATH/killedshells.txt
  if [ $? -ne 0 ];then
-  echo " no out-of-date files found - UnKillMultShells.sh exiting."
+  printf "%s\n" " no out-of-date files found - UnKillMultShells.sh exiting."
   read -p "Enter ctrl-c to remain in Terminal: "
   exit 0
  fi
 else
  ls *.sh > $t/killedshells.txt
 fi
-echo "  back from grep..."
+printf "%s\n" "  back from grep..."
 if [ 1 -eq 0 ];then
  cat $t/killedshells.txt
  popd > /dev/null
@@ -81,16 +83,16 @@ if [ 1 -eq 0 ];then
  read -p "Enter ctrl-c to interrupt :"
  touch $t/killedshells.txt	# rewind killedshells.txt
 fi
-b=$WINGIT_PATH/TerrCode86777/FLsara86777cb/Procs-Dev
+b=$codebase/src/Procs-Dev
 file=$t/killedshells.txt
 while read -e;do
  fn=$REPLY
- echo "   processing $fn ..."
+ printf "%s\n" "   processing $fn ..."
  $b/UnKillShell.sh $fn
  if [ $? -eq 0 ];then
-  echo "UnKillShell $fn successful."
+  printf "%s\n" "UnKillShell $fn successful."
  else
-  echo "UnKillShell $fn failed."
+  printf "%s\n" "UnKillShell $fn failed."
  fi
 done < $file
 # end UnKillMultShells.sh

@@ -1,6 +1,6 @@
 #!/bin/bash
 # SetToday.sh - set *TODAY and *TODAY1 environment vars.
-#	1/12/24.	wmk.
+#	1/14/24.	wmk.
 #
 # Usage. . SetToday.sh [-v]
 #
@@ -12,6 +12,7 @@
 # Modification History.
 # ---------------------
 # 1/12/24.	wmk.	integrated into BadAss/src/Procs-Dev.
+# 1/14/24.	wmk.	bug fix, eliminate leading 0 from TODAY1 month field.
 # Legacy mods.
 # 11/3/23.	wmk.	original code.
 # 11/15/23.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
@@ -28,7 +29,7 @@ if [ ! -z "$P1" ];then
 fi
 date +%Y-%m-%d|mawk 'BEGIN {print "#!/bin/bash"}{print "export TODAY=" $0}' > $TEMP_PATH/SetToday.sh
 date +%m/%d/%y|mawk 'BEGIN {print "#!/bin/bash"}{print "export TODAY1=" $0}' >> $TEMP_PATH/SetToday.sh
-sed -i  '2s?^0??1;s?/0?/?g' $TEMP_PATH/SetToday.sh
+sed -i  's?=0?=?1;s?/0?/?g' $TEMP_PATH/SetToday.sh
 chmod +x $TEMP_PATH/SetToday.sh
 . $TEMP_PATH/SetToday.sh
 if [ ! -z "$P1" ];then printf "%s\n" $TODAY1;fi

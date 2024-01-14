@@ -1,0 +1,8 @@
+/if.*USER/,/fi/d
+/if.*folderbase/,/fi/d
+/if.*pathbase/,/fi/d
+/if.*codebase/,/fi/d
+/if.*system_log/,/fi/d
+/if.*congterr\"/,/fi/d
+/if.*conglib\"/,/fi/d
+/TEMP_PATH=/d

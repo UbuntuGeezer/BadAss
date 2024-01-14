@@ -1,6 +1,6 @@
 #!/bin/bash
 # UnKillShell.sh - UnKill shell by removing illegal command at start.
-#	1/13/24.	wmk.
+#	1/14/24.	wmk.
 #
 # Usage. bash  UnKillShell.sh <shell-name> [<path>]
 #
@@ -30,6 +30,7 @@
 # 1/12/24.	wmk.	*thispath corrected for BadAss/src/Procs-Dev.
 # 1/13/24.	wmk.	*thispath corrected to use *libbase; HPPavilion > Lenovo in
 #			 printf.
+# 1/14/24.	wmk.	target message changed to 'UnKillShell to reinstate shell.'
 # Legacy mods.
 # 10/11/23.	wmk.	revert to *WINGIT_PATH for HP2 system.
 # Legacy mods.
@@ -96,12 +97,12 @@ if [ 1 -eq 0 ];then # below items are now in sedkillpathdefs.txt
  printf "%s\n" "/if.*conglib\"/,/fi/d" >> $TEMP_PATH/sedunkillsh.txt
  printf "%s\n" "/if.*congterr\"/,/fi/d" >> $TEMP_PATH/sedunkillsh.txt
 fi
-printf "%s\n%s\n" "/# -----/a# $TODAY1.\twmk.\t\(automated\) Version 3.0.6 Make old paths removed." >> $TEMP_PATH/sedunkillsh.txt
+printf "%s\n%s\n" "/# -----/a# $TODAY1.\twmk.\t\(automated\) UnKillShell to reinstate shell." >> $TEMP_PATH/sedunkillsh.txt
 printf "%s\n" "s?TerritoriesCB/FLsara86777?TerrCode86777/FLsara86777cb?g" \
   >> $TEMP_PATH/sedunkillsh.txt
 printf "%s\n" "s?TerritoriesCB/FLsara76777?TerrCode86777/FLsara86777cb?g" \
   >> $TEMP_PATH/sedunkillsh.txt
-printf "%s\n" "1a# $TODAY.\twmk.\t(automated) Version 3.0.6 paths eliminated (Lenovo)." >> $TEMP_PATH/sedunkillsh.txt
+printf "%s\n" "1a# $TODAY.\twmk.\t(automated) UnKillShell to reinstate shell (Lenovo)." >> $TEMP_PATH/sedunkillsh.txt
 if [ "$killpath" == "./" ];then
  # sed -i -f $TEMP_PATH/sedunkillsh.txt $killpath$P1
  sed -i -f $thispath/sedkillpathdefs.txt $killpath$P1
