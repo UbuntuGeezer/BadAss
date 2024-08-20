@@ -1,12 +1,13 @@
 '// publics.bas
-'//---------------------------publics----------------------------------------------
-'//		6/6/20.	wmk.
-'// publics - module-wide vars for Module1 code in accounts sheets
+'//---------------------------publics.bas----------------------------------------------
+'//		8/20/24.	wmk.
+'// publics.bas - module-wide vars for Module1 code in accounts sheets
 '// module-wide constants. (used in processing bank download sheets)
-'// (mirrored in file publics)
+'// (mirrored in file publics.bas)
 
 '// Modification History.
 '// ---------------------
+'// 8/20/24.	wmk.	const BLACK added for background color.
 '//	5/??/20.	wmk.	Original code
 '//	5/20/20.	wmk.	Released as Production into Alpha Clean Accounting.ods
 '//	5/23/20.	wmk.	ASTSHEET, LIASHEET, INCSHEET, corrected to match
@@ -52,6 +53,7 @@ public const MON9="September"
 public const MON10="October"
 public const MON11="November"
 public const MON12="December"
+public const BLACK=0				'// decimal value of BLACK color
 public const YELLOW=16776960		'// decimal value of YELLOW color
 public const LTGREEN=10092390		'// decimal value of LTGREEN color
 
@@ -74,5 +76,5 @@ public const LJUST=1		'// left-justify HoriJustify				'// mod052020
 public const CJUST=2		'// center HoriJustify						'// mod052020
 public const RJUST=3		'// right-justify HoriJustify				'// mod052320
 public const MAXTRANSL=50	'// maximum transaction text length			'// mod052020
-'//----------------------end publics---------------------------------------------
+'//----------------------end publics.bas---------------------------------------------
 '/**/

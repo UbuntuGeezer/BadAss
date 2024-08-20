@@ -6,7 +6,7 @@ REM  *****  BASIC  *****
 &apos;// Module1Hdr - BadAss Library Module1 header.
 &apos;// Module1 (Beta Release) - Local macros for Chase Activity Download Spreadsheet and
 &apos;//	transaction processing in Production Alpha Clean Accounting spreadsheet.
-&apos;// 8/22/22.	wmk.	&apos;/**/ and // &lt;module-name&gt;bas bracketing lines added; application
+&apos;// 8/22/22.	wmk.	&apos;/**/ and // &lt;module-name&gt;.bas bracketing lines added; application
 &apos;//				 extended to general banking activity in Accounting subsystem.
 &apos;// Legacy Mods.
 &apos;//	5/14/20.	wmk.	original code with mods
@@ -19,8 +19,8 @@ REM  *****  BASIC  *****
 &apos;//	5/20/20.	wmk.	added OPTION EXPLICIT for code control
 &apos;//	5/22/20.	wmk.	added PlaceSplitTrans function.
 &apos;//	5/23/20.	wmk.	added BeanField function; bug fix with ASTSHEET
-&apos;//	5/25/20.	wmk.	added errhandling and associated subs
-&apos;//	5/26/20.	wmk.	errhandling update resinserted
+&apos;//	5/25/20.	wmk.	added errhandling.bas and associated subs
+&apos;//	5/26/20.	wmk.	errhandling.bas update resinserted
 &apos;//	6/28/20.	wmk.	Beta Release to BadAss Library
 
 &apos;// Code protection.
@@ -30,13 +30,13 @@ OPTION EXPLICIT				&apos;// every variable must be declared before use
 
 &apos;// errhandling.bas
 &apos;//---------------------------------------------------------------
-&apos;// errhandling - Definitions for development error handling.
+&apos;// errhandling.bas - Definitions for development error handling.
 &apos;//		wmk. 5/26/20.	17:30
 &apos;//---------------------------------------------------------------
 &apos;//
 &apos;// Header Description.
 &apos;// -------------------
-&apos;//	errhandling contains definitions that may be inserted in any
+&apos;//	errhandling.bas contains definitions that may be inserted in any
 &apos;// OOoBasic Module for handing error conditions. This is intended for
 &apos;// use with development modules, and should be removed for Production
 &apos;// spreadsheets. This will ensure clean code released into the
@@ -92,18 +92,19 @@ global goErrRangeAddress As Object				&apos;// cell range address
 &apos;// ErrLogGetSheet - Get sheet index from error log globals.
 &apos;// ErrLogSetSheet - Set sheet index in error log globals.
 &apos;// LogError - make error log entry([goCellRangeAddress], psErrName, psErrMsg)
-&apos;//-----------------end errhandling header--------------------------
+&apos;//-----------------end errhandling.bas header--------------------------
 &apos;/**/
 
 &apos;// publics.bas
-&apos;//---------------------------publics----------------------------------------------
-&apos;//		6/6/20.	wmk.
-&apos;// publics - module-wide vars for Module1 code in accounts sheets
+&apos;//---------------------------publics.bas----------------------------------------------
+&apos;//		8/20/24.	wmk.
+&apos;// publics.bas - module-wide vars for Module1 code in accounts sheets
 &apos;// module-wide constants. (used in processing bank download sheets)
-&apos;// (mirrored in file publics)
+&apos;// (mirrored in file publics.bas)
 
 &apos;// Modification History.
 &apos;// ---------------------
+&apos;// 8/20/24.	wmk.	const BLACK added for background color.
 &apos;//	5/??/20.	wmk.	Original code
 &apos;//	5/20/20.	wmk.	Released as Production into Alpha Clean Accounting.ods
 &apos;//	5/23/20.	wmk.	ASTSHEET, LIASHEET, INCSHEET, corrected to match
@@ -149,6 +150,7 @@ public const MON9=&quot;September&quot;
 public const MON10=&quot;October&quot;
 public const MON11=&quot;November&quot;
 public const MON12=&quot;December&quot;
+public const BLACK=0				&apos;// decimal value of BLACK color
 public const YELLOW=16776960		&apos;// decimal value of YELLOW color
 public const LTGREEN=10092390		&apos;// decimal value of LTGREEN color
 
@@ -171,7 +173,7 @@ public const LJUST=1		&apos;// left-justify HoriJustify				&apos;// mod052020
 public const CJUST=2		&apos;// center HoriJustify						&apos;// mod052020
 public const RJUST=3		&apos;// right-justify HoriJustify				&apos;// mod052320
 public const MAXTRANSL=50	&apos;// maximum transaction text length			&apos;// mod052020
-&apos;//----------------------end publics---------------------------------------------
+&apos;//----------------------end publics.bas---------------------------------------------
 &apos;/**/
 
 &apos;// Main.bas
@@ -3275,7 +3277,7 @@ end function		&apos;// end PlaceSplitTrans	7/8/20
 &apos;// PlaceTransM.bas
 &apos;//-------------------------------------------------------------------
 &apos;// PlaceTransM - place multiple transactions into appropriate sheets.
-&apos;//		wmk. 6/12/20.	18:00
+&apos;//		wmk. 8/20/24.	15:47
 &apos;//-------------------------------------------------------------------
 
 sub PlaceTransM()
@@ -3297,6 +3299,8 @@ sub PlaceTransM()
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
+&apos;// 8/20/24.	wmk.	modified to check Reference column background color; if LTGREEN
+&apos;//	8/20/24.	 then treat transacton as &quot;already recorded&quot;.
 &apos;//	5/17/20.	wmk.	original code
 &apos;//	5/18/20.	wmk.	finish original code and get functional; fix show-
 &apos;//						stopping bugs
@@ -3441,6 +3445,7 @@ dim lStatus as Long				&apos;// long status for PlaceSplitTrans
 &apos;// row processing variables; use to process selected area
 dim i as long		&apos;// loop counter
 dim lNRowsSelected as long
+dim bAlreadyProcessed 	As Boolean	&apos;// transaction already processed
 dim bOddRowCount as boolean
 dim sAcctB		as String		&apos;// COA field from 2nd line
 dim oCat1Range As Object		&apos;// COA information for line 1
@@ -3492,16 +3497,47 @@ iBrkpt=1
 	lNRowsSelected = lGLEndRow+1 - lGLStartRow
 	lTransCount = lNRowsSelected/2	&apos;// get transaction count (2 rows per)
 &apos;	bOddRowCount = lTransCount*2 &lt;&gt; lNRowsSelected
-	
+
+if 1=0 then
+	&apos;// check background color on COLREF; if LTGREEN skip with message.
+	oCellRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow+3)
+	if oCellRef.Text.CellBackColor = LTGREEN then
+		oCellDateB = oGLSheet.getCellByPosition( COLDATE, lGLEndRow)	&apos;// load last row date field
+		oCellDateB.Text.CellBackColor = YELLOW
+		sErrName = &quot;ERRODDROWS&quot;
+		sErrMsg = &quot;Selection already recorded!&quot;_
+				+CHR(13)+CHR(10)+ &quot;Check last row selection of transaction&quot;
+		Call LogError(sErrName, sErrMsg)
+		GOTO DontCheck
+	endif	&apos;// end background color conditional
+endif
+		
 	for i = 1 to lTransCount
 
 		lGLCurrRow = lGLCurrRow + 2	&apos;// advance to next entry
-
+		bAlreadyProcessed = 0		&apos;// reset already processed
 		&apos;// Note. By checking for &quot;split&quot; first, allows user to select
 		&apos;// first row only if wants to process 1 split transaction and no others
 		&apos;// Check for &quot;split&quot;; branch into and check
 		oCellRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow)
 		sRef = oCellRef.String
+	&apos;// check background color on COLREF; if LTGREEN skip with message.
+&apos;	oCellRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow+3)
+dim oCellNextRef	As Object
+	oCellNextRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow+1)
+
+	if oCellNextRef.Text.CellBackColor = LTGREEN then
+&apos;		oCellDateB = oGLSheet.getCellByPosition( COLDATE, lGLCurrRow)	&apos;// load last row date field
+&apos;		oCellDateB.Text.CellBackColor = YELLOW
+&apos;		sErrName = &quot;ERRODDROWS&quot;
+&apos;		sErrMsg = &quot;Selection already recorded!&quot;_
+&apos;				+CHR(13)+CHR(10)+ &quot;Check first row selection of transaction&quot;
+&apos;		Call LogError(sErrName, sErrMsg)
+&apos;		GOTO DontCheck
+        bAlreadyProcessed = 1
+	endif	&apos;// end background color conditional
+
+	if not bAlreadyProcessed then
 
 		if StrComp(sRef, &quot;split&quot;)=0 then
 			lStatus = PlaceSplitTrans(oGLSheet, lGLCurrRow)
@@ -3530,7 +3566,8 @@ iBrkpt=1
 			endif	&apos;// bad return from PlaceSplitTrans conditional
 			
 		endif	&apos;// end &quot;split&quot; conditional
-		
+
+CheckOddRows:		
 		&apos;// not a &quot;split&quot;, check for end/odd row count
 		bOddRowCount = (lGLCurrRow = lGLEndRow)
 		if bOddRowCount then
@@ -3625,10 +3662,22 @@ SetProcessed:
 			oCellRefB = oGLSheet.getCellByPosition(COLREF, lGLCurrRow+1)	
 			oCellRef.Text.CellBackColor = LTGREEN								&apos;// mod051920
 			oCellRefB.Text.CellBackColor = LTGREEN								&apos;// mod051920
-
+	endif	&apos;// end bAlreadyProcessed
 iBrkpt=1
 	
 AdvanceTrans:						&apos;// use since this Basic does not support Continue For
+	if bAlreadyProcessed then
+	  oCellDateB = oGLSheet.getCellByPosition(COLDATE, lGLCurrRow+1)	
+	  oCellDateB.Text.CellBackColor = YELLOW
+	  sErrName = &quot;ERRODDROWS&quot;
+	  sErrMsg = &quot;Selection already recorded!&quot;_
+				+CHR(13)+CHR(10)+ &quot;Check rows of transaction&quot;
+	  Call LogError(sErrName, sErrMsg)
+	  &apos;// if this is a split transaction bail out (split transaction not flushed)
+	  if StrComp(sRef, &quot;split&quot;)=0 then
+	   GOTO CheckLastRow
+	  endif
+	endif
 			
 	next i		&apos;// end loop on GL rows to process
 

@@ -24,10 +24,10 @@ projpath = $(folderbase)/GitHub/Libraries/FLsara86777/EditBas
 # <filepath>/<filebase>.sql
 #=======================================================
 Always : JustDoIt
-	sed -i '/\/\/ StoreTrans.bas/,/\/\*\*\//d' \
+	sed -i '/\/\/ PlaceTransM.bas/,/\/\*\*\//d' \
 	 $pathbase/Basic/Module1/Module1.xba
-	echo "StoreTrans deleted from Module1.xba"
-	~\sysprocs/LOGMSG "  StoreTrans deleted from Module1."
+	echo "PlaceTransM deleted from Module1.xba"
+	~\sysprocs/LOGMSG "  PlaceTransM deleted from Module1."
 
 #=======================================================
 JustDoIt: ;

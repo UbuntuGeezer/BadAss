@@ -1,7 +1,7 @@
 '// PlaceTransM.bas
 '//-------------------------------------------------------------------
 '// PlaceTransM - place multiple transactions into appropriate sheets.
-'//		wmk. 6/12/20.	18:00
+'//		wmk. 8/20/24.	15:47
 '//-------------------------------------------------------------------
 
 sub PlaceTransM()
@@ -23,6 +23,8 @@ sub PlaceTransM()
 '//
 '//	Modification history.
 '//	---------------------
+'// 8/20/24.	wmk.	modified to check Reference column background color; if LTGREEN
+'//	8/20/24.	 then treat transacton as "already recorded".
 '//	5/17/20.	wmk.	original code
 '//	5/18/20.	wmk.	finish original code and get functional; fix show-
 '//						stopping bugs
@@ -167,6 +169,7 @@ dim lStatus as Long				'// long status for PlaceSplitTrans
 '// row processing variables; use to process selected area
 dim i as long		'// loop counter
 dim lNRowsSelected as long
+dim bAlreadyProcessed 	As Boolean	'// transaction already processed
 dim bOddRowCount as boolean
 dim sAcctB		as String		'// COA field from 2nd line
 dim oCat1Range As Object		'// COA information for line 1
@@ -218,16 +221,47 @@ iBrkpt=1
 	lNRowsSelected = lGLEndRow+1 - lGLStartRow
 	lTransCount = lNRowsSelected/2	'// get transaction count (2 rows per)
 '	bOddRowCount = lTransCount*2 <> lNRowsSelected
-	
+
+if 1=0 then
+	'// check background color on COLREF; if LTGREEN skip with message.
+	oCellRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow+3)
+	if oCellRef.Text.CellBackColor = LTGREEN then
+		oCellDateB = oGLSheet.getCellByPosition( COLDATE, lGLEndRow)	'// load last row date field
+		oCellDateB.Text.CellBackColor = YELLOW
+		sErrName = "ERRODDROWS"
+		sErrMsg = "Selection already recorded!"_
+				+CHR(13)+CHR(10)+ "Check last row selection of transaction"
+		Call LogError(sErrName, sErrMsg)
+		GOTO DontCheck
+	endif	'// end background color conditional
+endif
+		
 	for i = 1 to lTransCount
 
 		lGLCurrRow = lGLCurrRow + 2	'// advance to next entry
-
+		bAlreadyProcessed = 0		'// reset already processed
 		'// Note. By checking for "split" first, allows user to select
 		'// first row only if wants to process 1 split transaction and no others
 		'// Check for "split"; branch into and check
 		oCellRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow)
 		sRef = oCellRef.String
+	'// check background color on COLREF; if LTGREEN skip with message.
+'	oCellRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow+3)
+dim oCellNextRef	As Object
+	oCellNextRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow+1)
+
+	if oCellNextRef.Text.CellBackColor = LTGREEN then
+'		oCellDateB = oGLSheet.getCellByPosition( COLDATE, lGLCurrRow)	'// load last row date field
+'		oCellDateB.Text.CellBackColor = YELLOW
+'		sErrName = "ERRODDROWS"
+'		sErrMsg = "Selection already recorded!"_
+'				+CHR(13)+CHR(10)+ "Check first row selection of transaction"
+'		Call LogError(sErrName, sErrMsg)
+'		GOTO DontCheck
+        bAlreadyProcessed = 1
+	endif	'// end background color conditional
+
+	if not bAlreadyProcessed then
 
 		if StrComp(sRef, "split")=0 then
 			lStatus = PlaceSplitTrans(oGLSheet, lGLCurrRow)
@@ -256,7 +290,8 @@ iBrkpt=1
 			endif	'// bad return from PlaceSplitTrans conditional
 			
 		endif	'// end "split" conditional
-		
+
+CheckOddRows:		
 		'// not a "split", check for end/odd row count
 		bOddRowCount = (lGLCurrRow = lGLEndRow)
 		if bOddRowCount then
@@ -351,10 +386,22 @@ SetProcessed:
 			oCellRefB = oGLSheet.getCellByPosition(COLREF, lGLCurrRow+1)	
 			oCellRef.Text.CellBackColor = LTGREEN								'// mod051920
 			oCellRefB.Text.CellBackColor = LTGREEN								'// mod051920
-
+	endif	'// end bAlreadyProcessed
 iBrkpt=1
 	
 AdvanceTrans:						'// use since this Basic does not support Continue For
+	if bAlreadyProcessed then
+	  oCellDateB = oGLSheet.getCellByPosition(COLDATE, lGLCurrRow+1)	
+	  oCellDateB.Text.CellBackColor = YELLOW
+	  sErrName = "ERRODDROWS"
+	  sErrMsg = "Selection already recorded!"_
+				+CHR(13)+CHR(10)+ "Check rows of transaction"
+	  Call LogError(sErrName, sErrMsg)
+	  '// if this is a split transaction bail out (split transaction not flushed)
+	  if StrComp(sRef, "split")=0 then
+	   GOTO CheckLastRow
+	  endif
+	endif
 			
 	next i		'// end loop on GL rows to process
 

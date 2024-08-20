@@ -48,14 +48,14 @@ Always : JustDoIt
 	export awktime=
 	#$(AWK) -v awkdate=  -v awktime= -f awkxba2xba1.txt \
 	# $(srcpath)/Basic/Module1/Module1.xba \
-	#   > $(srcpath)/Basic/Module1/StoreTrans.ba1
-	 #echo "end sub     &apos;// end StoreTrans.bas   $$awkdate   $$awktime" >> StoreTrans.ba1
+	#   > $(srcpath)/Basic/Module1/PlaceTransM.ba1
+	 #echo "end sub     &apos;// end PlaceTransM.bas   $$awkdate   $$awktime" >> PlaceTransM.ba1
 	 #exit 1
 	 sed -n -f sedextbas.txt $(srcpath)/Basic/Module1/Module1.xba \
-	  > $(srcpath)/Basic/Module1/StoreTrans.ba1
+	  > $(srcpath)/Basic/Module1/PlaceTransM.ba1
 	 sed "s?&apos;?\'?g;s?&quot;?\"?g;s?&lt;?<?g;s?&gt;?>?g;s?&amp;?\x26?g" \
-	  $(srcpath)/Basic/Module1/StoreTrans.ba1 > $(srcpath)/Basic/Module1/StoreTrans.bas
-	 echo "Basic/StoreTrans.bas available for editing"
+	  $(srcpath)/Basic/Module1/PlaceTransM.ba1 > $(srcpath)/Basic/Module1/PlaceTransM.bas
+	 echo "Basic/PlaceTransM.bas available for editing"
 
 #=======================================================
 JustDoIt: ;

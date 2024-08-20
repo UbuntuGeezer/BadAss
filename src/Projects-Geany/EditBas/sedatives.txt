@@ -1,2 +1,2 @@
-s?<basmodule>?StoreTrans?g
+s?<basmodule>?PlaceTransM?g
 s?<xbafile>?Module1?g
