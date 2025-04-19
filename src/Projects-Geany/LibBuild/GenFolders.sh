@@ -1,6 +1,6 @@
 #!/bin/bash
 # GenFolders.sh - Create and initialize BadAss/Basic folders.
-#	1/12/24.	wmk.
+#	4/18/25.	wmk.
 #
 # Usage. bash  GenFolders.sh
 #
@@ -12,14 +12,14 @@
 #
 # Modification History.
 # ---------------------
-# 1/12/24.	wmk.	Modified for BadAss/Basic folders.
-# Legacy mods.
-# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
-# 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath introduced.
-# 6/22/23.	wmk.	original shell.
-# 6/25/23.	wmk.	skip *mkdir if module folder already exists.
-# 8/21/23.	wmk.	switch to *codebase for build; *codebase, *pathbase defs
-#			 unconditional; documentation improved.
+# 4/18/25.	wmk.	(automated) Modification History sorted.
+# 1/12/24.	wmk.	Modified for BadAss/Basic folders. 
+# 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath introduced. 
+# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed. 
+# 8/21/23.	wmk.	switch to *codebase for build; *codebase, *pathbase defs 
+# 8/21/23.	 unconditional; documentation improved. 
+# 6/25/23.	wmk.	skip *mkdir if module folder already exists. 
+# 6/22/23.	wmk.	original shell. 
 
 #	Environment vars:
 #if [ -z "$TODAY" ];then

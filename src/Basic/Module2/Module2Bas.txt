@@ -17,6 +17,7 @@ ETDescListener
 ETDialogRecord
 ETDialogReset
 ETDlgSplitRecord
+----------------end constants borrowed from publics
 ETPubVarsReset
 ETRecdContListener
 ETRecdDoneListener

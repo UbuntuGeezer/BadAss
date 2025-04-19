@@ -1,6 +1,6 @@
 #!/bin/bash
 # GetBasList.sh - Get .bas block list from FLsara86777 .xba Module.
-#	1/12/24.	wmk.
+#	4/19/25.	wmk.
 #
 # Usage. bash  GetBasList.sh <xbamodule>
 #
@@ -14,14 +14,14 @@
 #
 # Modification History.
 # ---------------------
-# 1/12/24.	wmk.	code checked for BadAss library compatibility.
-# Legacy mods.
-# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
-# 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath introduced.
-# Legacy mods.
-# 6/22/23.	wmk.	original shell.
-# 8/21/23.	wmk.	*pathbase, *codebase unconditional.
-# 8/22/23.	wmk.	*codebase used throughout; FLsara86777 added to comments.
+# 4/19/25.	wmk.	updated. 
+# 4/19/25.	wmk.	(automated) Modification History sorted.
+# 1/12/24.	wmk.	code checked for BadAss library compatibility. 
+# 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath introduced. 
+# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed. 
+# 8/22/23.	wmk.	*codebase used throughout; FLsara86777 added to comments. 
+# 8/21/23.	wmk.	*pathbase, *codebase unconditional. 
+# 6/22/23.	wmk.	original shell. 
 #
 # P1=<xbamodule>
 #
@@ -31,11 +31,6 @@ if [ -z "$P1" ];then
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 1
 fi
-#	Environment vars:
-#if [ -z "$TODAY" ];then
-# . ~/GitHub/TerritoriesCB/Procs-Dev/SetToday.sh
-#TODAY=2022-04-22
-#fi
 #procbodyhere
 srcbase=$libbase/src/Basic/$P1
 targbase=$libbase/src/Basic/$P1

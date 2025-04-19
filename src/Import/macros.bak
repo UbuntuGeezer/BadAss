@@ -1,0 +1,2407 @@
+// macros.gs - macros with ChartofAccounts GoogleSheets.
+//  9/4/24. wmk.  22:22
+//
+// Modification History.
+// ---------------------
+// 9/4/24.  wmk.  superfluous blocks removed.
+// 9/3/24.  wmk.  CompleteTransaction added.
+// 9/1/24.  wmk.  .bas code blocks removed (recoverable from commit 5940947).
+// 8/31/24. wmk.  PlaceTransM, GetTransSheetName, GetInsRow, PlaceGLAmount
+// 8/3/24.   added; testing begun.
+// 8/29/24. wmk.  MoveToChartofAccounts, ReverseSplitTrans added.
+// 8/28/24. wmk.  ReverseDETransaction completed.
+// 8/27/24. wmk.  error handling (try/catch) added to SetSumColor.
+// 8/26/24. wmk.  EnterSplitTrans line count added; SetSumColor function added.
+// 8/24/24. wmk.  EnterSplitTrans started.
+// 8/22/24. wmk.  ProcessSpitTrans started.
+// 8/11/24. wmk.  CopyAboveTrans, CopyBelowTrans now transposing values into debit
+// 8/11/24.  /credit columns correctly.
+// 8/8/24.  wmk.  InsertAbove, CopyAboveTrans, MoveCredToDeb, CopyBelowTrans added.
+// 8/7/24.  wmk.  original.
+
+// EnterSplitTrans.gs
+//-------------------------------------------------
+// EnterSplitTrans - enter split transaction.
+//  8/28/24.  wmk.  06:07
+//-------------------------------------------------
+function EnterSplitTrans() {
+// Entry. user in active spreadsheet with cell 'A' selected in first row of
+//  the split transaction. The first row should have the date, description,
+//  set and the memo field set to 'split'.
+//
+//  <date> <desc> .....                                  split
+//  <date> <desc> total amount to split  xxx.yy    COA
+//
+//  the split transaction then records the split amounts in the opposite
+//  column from the total amount; the split transaction is terminated with
+//  a line with "split" in the memo field.
+//  <date> <desc> .....                                 split
+//
+// Exit. the transaction lines are duplicated with the <date> and <desc>
+//  from the first split line. The amounts are left in their respective
+//  columns, as are the COA account numbers. The transaction is terminated
+//  with the ending "split" line. The split total is placed as a formula
+//  in the COA field of the last split line (e.g. "=SUM(c<line3>:c<line_n-1)"
+//
+//
+// Modification History.
+// ---------------------
+// 8/29/24.   wmk.  1=0 dead code block removed.
+// 8/28/24.   wmk.  add LTGRAY background to unused cells in transaction.
+// 8/26/24.   wmk.  add formatting to values in new split rows; add split
+// 8/26/24.    count to "split" 1st row to determine line count to insert.
+// 8/25/24.   wmk.  original.
+//
+// Notes. EnterSplitTrans checks if the sum of the debit/credit fields
+//  in lines 3 through n-1 equals the total entered in line 2.
+
+// constants.
+  // const TAN = '#eee961';     // TAN background for split transactions
+  // const YELLOW = '#fff200';
+  // const Financial = '#,##0.00;(#,##0.00);
+  var LTGRAY = PropertiesService.getScriptProperties().getProperty('LTGRAY');
+  var TAN = PropertiesService.getScriptProperties().getProperty('TAN');
+  var YELLOW = PropertiesService.getScriptProperties().getProperty('YELLOW');
+  var Financial = PropertiesService.getScriptProperties().getProperty('Financial');
+
+// variables.
+  var spreadsheet = SpreadsheetApp.getActive();
+  var oRange = {};
+  var oSplitRange = {};
+  var oValsRangeList = {};
+  var nCount;         // number of splits
+  var nFirstRow;      // first selected row number
+  var nLastRow;       // last selected row number
+  var nSplitRow1;
+  var nSplitEndRow;
+  var sRangeStr;
+  var sRangeTarg;
+  var sL1RangeStr;    // line 1 range string
+  var sLEndRangeStr;  // line n range string
+  var tRangeStr1;
+  var tRangeStr2;
+  var tRangeStr3;
+  var plusval;
+  var typeis;
+
+  oRange = spreadsheet.getActiveRange();
+  nFirstRow = oRange.getRow();
+  nLastRow = oRange.getLastRow();
+  tRangeStr1 = 'A' + nFirstRow + ':F' + nFirstRow;
+  tRangeStr2 = 'F' + nLastRow + ':F' + nLastRow;
+  nCount = spreadsheet.getRange('E'+nFirstRow).getValue();
+  plusval = spreadsheet.getRange(tRangeStr2).getValue();
+  typeis = typeof nCount;
+  spreadsheet.toast('In EnterSplitTrans ' + ' Selected Range = ' + tRangeStr1 
+  + '   A' + nLastRow + ':A' + nLastRow + '   number of splits =' +nCount
+  + '   type of nCount =' + typeis
+  + '     end of message','WhereAmI',5);
+
+
+  // insert 4 rows after 1st row.
+  var newrows;
+  var bSplitDebit;
+  bSplitDebit = 0;
+  if( typeis == 'string'){
+   newrows = 4;
+   bSplitDebit = 1;
+   sSumColumn = 'D'}
+  else{
+   if( nCount < 0){
+    nCount = -nCount;
+    sSumColumn = 'C'}
+   else{
+    bSplitDebit = 1;
+    sSumColumn = 'D'}
+
+   newrows = nCount +2}
+
+  spreadsheet.getActiveSheet().insertRowsAfter(spreadsheet.getActiveRange().getLastRow(), newrows);
+  spreadsheet.getActiveRange().setBackground(TAN);
+  nLastRow = nFirstRow + newrows;
+  tRangeStr2 = 'A' + nLastRow + ':F' + nLastRow;
+
+  // set sRangeStr to A<nFirstRow>:B<nFirstRow> for copy of date, desc fields.
+  sRangeStr = 'A' + nFirstRow +':B' + nFirstRow;
+  for (var i = nFirstRow+1;i<nLastRow;i = i+1){
+    sRangeTarg = 'A' + i + ':B' + i;
+    spreadsheet.getRange(sRangeStr).copyTo(spreadsheet.getRange(sRangeTarg), SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false); 
+  }
+//  spreadsheet.getRange(sRangeStr).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
+
+  // activate entire first row and set yellow-ish background.
+  oSplitRange =spreadsheet.getRange(tRangeStr1).activate();
+  spreadsheet.getActiveRange().setBackground(TAN);
+
+  // copy "split" to last row.
+  spreadsheet.getActiveRange().copyTo(spreadsheet.getRange(tRangeStr2), SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
+  // added comment to trigger need to reload this macro.
+
+  // place total formula in column E last row.
+  // if bSplitDebit SUM(D:..), else SUM(C..)
+  nSplitRow1 = nFirstRow + 1;
+  var nSplitsRow;
+  nSplitsRow = nSplitRow1 + 1;
+  nSplitEndRow = nLastRow-1;
+  sRangeTarg = 'E' + nLastRow + ':E' + nLastRow;
+  sRangeSplit = sSumColumn + nSplitRow1 + ':' + sSumColumn + nSplitEndRow;
+  spreadsheet.getRange(sRangeTarg).setFormula('=SUM(' + sRangeSplit + ')');
+  spreadsheet.getRange(sRangeTarg).setNumberFormat(Financial);
+
+  // set Financial number format in debit/credit columns.
+//var rangeList = sheet.getRangeList(['D4', 'B2:C4']);
+  oValsRangeList = spreadsheet.getRangeList(['C'+nSplitRow1+':D'+nSplitEndRow]);
+  oValsRangeList.setNumberFormat(Financial);
+
+
+  // set General number format in Account column.
+  oAcctRangeList = spreadsheet.getRangeList(['E'+nSplitRow1+':E'+nSplitEndRow]);
+  oAcctRangeList.setNumberFormat('General');
+
+  // gray out unused cells.
+  if( bSplitDebit ){
+    // gray out Credit
+    oValsRangeList = spreadsheet.getRangeList(['D'+nSplitRow1+':D'+nSplitRow1,'C'+nSplitsRow+':C'+nSplitEndRow]);
+    oValsRangeList.setBackground(LTGRAY);
+  }
+  else{
+    // gray out Debit
+    oValsRangeList = spreadsheet.getRangeList(['C'+nSplitRow1+':C'+nSplitRow1,'D'+nSplitsRow+':D'+nSplitEndRow]);
+    oValsRangeList.setBackground(LTGRAY);
+
+   }   // end bSplitDebit
+
+}  // end EnterSplitrans   8/29/24.
+//**/
+
+
+// NumFmtFinancial.gs
+function NumFmtFinancial() {
+  var spreadsheet = SpreadsheetApp.getActive();
+  spreadsheet.getRange('D1294').activate();
+  spreadsheet.getActiveRangeList().setNumberFormat('#,##0.00;(#,##0.00)');
+}   // end NumFmtFinancial
+//**/
+
+// NumFormatAuto.gs
+function NumFormatAuto() {
+  var spreadsheet = SpreadsheetApp.getActive();
+  spreadsheet.getRange('E1295').activate();
+  spreadsheet.getActiveRangeList().setNumberFormat('General');
+}   // end NumFmtAuto
+//**/
+
+// onEdit.gs
+function onEdit(e){
+
+const oRange = e.range;
+oRange.setBackground(YELLOW);
+}   // end OnEdit local event
+//**/
+
+// SetSumColor.gs
+//-------------------------------------------------------
+//  SetSumColor - Set background color on split sum cell.
+//    8/26/24.  wmk.
+//-------------------------------------------------------
+function SetSumColor(){
+
+// Entry.
+//
+// Modification History.
+// ---------------------
+// 8/28/24.   wmk.  use PropertiesService to set color values.
+// 8/26/24.   wmk.  original.
+
+// constants.
+  //const LTGREEN = '#23ff23';  // light green
+  //const TAN = '#eee961';      // tan
+var LTGREEN = PropertiesService.getScriptProperties().getProperty('LTGREEN');
+var TAN = PropertiesService.getScriptProperties().getProperty('TAN');
+
+// variables.
+var spreadsheet = SpreadsheetApp.getActive();
+var oDebitCell = {};
+var oCreditCell = {};
+var oSumCell = {};
+var fDebitVal;
+var fCreditVal;
+var fSumVal;
+var nErrCode;
+var nFirstRow;
+var nSumRow;
+
+// code.
+  nErrCode = 0;
+
+try{
+  nSumRow = spreadsheet.getActiveRange().getLastRow();
+  nFirstRow = spreadsheet.getActiveRange().getRow();
+  oDebitCell = spreadsheet.getRange('C'+ nFirstRow);
+  oCreditCell = spreadsheet.getRange('D' + nFirstRow);
+  fDebitVal = oDebitCell.getValue();
+  fCreditVal = oCreditCell.getValue();
+  oSumCell = spreadsheet.getRange('E'+ nSumRow);
+  fSumVal = oSumCell.getValue();
+
+  if( fDebitVal == fSumVal || fCreditVal == fSumVal )
+    oSumCell.setBackground(LTGREEN);
+  else
+    oSumCell.setBackground(TAN);
+}
+catch{
+  nErrCode = -1;
+}
+if( nErrCode != 0 )
+ spreadsheet.toast('in SetSumColor - unprocessed error','Error Handler');
+
+}   //  end SetSumColor   8/26/24.
+//**/
+
+// ReverseDETrans.gs
+//---------------------------------------------------------------
+// ReverseDETrans - Reverse double-entry transaction.
+//		8/28/24.	wmk.	03:46
+//---------------------------------------------------------------
+
+function ReverseDETrans(){
+
+// Usage. iVal = ReverseDETrans();
+//
+// Entry. User has selected lines of General Ledger transaction to reverse
+//
+// Exit. iVal = 0 - normal return
+//				-1 - abnormal return
+//
+// Calls.	CheckDoubleEntry, CreateReverseTrans
+//			ErrLogSetup, ErrLogSetRecording
+//
+// Modification history.
+// ---------------------
+// 8/28/24.   wmk.  bug fix to align account fields 'center; use
+// 8/28/24.    PropertiesService to set color values.
+// 8/27/24.		wmk.	convert function to .gs AppsScript.
+// Legacy mods. (see commit 5940947).
+//
+//	Notes. Method: For double-entry transaction,insert 2 lines at first
+// row position with "ROWS" option; copy original transaction to 2 new
+// rows; swap Account columns in new transaction.
+// back from original transaction into opposite columns.
+// Once the reversing transaction h;been put in place in the GL,
+// the user runs PlaceTransM or PlaceSplitTrans to store the 
+// new transaction in the appropriate COA sheets
+// as though the user entered them for processing.
+
+//	constants.
+// const TAN = '#eee961';      // tan
+const DEROWCOUNT=2;			// double entry row count
+var TAN = PropertiesService.getScriptProperties().getProperty('TAN');
+
+//	local variables.
+
+//	.gs script vars.
+var iRetValue;			// returned value
+var spreadsheet = SpreadsheetApp.getActive();
+var oRange = {};
+var sRangeStr;
+var tRangeStr1;
+var tRangeStr2;
+
+
+//	CellRange content variables for GL sheet.
+var nAccount;
+var oGLRange  = {};	// Object		// RangeAddress 	// Object of two rows processing
+var oSrcRange = {};     // source for transaction copy
+var nFirstRow;
+var nLastRow;
+var nNewRow;
+var nNewLastRow;
+var sGLRange;
+
+	// code.
+  try{
+    iRetValue = 0;			// set normal return
+	  oRange = spreadsheet.getActiveRange();
+	  oGLRange = oRange;
+    nFirstRow = oRange.getRow();
+    nLastRow = oRange.getLastRow();
+    nNewRow = nLastRow + 1;
+    nNewLastRow = nNewRow + 1;
+    oSrcRange = spreadsheet.getRange('A' + nFirstRow + ':F' + nLastRow);
+
+    // insert 2 lines below last line of transaction.
+    spreadsheet.getActiveSheet().insertRowsAfter(nLastRow, DEROWCOUNT);
+
+    // copy transaction lines to new lines.
+    sGLRange = 'A'+ nNewRow + ':' + 'F' + nNewLastRow;
+    oGLRange = spreadsheet.getRange(sGLRange);
+    //spreadsheet.toast('oGLRange = ' + sGLRange,'Debugging Window');
+    oSrcRange.copyTo(oGLRange,
+      SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
+
+  // now swap account column in both new rows.
+  tRangeStr1 = 'E' + nNewRow;
+  tRangeStr2 = 'E' + nNewLastRow;
+  nAccount = spreadsheet.getRange('E' + nNewRow).getValue();
+  spreadsheet.getRange(tRangeStr2).moveTo(spreadsheet.getRange(tRangeStr1));
+  spreadsheet.getRange(tRangeStr2).setValue(nAccount);
+
+  // set "reversal" in Ref field with TAN background.
+  sGLRange = 'F' + nNewRow + ':F' + nNewLastRow;
+  spreadsheet.getRange(sGLRange).setValue('reversal');
+  spreadsheet.getRange(sGLRange).setBackground(TAN);
+
+  //spreadsheet.setActiveSheet(spreadsheet.getSheets()[0]);
+
+  var uAlignJunk;
+  var oAcctRange1 = {};
+  var oAcctRange2 = {};
+  var oAcctRange = {};
+  oAcctRange2 = spreadsheet.getRange('E'+nNewLastRow+ ':E'+nNewLastRow);
+  oAcctRange1 = spreadsheet.getRange('E'+ nNewRow+ ':E'+ nNewRow);
+  uAlignJunk = oAcctRange1.getHorizontalAlignment();
+  oAcctRange2.setHorizontalAlignment(uAlignJunk);
+  //spreadsheet.toast('Horizontal Alignment = '+uAlignJunk,'Debugging Window');
+	}	// end try
+  catch(e){
+  spreadsheet.toast('in ReverseDETrans - unprocessed error.','Error Handler');
+	iRetValue = -1;
+  }		// end catch
+  
+  return iRetValue;
+	
+} 	// end ReverseDETrans	8/28/24.
+//**/
+
+// MoveToChartofAccounts.gs
+//-----------------------------------------------------------
+//	MoveToChartofAccounts - activate ChartofAccounts sheet.
+//		8/29/24.	wmk.
+//-----------------------------------------------------------
+function MoveToChartofAccounts(){
+
+// Entry.
+//
+// Exit.
+//
+// Modification History.
+// ---------------------
+// mm/dd/yy.	wmk.	original.
+//
+
+// local constants.
+
+// properties.
+var COASheet = PropertiesService.getScriptProperties().getProperty('COASHEET');
+
+// variables.
+var spreadsheet = SpreadsheetApp.getActive();
+var oRange = {};
+var oSheet = {};
+
+// code.
+try{
+  oSheet = spreadsheet.getSheetByName(COASheet);
+  spreadsheet.setActiveSheet(oSheet);
+}
+catch(e){
+  spreadsheet.toast('in MoveToChartofAccounts - unprocessed error', 'Error Handler');
+}
+ return;
+ 
+}	// end MoveToChartofAccounts  8/29/24.
+//**/
+
+// MoveToGeneralLedger.gs
+//-----------------------------------------------------------
+//	MoveToGeneralLedger - activate General Ledger sheet.
+//		8/29/24.	wmk.
+//-----------------------------------------------------------
+function MoveToGeneralLedger(){
+
+// Entry.
+//
+// Exit.
+//
+// Modification History.
+// ---------------------
+// 8/29/24.	wmk.	original.
+//
+
+// local constants.
+
+// properties.
+var GLSheet = PropertiesService.getScriptProperties().getProperty('GLSHEET');
+
+// variables.
+var spreadsheet = SpreadsheetApp.getActive();
+var oRange = {};
+var oSheet = {};
+
+// code.
+try{
+  oSheet = spreadsheet.getSheetByName(GLSheet);
+  spreadsheet.setActiveSheet(oSheet);
+}
+catch(e){
+  spreadsheet.toast('in MoveToGeneralLedger - unprocessed error', 'Error Handler');
+}
+ return;
+ 
+}	// end MoveToGeneralLedger		8/29/24.
+//**/
+
+
+// ReverseSplitTrans.gs
+//-----------------------------------------------------------
+//	ReverseSplitTrans - Reverse split transaction.
+//		8/29/24.	wmk.	19:37
+//-----------------------------------------------------------
+function ReverseSplitTrans(){
+
+// Entry. User has selected rows of split transaction in GL sheet.
+//	first row has split count or - in Account field.
+//
+// Exit.  Reverse split transaction added in rows immediately following
+//	original transaction.
+//
+// Modification History.
+// ---------------------
+// 8/29/24.	wmk.	original.
+//
+
+// local constants.
+const RESET = '#ffffff';		// RESET color to white (no background color)
+
+// properties.
+  var LTGRAY = PropertiesService.getScriptProperties().getProperty('LTGRAY');
+  var TAN = PropertiesService.getScriptProperties().getProperty('TAN');
+  var YELLOW = PropertiesService.getScriptProperties().getProperty('YELLOW');
+  var Financial = PropertiesService.getScriptProperties().getProperty('Financial');
+
+// variables.
+var spreadsheet = SpreadsheetApp.getActive();
+var oRange = {};
+var oGLRange;
+  var oSplitRange = {};
+  var oSrcRange;
+  var oValsRangeList = {};
+  var nCount;         // number of splits
+  var nFirstRow;      // first selected row number
+  var nLastRow;       // last selected row number
+  var nRevFirstRow;	  // reverse first row ("split")
+  var nRevLastRow;	  // reverse last row ("split")
+  var nRevSplitRow1;
+  var nRevSplitLastRow;
+  var nRevTotalRow;   // reverse first row + 1
+  var nSplitRow1;
+  var nSplitEndRow;
+  var sColorRange;    // range for setting background color
+  var sRangeStr;
+  var sRangeTarg;
+  var sGLRange;
+  var sSrcRange;
+  var sL1RangeStr;    // line 1 range string
+  var sLEndRangeStr;  // line n range string
+  var tRangeStr1;
+  var tRangeStr2;
+  var tRangeStr3;
+  var plusval;
+  var typeis;
+
+// code.
+try{
+  // get full row count.
+  oRange = spreadsheet.getActiveRange();
+  nFirstRow = oRange.getRow();
+  nLastRow = oRange.getLastRow();
+  nRevFirstRow = nLastRow + 1;
+  nRevTotalRow = nRevFirstRow + 1;    // total split row
+  nRevSplitRow1 = nRevTotalRow + 1;   // first rev split row
+  sSrcRange = 'A' + nFirstRow + ':F' + nLastRow;
+  tRangeStr2 = 'E'+ nFirstRow + ':E' + nFirstRow;
+  nCount = spreadsheet.getRange(tRangeStr2).getValue();
+  plusval = spreadsheet.getRange(tRangeStr2).getValue();
+  if( plusval < 0 ) plusval = -plusval;
+  typeis = typeof nCount;
+
+	// Debugging code.
+  spreadsheet.toast('In ReverseSplitTrans ' + ' Selected Range = '
+  + '   A' + nLastRow + ':A' + nLastRow + '   number of splits =' +nCount
+  + '   type of nCount =' + typeis
+  + '     end of message','WhereAmI',5);
+
+
+  // insert full row count after this transaction.
+  var newrows;
+  var bSplitDebit;
+  bSplitDebit = 0;
+  if( typeis == 'string'){
+   newrows = 5;		// header/trailer split plus 3 rows for transaction data
+   bSplitDebit = 1;
+   sSumColumn = 'D'}
+  else{
+   if( nCount < 0){
+    nCount = -nCount;
+    sSumColumn = 'C'}
+   else{
+    bSplitDebit = 1;
+    sSumColumn = 'D'}
+
+   newrows = nCount +3}		// header/trailer "split" + total row + split count
+
+  spreadsheet.getActiveSheet().insertRowsAfter(spreadsheet.getActiveRange().getLastRow(), newrows);
+	nRevLastRow = nRevFirstRow + newrows-1;
+
+  // copy original split transaction to new rows.
+  //  note: background colors are copied with transaction data.
+    oSrcRange = spreadsheet.getRange(sSrcRange);
+    sGLRange = 'A'+ nRevFirstRow + ':' + 'F' + nRevLastRow;
+    oGLRange = spreadsheet.getRange(sGLRange);
+    //spreadsheet.toast('oGLRange = ' + sGLRange,'Debugging Window');
+    oSrcRange.copyTo(oGLRange,
+      SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
+	
+	// check flag and move total from debit to credit as appropriate.
+  if(bSplitDebit == 1){
+    sSrcRange = 'C' + nRevTotalRow + ':C' + nRevTotalRow;
+    sGLRange = 'D' + nRevTotalRow + ':D' + nRevTotalRow;
+  }
+  else{
+    sSrcRange = 'D' + nRevTotalRow + ':D' + nRevTotalRow;
+    sGLRange = 'C' + nRevTotalRow + ':C' + nRevTotalRow;
+  }   // end bSplitDebit
+  oSrcRange = spreadsheet.getRange(sSrcRange);
+  oGLRange = spreadsheet.getRange(sGLRange);
+  oSrcRange.moveTo(oGLRange);
+
+	// move split rows from debit to credit as appropriate.
+  nSplitRow1 = nRevTotalRow + 1;
+  nSplitEndRow = nRevLastRow - 1;
+  if(bSplitDebit == 1){
+    sSrcRange = 'D' + nSplitRow1 + ':D' + nSplitEndRow;
+    sGLRange = 'C' + nSplitRow1 + ':C' + nSplitEndRow;
+  }
+  else{
+    sSrcRange = 'C' + nSplitRow1 + ':C' + nSplitEndRow;
+    sGLRange = 'D' + nSplitRow1 + ':D' + nSplitEndRow;
+  }	  // end bSplitDebit
+  sSumRange = sGLRange;
+  oSrcRange = spreadsheet.getRange(sSrcRange);
+  oGLRange = spreadsheet.getRange(sGLRange);
+  oSrcRange.moveTo(oGLRange);
+
+  oGLRange = spreadsheet.getRange('E' + nRevLastRow + ':E' + nRevLastRow);
+  oGLRange.setFormula('=SUM('+sSumRange+')');
+
+
+	// clear background color on all debit/credit fields.
+  var nStart;
+  var nEnd;
+  nStart = nRevFirstRow + 1;
+  nEnd = nRevLastRow - 1;
+  sColorRange = 'C' + nStart + ':D' + nEnd;
+  spreadsheet.getRange(sColorRange).setBackground(RESET);
+	
+  // set TAN as color in Reference fields.
+  // set 'reversal' in Reference fields.
+//  var nRevFirstRow;	  // reverse first row ("split")
+//  var nRevLastRow;	  // reverse last row ("split")
+  //spreadsheet.toast('nRevFirstRow = ' + nRevFirstRow + '   nRevLastRow = ' + nRevLastRow,'Debugging Window');
+  sColorRange = 'F' + nStart + ':F' + nEnd;
+  spreadsheet.getRange(sColorRange).setBackground(TAN);
+  spreadsheet.getRange(sColorRange).setValue('reversal');
+	return;
+}
+catch(e){
+  spreadsheet.toast('in ReverseSplitTrans - unprocessed error', 'Error Handler');
+}
+ return;
+ 
+}	// end ReverseSplitTrans		8/29/24.
+//**/
+
+// PlaceTransM.gs
+//-------------------------------------------------------------------
+// PlaceTransM - place multiple transactions into appropriate sheets.
+//		9/3/24.	wmk.  07:14
+//-------------------------------------------------------------------
+
+function PlaceTransM(){
+
+// Usage.	macro call or
+//			PlaceTransM();
+//
+// Entry.	user has selected one or more transaction rows in ledger sheet
+//			from which transactions are to be placed in appropriate
+//			accounts sheet
+//
+//	Exit.	transaction (2 rows) is copied with each row of the transaction
+//			copied to the appropriate sheet by account number, and the
+//			account numbers transposed in the new entries to cross-reference
+//			the corresponding double-entry account for the transaction
+//
+//	Calls.	GetTransSheetName, GetInsRow, GetMonthName, SetSheetDate,
+//			PlaceSplitTrans
+//
+// Modification history.
+// ---------------------
+// 9/3/24.  wmk.  activate PlaceSplitTrans call.
+// 9/1/24.  wmk.  begin removing old bas blocks; PlaceTransM calls with new
+// 9/1/24.   vXrefAccount parameter.
+// 8/31/24. wmk.  new var lGLTransStart, starting line of new trasanction
+// 8/31/24.  for each transaction being placed.
+// 8/31/24   account sheets.
+// 8/30/24. wmk.  improve processing loop.
+// 8/29/24.	wmk.	original; .gs adaptation from .bas.
+// Legacy mods. (see commit 5940947).
+//
+//	Notes.
+// 8/31/24. wmk.  new var lGLTransStart, starting line of new trasanction
+// 8/31/24.  for each transaction being placed.
+// 8/31/24   account sheets.
+//
+//  This emulates the process of taking general ledger
+// transactions (double entries) and creating new entries in
+// the appropriate account sheets for each line of the transaction. 
+// Each line of the transaction uses the following columns
+// Column A=date, B=transaction, C=debit D=credit  E=COA account
+//			 F=reference
+// Method.
+// (maybe write a utility just to verify transactions)
+// user should "select" area in GL sheet with ledger entries to clone
+//  to other sheets;
+// const INSBIAS = 3 to set row bias from start of Month/Acct#
+// convert month field from date data to capitalized month name for
+// use CurrentSelection function to get General Ledger rows to push into
+// appropriate category account sheet;
+// function GetTransSheetName (<sAcct>) as String - get sheet name, given
+// account number string
+// function GetInsRow( <oExSheet>, <sAcct>, <sMonth> ) as long returning row #
+//   if -1 not found; -2 if won't fit before next month or account;
+//  -3 COA found, but month not found before COA changed, 
+// insert new row at row returned from GetInsRow and copy row information
+// from General Ledger sheet to Expenses sheet; change color of date
+// field in both General Ledger and target account category sheet to a
+// light green. This will help the user to avoid the mistake of
+// double-updating General Ledger entries into account category sheets
+// use getSheetByName() call on Sheets object to accesss category
+// sheets
+// search in both category sheets looks for <month-name> in the second
+// field, and <account-number> in the first field, then move forward
+// in rows to check if enough space for insert without affecting
+// either month tallies; if not, transaction is skipped.
+// new rows are marked with light green background in Date field to
+// make it easy for the user to spot "automated" entries.
+// processed transaction rows in GL sheet are marked with light green
+//	background in Reference field to make it easy for user to spot
+// entries that have been disseminated with "automated" entries in
+// the account category sheets; if a transaction has been skipped
+// by the automated dissemination, its Reference field is left in
+// its original background color state
+//----------------------------------------------------------------------
+//***************BUGS - * = still outstanding
+// 5/18/20.	failed to flag as error and skip transaction with at least
+//				one line with values in both debit and credit fields
+// 5/18/20.	failed to flag as error and skip transaction with at least
+//				one l line with no values in both debit and credit fields
+//	5/19/20.	transaction on accounts 1010/1020 ATM withdrawal
+//				skipped with "duplicate accounts" error
+//	5/19/20.	"duplicate accounts" trasaction error still colored
+//				reference field green
+//	5/19/20.	insert into same sheet with two different COAs causes
+//				insert of second COA line only 2 rows in from COA, not 3
+
+//	constants. 
+const COLDATE='A'		// Date - column A
+const COLTRANS='B'	// Transaction - column B
+const COLDEBIT='C'	// Debit - column C
+const COLCREDIT='D'	// Credit - column D
+const COLACCT='E'		// COA Account - column E
+// const COLREF='F'		// Reference - column F
+
+// column index values for accessing information.
+
+/* -----------------.bas constants. ------------------
+// cell formatting constants.
+'const DEC2=123		// number format for (x,xxx.yy)
+'const MMDDYY=37		// date format mm/dd/y
+'const LJUST=1		// left-justify HoriJustify
+'const CJUST=2		// center HoriJustify
+'const RJUST=0		// right-justify HoriJustify
+'const MAXTRANSL=50	// maximum transaction text length
+*/ //-------------- end .bas constants.
+
+// properties.
+var COLREF = PropertiesService.getScriptProperties().getProperty('COLREF');
+var LTGRAY = PropertiesService.getScriptProperties().getProperty('LTGRAY');
+var LTGREEN = PropertiesService.getScriptProperties().getProperty('LTGREEN');
+var TAN = PropertiesService.getScriptProperties().getProperty('TAN');
+var YELLOW = PropertiesService.getScriptProperties().getProperty('YELLOW');
+var Financial = PropertiesService.getScriptProperties().getProperty('Financial');
+
+// process control constants.
+const ERRCONTINUE=-1	// error, but continue with next transaction
+const ERRSTOP=-2		// error, stop processing transactions
+
+// variables.
+var spreadsheet = SpreadsheetApp.getActive();
+var oRange = {};
+var oGLRange = {};
+var oTempRange = {};
+
+var i;            // loop counter
+var iStatus;      // callout returned status
+var nFirstRow;		// first row selected
+var nLastRow;		  // last row selected
+var nCheckRow;		// row to check for already processed
+var lGLStartRow;	// loop processing start row
+var lGLTransStart;  // starting row of current transaction
+var lGLEndRow;		// loop processing end row
+var lGLCurrRow;		// current row being processed in GL
+var lLastSplitRow;  // last row of split
+var nLastTransRow;  // last transaction within split
+var lRowsSelected;  // count of rows selected
+var lTransCount;	// number of transactions to process
+var nBackColor;		// background color value
+var sRefString;   // reference field string
+var sTempRange;   // temporary range string
+var vSplitCnt;    // split row count
+var nSplits;      // count of splits
+var nTotalRow;    // split total row
+var vXrefAccount; // cross-reference account for amount
+
+// code.
+try{
+  oRange = spreadsheet.getActiveRange();
+  nFirstRow = oRange.getRow();
+  nLastRow = oRange.getLastRow();
+  lGLStartRow = nFirstRow;
+  lGLEndRow = nLastRow;
+  lRowsSelected = lGLEndRow+1 - lGLStartRow;
+  lGLCurrRow = lGLStartRow -1;	// loop processing current row (incremented first)
+
+  // loop processing rows..
+  for(i=0;i<lRowsSelected;i++){
+    lGLCurrRow = lGLCurrRow + 1;   // advance to next transaction
+    lGLTransStart = lGLCurrRow;    // set transaction starting row
+    oTempRange = spreadsheet.getRange(COLREF + lGLCurrRow + ':' + COLREF + lGLCurrRow);
+    // spreadsheet.toast('range string =' + COLREF + lGLCurrRow + ':' + COLREF
+    // + lGLCurrRow, 'Debug',5);
+   
+    // check for "split"
+    sRefString = oTempRange.getValue();
+    if(sRefString == 'split'){
+      nTotalRow = lGLCurrRow + 1;
+      oTempRange = spreadsheet.getRange(COLACCT + lGLCurrRow + ':' + COLACCT + lGLCurrRow);
+      vSplitCnt = oTempRange.getValue();
+      if( typeof vSplitCnt == 'string'){
+        nSplits = 2
+      }
+      else if( vSplitCnt < 0){
+        nSplits = -vSplitCnt
+      }
+      else{
+        nSplits = vSplitCnt
+      }
+
+      // check last row for 'split'.
+      lLastSplitRow = lGLCurrRow + nSplits + 2;
+      nLastTransRow = lLastSplitRow - 1;
+      oTempRange = spreadsheet.getRange(COLREF + lLastSplitRow + ':' + COLREF + lLastSplitRow);
+      sRefString = oTempRange.getValue();
+      if (sRefString != 'split'){
+        spreadsheet.toast('split row count problem - split skipped - row ='+lLastSplitRow,'Error Handler');
+        break;
+      }
+
+      // check second row for already processed.
+      nCheckRow = nTotalRow;
+      oTempRange = spreadsheet.getRange(COLREF + nCheckRow + ':' + COLREF + nCheckRow);
+      nBackColor = oTempRange.getBackground();
+      if(nBackColor == LTGREEN){
+        spreadsheet.toast('at row ' + nCheckRow
+          + '... refusing to process prior completed transaction.',
+         'Warning',5);
+        i = i + nSplits + 2;
+        lGLCurrRow = lGLCurrRow + i;
+        continue;
+      }
+ 
+      iStatus = PlaceSplitTrans(lGLCurrRow);
+
+      // if split placement successful, set LTGREEN in split rows.
+      if(iStatus == 0){
+        sTempRange = COLREF + nTotalRow + ':' + COLREF + 
+         nLastTransRow;
+        oTempRange = spreadsheet.getRange(sTempRange);
+        oTempRange.setBackground(LTGREEN);
+      }
+      //
+      //lGLCurrRow = lGLCurrRow + nSplits + 2;
+      i = i + nSplits + 2;
+      lGLCurrRow = lGLCurrRow + nSplits + 2;
+      continue
+    }
+
+    // check background color of COLREF:(nFirstRow+1) field; if LTGREEN, assume already processed.
+    //  this will work for either a regular or split transaction.
+    nCheckRow = lGLCurrRow;
+    oTempRange = spreadsheet.getRange(COLREF + nCheckRow + ':' + COLREF + nCheckRow);
+    nBackColor = oTempRange.getBackground();
+    if(nBackColor == LTGREEN){
+      spreadsheet.toast('at row ' + nCheckRow + '... refusing to process prior completed transaction.',
+       'Warning',5);
+      i = i + 1;
+      lGLCurrRow = lGLCurrRow + 1;
+      continue
+    }
+
+    // this is not a split, so the next row must be included
+    // in the selection.
+    if( lGLCurrRow >= lGLEndRow ){
+      spreadsheet.toast('at row ' + lGLCurrRow + '... refusing to process - balancing row not selected.',
+       'Warning',5);
+      break;
+
+    }
+    var lNextRow;
+    lNextRow = lGLCurrRow + 1;
+    sTempRange = COLACCT + lNextRow;
+    oTempRange = spreadsheet.getRange(sTempRange);
+    vXrefAccount = oTempRange.getValue();
+
+    // place transaction line in account sheet.
+    iStatus = PlaceGLAmount(lGLCurrRow,vXrefAccount);
+    if(iStatus != 0 ){   // placement failed
+      // skip remaining transaction (no message for now)
+      i = i + 1;
+      lGLCurrRow = lGLCurrRow + 1;
+      continue;
+    }
+
+/*
+    // mark row completed.
+    sTempRange = COLREF + lGLCurrRow + ':' + COLREF + lGLCurrRow;
+    oTempRange = spreadsheet.getRange(sTempRange);
+    oTempRange.setBackground(LTGREEN);
+*/
+
+    // get xref account from current row.
+    sTempRange = COLACCT + lGLCurrRow;
+    oTempRange = spreadsheet.getRange(sTempRange);
+    vXrefAccount = oTempRange.getValue();
+
+    // advance to balancing row and process it.
+    i = i + 1;
+    lGLCurrRow = lGLCurrRow + 1;
+    iStatus = PlaceGLAmount(lGLCurrRow,vXrefAccount);
+    if(iStatus != 0 ){   // placement failed
+
+      // flag preceding lines as "orphaned".
+      if(lGLCurrRow > lGLTransStart){
+        for (j=lGLTransStart; j< lGLCurrRow;j++){
+          // mark row orphaned.
+          sTempRange = COLREF + j + ':' + COLREF + j;
+          oTempRange = spreadsheet.getRange(sTempRange);
+          oTempRange.setBackground(YELLOW);
+        }   // end loop on orphaned lines.
+
+      } // end have orphaned lines
+    } // end placement failed
+  } // end loop on rows
+  
+  return;  
+}	// end try block
+
+catch(e){
+  spreadsheet.toast('in PlaceTransM - unprocessed error.','Error Handler');
+}	// end catch block
+
+return;
+
+}	// end PlaceTransM		8/31/24.
+//**/
+
+// PlaceGLAmount.gs
+//------------------------------------------------------------------------
+//	PlaceGLAmount - Place amount from current GL line into target account.
+//		9/1/24.	wmk.	12:21
+//------------------------------------------------------------------------
+function PlaceGLAmount(plGLCurrLine,pnRefAcct){
+
+// Usage. iRetVal = PlaceGLAmcount(plGLCurrLine,pnRefAcct);
+//
+//   plGLCurrLine = current line within GL sheet
+//     Debit/Credit value is to be placed in appropriate account sheet
+//   pnRefAcct = reference account to be placed in account sheet
+//    (this is the counter-entry's account)
+//
+// Entry. user in General Ledger sheet
+//
+// Exit.  iRetVal = 0 - success; -1 error
+//  Debit/Credit value placed in appropriate account sheet.
+//  user in General Ledger sheet
+//  if placement successful Reference field in plGLCurrLine is LTGREEN
+//
+// Calls. GetTransSheetName, GetMonthName, GetInsRow.
+//
+// Modification History.
+// ---------------------
+// 9/1/24.  wmk.  loop improvments; error handling expanded; calling sequence
+// 9/1/24.   pnRefAcct parameter added.
+// 8/31/24. wmk.  error handling improvements.
+// 8/30/24.	wmk.	original.
+//
+// Notes. lGLStart enables PlaceTransM to backtrack the current transaction
+// to its first line in the event of an insertion failure into a target account
+// sheet.
+
+// local constants.
+
+// properties.
+var LTGREEN = PropertiesService.getScriptProperties().getProperty('LTGREEN');
+var YELLOW =  PropertiesService.getScriptProperties().getProperty('YELLOW');
+var COLACCT =  PropertiesService.getScriptProperties().getProperty('COLACCT');
+var COLDEBIT =  PropertiesService.getScriptProperties().getProperty('COLDEBIT');
+var COLCREDIT =  PropertiesService.getScriptProperties().getProperty('COLCREDIT');
+var COLREF =  PropertiesService.getScriptProperties().getProperty('COLREF');
+var COLDATE =  PropertiesService.getScriptProperties().getProperty('COLDATE');
+var INSBIAS = PropertiesService.getScriptProperties().getProperty('INSBIAS');
+
+// variables.
+var spreadsheet = SpreadsheetApp.getActive();
+var oRange = {};
+var nRetVal;		// returned value
+var oTempRange = {};  // temporary range
+var sTempRange;       // temporary range string
+var sName;            // sheet name
+var sAcct;            // COA account field text
+var sCOAType;         // COA field type
+var sDateType;        // date field type
+var oAcctSheet = {};  // accounting sheet for searching
+var oDate;            // date field object
+var sDate;            // date as string
+var lGLStart;         // starting row of current transaction
+var vRowImage = [{}];      // target values array
+var vXrefAcct = {};   // xref account object
+
+// code.
+try{
+  nRetVal = 0;
+  // get Account field from passed row.
+  sTempRange = COLACCT + plGLCurrLine + ':' + COLACCT + plGLCurrLine;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  sAcct = oTempRange.getValue();
+  vXrefAcct = pnRefAcct;          // reference account
+  sCOAType =typeof sAcct;
+  // grab values from source row.
+  sTempRange = COLDATE + plGLCurrLine + ':' + COLREF + plGLCurrLine;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  vRowImage = oTempRange.getValues();
+
+  // get transaction sheet name from account value.
+  sName = GetTransSheetName(sAcct);
+
+  // search transaction sheet for account value.
+  sTempRange = COLDATE + plGLCurrLine;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  oDate = oTempRange.getValue();
+//var date = new Date();
+var timeZone = Session.getScriptTimeZone();
+var formattedDate = Utilities.formatDate(oDate, timeZone, "MM/dd/YY");
+  sDate = formattedDate;
+  //sDateType = typeof sDate;
+var sMonth;         // month string
+
+var nMonth;         // month number
+  sMonth = sDate.substring(0,2);
+  nMonth = +sMonth;
+  sMonth = GetMonthName(sDate);
+
+var lRowIndex;      // insert row index
+  // set sheet object to account sheet name.
+  var oCurrSheet = {};
+  var oCurrRange = {};
+  oCurrSheet = SpreadsheetApp.getActiveSheet();
+  oCurrRange = oCurrSheet.getActiveRange();
+  oAcctSheet = spreadsheet.getSheetByName(sName);
+//spreadsheet = SpreadsheetApp.getActiveSheet();
+  spreadsheet.setActiveSheet(oAcctSheet);
+
+  lRowIndex = GetInsRow(oAcctSheet, sAcct, sMonth);
+  if(lRowIndex <= 0){
+  spreadsheet = SpreadsheetApp.setActiveSheet(oCurrSheet);
+  spreadsheet.setActiveRange(oCurrRange);
+    nRetVal = -1;
+    forceError;
+  }
+
+  // insert row in transaction sheet.
+  spreadsheet.insertRowBefore(lRowIndex);
+  // now copy values into row;
+  sTempRange = COLDATE + lRowIndex + ':' + COLREF + lRowIndex;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  oTempRange.setValues(vRowImage);
+  sTempRange = COLACCT + lRowIndex;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  oTempRange.setValue(vXrefAcct);
+
+
+  // move back to General Ledger sheet.
+  spreadsheet = SpreadsheetApp.setActiveSheet(oCurrSheet);
+  spreadsheet.setActiveRange(oCurrRange);
+    // mark row completed.
+    sTempRange = COLREF + plGLCurrLine + ':' + COLREF + plGLCurrLine;
+    oTempRange = spreadsheet.getRange(sTempRange);
+    oTempRange.setBackground(LTGREEN);
+
+}
+catch(e){
+  switch(nRetVal){
+  case 0:
+     nRetVal = -1;
+    spreadsheet.toast('in PlaceGLAmount - unprocessed error', 'Error Handler');
+    break;
+  default:
+    spreadsheet.toast('in PlaceGLAmount - unprocessed error', 'Error Handler');
+    break;
+  }
+
+}
+ return nRetVal;
+ 
+}	// end PlaceGLAmount		9/1/24.
+//**/
+
+
+// PlaceGLInvAmount.gs
+//---------------------------------------------------------------------------
+//	PlaceGLInvAmount - Place inverse amount from GL line into target account.
+//		9/2/24.	wmk.	21:01
+//---------------------------------------------------------------------------
+function PlaceGLInvAmount(plGLCurrLine,pnRefAcct){
+
+// Usage. iRetVal = PlaceGLAmcount(plGLCurrLine,pnRefAcct);
+//
+//   plGLCurrLine = current line within GL sheet
+//     Debit/Credit value is to be placed in appropriate account sheet
+//     but in the inverse column (debit placed in credit, credit placed
+//     in debit)
+//   pnRefAcct = account # of target sheet;
+//     Note: the line item should be placed in the parent account sheet of
+//      the pnRefAcct; the stored account in the line item will remain
+//      unchanged, as it is the xref account for an inverse item
+//
+// Entry. user in General Ledger sheet
+//
+// Exit.  iRetVal = 0 - success; -1 error
+//  Debit/Credit value placed in appropriate account sheet.
+//  user in General Ledger sheet
+//  if placement successful Reference field in plGLCurrLine is LTGREEN
+//
+// Calls. GetTransSheetName, GetMonthName, GetInsRow.
+//
+// Modification History.
+// ---------------------
+// 9/2/24.  wmk.  original; adapted from PlaceGLAmount;
+// Legacy mods.
+// 9/1/24.  wmk.  loop improvments; error handling expanded; calling sequence
+// 9/1/24.   pnRefAcct parameter added.
+// 8/31/24. wmk.  error handling improvements.
+// 8/30/24.	wmk.	original.
+//
+// Notes. lGLStart enables PlaceTransM to backtrack the current transaction
+// to its first line in the event of an insertion failure into a target account
+// sheet.
+
+// local constants.
+
+// properties.
+var LTGREEN = PropertiesService.getScriptProperties().getProperty('LTGREEN');
+var YELLOW =  PropertiesService.getScriptProperties().getProperty('YELLOW');
+var COLACCT =  PropertiesService.getScriptProperties().getProperty('COLACCT');
+var COLDEBIT =  PropertiesService.getScriptProperties().getProperty('COLDEBIT');
+var COLCREDIT =  PropertiesService.getScriptProperties().getProperty('COLCREDIT');
+var COLREF =  PropertiesService.getScriptProperties().getProperty('COLREF');
+var COLDATE =  PropertiesService.getScriptProperties().getProperty('COLDATE');
+var INSBIAS = PropertiesService.getScriptProperties().getProperty('INSBIAS');
+
+// variables.
+var spreadsheet = SpreadsheetApp.getActive();
+var oRange = {};
+var nRetVal;		// returned value
+var oTempRange = {};  // temporary range
+var sTempRange;       // temporary range string
+var sName;            // sheet name
+var sAcct;            // COA account field text
+var sCOAType;         // COA field type
+var sDateType;        // date field type
+var oAcctSheet = {};  // accounting sheet for searching
+var oDate;            // date field object
+var sDate;            // date as string
+var lGLStart;         // starting row of current transaction
+var vRowImage = [{}];      // target values array
+var vXrefAcct = {};   // xref account object
+var bValIsDebit;      // original value is debit
+
+// code.
+try{
+  nRetVal = 0;
+  // get Account field from passed row.
+  sTempRange = COLACCT + plGLCurrLine + ':' + COLACCT + plGLCurrLine;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  sAcct = oTempRange.getValue();
+  vXrefAcct = pnRefAcct;          // reference account
+  sCOAType =typeof sAcct;
+  // grab values from source row.
+  sTempRange = COLDATE + plGLCurrLine + ':' + COLREF + plGLCurrLine;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  vRowImage = oTempRange.getValues();
+
+  // get transaction sheet name from pnRefAcct value.
+  sName = GetTransSheetName(pnRefAcct);
+
+  // search transaction sheet for account value.
+  sTempRange = COLDATE + plGLCurrLine;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  oDate = oTempRange.getValue();
+//var date = new Date();
+var timeZone = Session.getScriptTimeZone();
+var formattedDate = Utilities.formatDate(oDate, timeZone, "MM/dd/YY");
+  sDate = formattedDate;
+  //sDateType = typeof sDate;
+var sMonth;         // month string
+
+var nMonth;         // month number
+  sMonth = sDate.substring(0,2);
+  nMonth = +sMonth;
+  sMonth = GetMonthName(sDate);
+
+var lRowIndex;      // insert row index
+  // set sheet object to account sheet name.
+  var oCurrSheet = {};
+  var oCurrRange = {};
+  oCurrSheet = SpreadsheetApp.getActiveSheet();
+  oCurrRange = oCurrSheet.getActiveRange();
+  oAcctSheet = spreadsheet.getSheetByName(sName);
+//spreadsheet = SpreadsheetApp.getActiveSheet();
+  spreadsheet.setActiveSheet(oAcctSheet);
+
+  lRowIndex = GetInsRow(oAcctSheet, pnRefAcct, sMonth);
+  if(lRowIndex <= 0){
+  spreadsheet = SpreadsheetApp.setActiveSheet(oCurrSheet);
+  spreadsheet.setActiveRange(oCurrRange);
+    nRetVal = -1;
+    forceError();
+  }
+
+  // insert row in transaction sheet.
+  spreadsheet.insertRowBefore(lRowIndex);
+  // now copy values into row;
+  sTempRange = COLDATE + lRowIndex + ':' + COLREF + lRowIndex;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  oTempRange.setValues(vRowImage);
+
+/* -------- do not change account; this is the counter-account -----
+  sTempRange = COLACCT + lRowIndex;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  oTempRange.setValue(vXrefAcct);
+*/
+
+  // now swap debit and credit values.
+  sTempRange = COLDEBIT + lRowIndex;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  var vAmount;
+  vAmount = oTempRange.getValue();
+  bValIsDebit = (typeof vAmount == 'number');
+  var sTargRange;
+  var oTargRange;
+  var sSrcRange;
+  var oSrcRange;
+  if (bValIsDebit){   // move Debit to Credit
+    sTargRange = COLCREDIT + lRowIndex;
+    oTargRange = spreadsheet.getRange(sTargRange);
+    oSrcRange = oTempRange;
+  }
+  else{   // move Credit to Debit
+    sSrcRange = COLCREDIT + lRowIndex;
+    oSrcRange = spreadsheet.getRange(sSrcRange);
+    sTargRange = COLDEBIT + lRowIndex;
+    oTargRange = spreadsheet.getRange(sTargRange);
+  }
+  oSrcRange.moveTo(oTargRange);
+
+  // move back to General Ledger sheet.
+  spreadsheet = SpreadsheetApp.setActiveSheet(oCurrSheet);
+  spreadsheet.setActiveRange(oCurrRange);
+    // mark row completed.
+    sTempRange = COLREF + plGLCurrLine + ':' + COLREF + plGLCurrLine;
+    oTempRange = spreadsheet.getRange(sTempRange);
+    oTempRange.setBackground(LTGREEN);
+
+}
+catch(e){
+  switch(nRetVal){
+  case 0:
+     nRetVal = -1;
+    spreadsheet.toast('in PlaceGLInvAmount - unprocessed error', 'Error Handler');
+    break;
+  default:
+    spreadsheet.toast('in PlaceGLInvAmount - unprocessed error', 'Error Handler');
+    break;
+  }
+
+}
+ return nRetVal;
+ 
+}	// end PlaceGLInvAmount		9/2/24.
+//**/
+
+// GetInsRow.gs
+//------------------------------------------------------------------
+// GetInsRow - Get insertion row given sheet, COA account, month.
+//		9/1/24. wmk.	10:25
+//------------------------------------------------------------------
+
+function GetInsRow( poSheet, psAcctCat, psMonth){
+
+//	Usage.	lInsRow = GetInsRow( oSheet, sAcctCat, sMonth)
+//
+//		[oSheet = Sheet object from Doc.Sheets[]]
+//		sAcctCat = accounting COA to search for
+//		sMonth = month to search for within category
+//
+// Entry. active sheet is appropriate account sheet
+//
+//	Exit.	
+//    lInsRow = >= 0; row index at which to insert new transaction
+//							returned index is where COA and month found + INSBIAS
+//					= -1 COA not found at all
+//					= -2 COA and month found, but not enough room to insert
+//					= -3 COA found, but month not found before COA changed
+//
+// Calls.	<other subs/functions called>
+//
+// Modification history.
+// ---------------------
+// 9/1/24.  wmk.  begin removing old bas blocks.
+// 8/31/24. wmk.  original; adapted for gs from bas.
+// Legacy mods. (see commit 5940947).
+// 5/17/20		wmk.	original code; stub.
+// 5/18/20.	wmk.	code fleshed out
+// 5/20/20.	wmk.	vars compliant with EXPLICIT
+// 5/23/20.	wmk.	clarify calling sequence documentation
+// 6/8/20.	wmk.	mod to stop checking if have encountered a COA
+// 6/8/20.	 that is > COA looking for and flag not found
+//
+// Notes. Does row-by-row search for line containing the COA account number
+// in Column A, and the month in ColumnB
+//
+
+//	constants. (see module-wide constants)
+// local constants.
+
+// properties.
+var COLDATE = PropertiesService.getScriptProperties().getProperty('COLDATE');
+var COLTRANS = PropertiesService.getScriptProperties().getProperty('COLTRANS');
+var COLDEBIT = PropertiesService.getScriptProperties().getProperty('COLDEBIT');
+var COLCREDIT = PropertiesService.getScriptProperties().getProperty('COLCREDIT');
+var COLACCT = PropertiesService.getScriptProperties().getProperty('COLACCT');
+var COLREF = PropertiesService.getScriptProperties().getProperty('COLREF');
+var INSBIAS = PropertiesService.getScriptProperties().getProperty('INSBIAS');
+//var <localprop> = PropertiesService.getScriptProperties().getProperty('<propname>');
+const COALEN = 4;
+const ERRCOACHANGED = -3;
+const ERRCOAMONTH = -2;
+const ERRCOANOTFOUND = -1;
+
+// variables.
+var spreadsheet = SpreadsheetApp.getActive();
+var oRange = {};
+
+// variables.
+var il;           // loop index
+var	j;            // short loop index
+var lRowIndex	;   // returned row index
+var sAcctCat;     // localized reference to psAcctCat
+var sMonth		;   // localized reference to psMonth
+var bCOAMatched	; // found COA flag
+var bMonthMatched;  // found month flag
+var nErrCode;     // error code
+var bNoMatch	;   // this one not COA looking for flag
+
+// sheet information variables.
+var lStartRow	; //Long		// sheet starting row (should be 0)
+var lStartColumn	;// Long		// sheet starting column
+var lEndRow		; //Long		// sheet end row
+var lEndColumn		; //Long		// sheet end column
+var oRange = {}		; // RangeAddress object
+var oTempRange = {};  // temporary range address
+//Static oCellDate	; //Object
+//Static oCellTrans	; //Object
+var sRowDate	; //String	// string from Date column
+var vRowDate;       // value from Date column
+var sRowTrans	; //String	// string from Transaction column
+var sScanDate	; //String	// Date field from current scan row
+//var oRow		; //Object	// row cells from search row index
+
+
+/* -------------------- original bas code -------------------------
+//	local variables.
+dim il			as Long		// loop index
+dim iBrkPt		as Integer	// easy breakpoint marker
+dim	j			as integer	// short loop index
+dim lRowIndex	as Long		// returned row index
+dim sAcctCat	as String	// localized reference to psAcctCat
+dim sMonth		as String	// localized reference to psMonth
+dim bCOAMatched	as Boolean	// found COA flag
+dim bNoMatch	as Boolean	// this one not COA looking for flag
+
+// sheet information variables.
+dim lStartRow	as Long		// sheet starting row (should be 0)
+dim lStartColumn	as Long		// sheet starting column
+dim lEndRow		as Long		// sheet end row
+dim lEndColumn		as Long		// sheet end column
+dim oRange		as Object	// RangeAddress object
+Static oCellDate	as Object
+Static oCellTrans	as Object
+dim sRowDate	as String	// string from Date column
+dim sRowTrans	as String	// string from Transaction column
+dim sScanDate	as String	// Date field from current scan row
+'dim oRow		as Object	// row cells from search row index
+*/ //-------------- end original bas code block -----------------
+
+  // code.
+try{
+//GetInsRow( poSheet, psAcctCat, psMonth)
+  nErrCode = 0;           // clear internal error
+  lRowIndex = -1;		      // set not found
+	sAcctCat = psAcctCat;   // localize passed COA
+	sMonth = psMonth;       // localize passed month
+  //oRange = poSheet.GetRange();
+  lStartRow = 5;
+  lStartColumn = 0;
+  lEndRow = spreadsheet.getLastRow();
+  lEndColumn = spreadsheet.getLastColumn();
+  bCOMatched = false;
+
+  // find sAcctCat first row.
+	// for each row 0 to sheet last row
+  il = lStartRow;
+  bCOAMatched = false;
+  while(!bCOAMatched && il < lEndRow){
+
+		// check Date field for COA account match.
+    oTempRange = spreadsheet.getRange('A' + il);
+		vRowDate = oTempRange.getValue();
+    bCOAMatched = (vRowDate == sAcctCat);
+    il++;
+  }   // end loop searching for COA
+
+  if( !bCOAMatched ){
+    nErrCode = ERRCOANOTFOUND;
+    forceError();
+  }
+	
+	// search for month first to ease debugging, since there are so many
+	// less month matches...
+  bMonthMatched = false;
+  j = il;
+  while( !bMonthMatched && j < lEndRow){
+  //for(j=il;j<=lEndRow;j++){
+    // ensure still in same COA account
+    oTempRange = spreadsheet.getRange(COLDATE + j);
+		vRowDate = oTempRange.getValue();
+    if(typeof vRowDate != 'string'){
+      sRowDate = vRowDate.toString();
+    }
+    else {
+      sRowDate = vRowDate;
+    }
+    if(sRowDate.length == COALEN && sRowDate != sAcctCat){
+      nErrCode = COACHANGED;
+      forceError();
+    } // COA account changed
+
+    // now check month
+    oTempRange = spreadsheet.getRange(COLTRANS + j);
+    sRowMonth = oTempRange.getValue();
+    bMonthMatched = (sRowMonth == sMonth);
+    j++;
+  } // loop searching for month
+    
+    if(bMonthMatched){
+      il = j;
+      bInsRowSet = true;
+    }
+    else{
+      nErrCode = ERRCOAMONTH;
+      forceError();
+    } // have month match
+
+		// check Transaction field for month match
+
+  if( il < lEndRow)
+   lRowIndex = il;
+
+}   // end try block
+
+catch(e){
+  switch(nErrCode){
+    case 0:
+      spreadsheet.toast('in GetInsRow - unprocessed error.','Error Handler');  
+      return -1;
+    case ERRCOANOTFOUND:
+      spreadsheet.toast('in GetInsRow - unprocessed error.','Error Handler');  
+      return nErrCode;
+    case ERRCOACHANGED:
+      spreadsheet.toast('in GetInsRow - unprocessed error.','Error Handler');  
+      return nErrCode;
+    case ERRCOAMONTH:
+      spreadsheet.toast('in GetInsRow - unprocessed error.','Error Handler');  
+      return nErrCode;
+    default:
+      spreadsheet.toast('in GetInsRow - unprocessed error.','Error Handler');  
+      return -1;
+  }
+}
+
+  return lRowIndex;
+
+}	// end GetInsRow	9/4/24.
+//**/
+
+// GetTransSheetName.bas
+//---------------------------------------------------------------
+// GetTransSheetName - Get sheet name where transaction belongs.
+//		8/30/24.	wmk.	21:21
+//---------------------------------------------------------------
+
+function GetTransSheetName(psAcct){
+
+// Usage.	sSheetName = GetTransSheetName( sAcct )
+//
+//	sAcct = account number for transaction
+//			1xxx - Asset account number
+//			2xxx - Liability account number
+//			3xxx - Income account number
+//			4xxx - Expenses account number
+//			5xxx - Expenses account number	(non-deductible)
+//			9xxx - Expenses account number	(uncategorized)
+//
+// Exit.	sSheetName = <target> = <result>
+//
+// Modification history.
+// ---------------------
+// 8/30/24.	wmk.	original; adapted from bas code.
+// Legacy mods.
+// 5/15/20	wmk.	original code.
+// 5/20/20.	wmk.	var dims to comply with EXPLICIT.
+//
+// Notes. <Insert notes here>
+//
+
+//	constants. (see module-wide constants)
+
+// properties.
+var ASTSHEET = PropertiesService.getScriptProperties().getProperty('ASTSHEET');
+var LIASHEET = PropertiesService.getScriptProperties().getProperty('LIASHEET');
+var INCSHEET = PropertiesService.getScriptProperties().getProperty('INCSHEET');
+var EXPSHEET = PropertiesService.getScriptProperties().getProperty('EXPSHEET');
+
+// variables.
+var spreadsheet = SpreadsheetApp.getActive();
+var oRange = {};
+
+
+//	local variables.
+var sName	;// String	// returned string
+var sDigit 	;// String	// extracted 1st digit
+var sAcct;    // passed account as string
+
+  // code.
+try{
+  sName = '';
+  if(typeof psAcct == 'number')
+   sAcct = psAcct.toString();
+  else
+   sAcct = psAcct;
+
+  sDigit = sAcct.substr(0,1);
+  switch(sDigit){
+   case '1':
+	  sName = ASTSHEET;
+	  break;
+   case '2':
+	  sName = LIASHEET;
+    break;
+   case '3':
+	  sName = INCSHEET;
+    break;
+   case '4':
+    sName = EXPSHEET;
+    break;
+   case '5':
+	  sName = EXPSHEET;
+    break;
+   case '9':
+	  sName = EXPSHEET;
+    break;
+  }
+}
+catch(e){
+  spreadsheet.toast('in GetTransSheetName - unprocessed error.','Error Handler');
+}
+
+  return sName;		// return sheet name
+  
+} 	// end GetTransSheetName	8/30/24.
+//**/
+
+// GetMonthName.gs
+//---------------------------------------------------------------
+// GetMonthName - return month name given date number.
+//		8/31/24.	wmk.	04:33
+//---------------------------------------------------------------
+
+function GetMonthName(psDate){
+
+// Usage. sMonth = GetMonthName( sDate )
+//
+//	sDate = date string "mm/dd/yy" or compatible format
+//
+// Exit. sMonth = appropriate month from list
+//		"January", "February", "March", "April", "May", "June"
+//		"July", "August", "September", "October", "November", "December"
+//
+// Modification history.
+// ---------------------
+// 8/31/24.		wmk.	oriiginal; adapted to .gs from .bas.
+// Legacy mods.
+// 5/15/20		wmk.	original code.
+// 5/20/20.		wmk.	vars compliant with EXPLICIT.
+
+//	constants. (see module-wide constants)
+
+// properties.
+var MON1 = PropertiesService.getScriptProperties().getProperty('MON1');
+var MON2 = PropertiesService.getScriptProperties().getProperty('MON2');
+var MON3 = PropertiesService.getScriptProperties().getProperty('MON3');
+var MON4 = PropertiesService.getScriptProperties().getProperty('MON4');
+var MON5 = PropertiesService.getScriptProperties().getProperty('MON5');
+var MON6 = PropertiesService.getScriptProperties().getProperty('MON6');
+var MON7 = PropertiesService.getScriptProperties().getProperty('MON7');
+var MON8 = PropertiesService.getScriptProperties().getProperty('MON8');
+var MON9 = PropertiesService.getScriptProperties().getProperty('MON9');
+var MON10 = PropertiesService.getScriptProperties().getProperty('MON10');
+var MON11 = PropertiesService.getScriptProperties().getProperty('MON11');
+var MON12 = PropertiesService.getScriptProperties().getProperty('MON12');
+
+//	local variables.
+var spreadsheet = SpreadsheetApp.getActive();
+var oRange = {};
+var nMonth;		// number of month
+var sName;		// returned name of month
+var sDate = [{}];
+
+  // code.
+try{
+	sName = '';		// default to empty string
+	sDate = psDate.split('/');
+  nMonth = +sDate[0];
+	
+	switch(nMonth){
+	case 1:
+		sName = MON1;
+		break;
+	case 2:
+		sName = MON2;
+		break;
+	case 3:
+		sName = MON3;
+		break;
+	case 4:
+		sName = MON4;
+		break;
+	case 5:
+		sName = MON5;
+		break;
+	case 6:
+		sName = MON6;
+		break;
+	case 7:
+		sName = MON7;
+		break;
+	case 8:
+		sName = MON8;
+		break;
+	case 9:
+		sName = MON9;
+		break;
+	case 10:
+		sName = MON10;
+		break;
+	case 11:
+		sName = MON11;
+		break;
+	case 12:
+		sName = MON12;
+		break;
+
+	}	// end month number case
+}		// end try block
+
+catch(e){
+  spreadsheet.toast("in GetMonthName - unprocessed error.","Error Handler");
+  sName = '';
+}
+	
+	return sName;	// set return value
+	
+} 	// end GetMonthName	8/31/24. 
+//**/
+
+// GenericTest.gs
+function GenericTest(){
+
+  var spreadsheet = SpreadsheetApp.getActive();
+  var Anything;
+  var RetVal;
+try{
+  Logger.log('in GenericTest; Anything = 1301');
+  Anything = 1301;
+  //RetVal = CheckSplitTrans(Anything);
+  //RetVal = PlaceSplitTrans(Anything);
+  //RetVal = PlaceGLInvAmount(Anything,1020);
+  RetVal = PlaceSplitTrans(Anything);
+}
+catch(e){
+ spreadsheet.toast('in GenericTest - unprocessed error.','Error Handler');
+}
+}
+//**/
+
+// CheckSplitTrans.gs
+//---------------------------------------------------------------
+// CheckSplitTrans - Check split transaction for validity.
+//		9/2/24. 	wmk.	05:03
+//---------------------------------------------------------------
+
+function CheckSplitTrans(plSplit1stRow){
+
+//	Usage.	lSplitEndRow = CheckSplitTrans(lSplit1stRow);
+//			PlaceSplitTrans(lSplit1stRow );
+//
+//		lSplit1stRow = row index of first row of split transaction
+//
+// Entry. user in General Ledger as active sheet.
+//		GL sheet processing has found row with "split" as the
+//			.Text.String value in COLSPLIT. The split entry contains
+//			multiple rows until another row is found with "split" as the
+//			.Text.String value in COLSPLIT. The second row of the split
+//			transaction MUST contain the COA target and the total amount
+//			of the split, regardless of whether it is a Debit or Credit.
+//			Subsequent rows contain the amounts split into the opposing
+//			COAs, and their value sums MUST equal the COA target amount.
+//
+//	Exit.	lSplitEndRow = last row of split, "split" in COLSPLIT
+//						< 0 - error in split transaction
+//						-1 - (ERRNOTSPLIT) first row not "split" in COLSPLIT
+//						-2 - (ERRBADTALLY) split values don't add to total
+//						-3 - (ERRROWSEXCEEDED) too many/few rows before second "split"
+//						-4 - (ERRBADVALS) bad Debit/Credit values
+//						-5 - (ERRBADDATE) Date field too short
+//						-6 - (ERRDATENOTSAME) Date field doesn't match others
+//						-7 - (ERRSPLITDESC) "split" descriptions don't match
+//
+// Calls.	ErrLogGetModule, ErrLogGetCellInfo, ErrLogGetSheet,
+//			ErrLogSetSheet, ErrLogSetModule, ErrLogSetCellInfo,
+//			LogError
+//
+//	Modification history.
+//	---------------------
+// 9/2/24.    wmk.  all tests complete; superfluous old bas code
+// 9/2/24.     removed.
+// 9/1/24.		wmk.	original; adapted gs code from bas code.
+// Legacy mods. (see fa2f62f commit).
+//
+//	Notes.
+// ensure current row has "split" in COLSPLIT field; return -1 if not
+//
+// count of rows in the "split" is determined by 1st line Account field;
+//  if '-' this is a simple split with 2 splits;
+//  if <positive integer> this is a split of the Debit account into
+//   several Credit accounts
+//  if <negative integer> this is a split of the Credit account into
+//   several Debit accounts
+// ensure that total values from split rows = total in 1st row
+//  if not, return -2
+// on successful exit, point to last row with "split" in COLSPLIT field
+
+//	constants.
+// local contants. (common with PlaceSplitTrans)
+const MAXSPLITROWS=10;	// maximum rows in "split" transaction
+const MINROWLIMIT=1;		// 0-based index minimum total row index
+const MINDATELEN=6;		// minimum Date string length
+const ERRNOTSPLIT=-1;	//first row not "split" in COLSPLIT
+const ERRBADTALLY=-2;	// split values don't add to total
+const ERRROWSEXCEEDED=-3;	// too many/few rows before second "split"
+const ERRBADVALS=-4;		// bad Debit/Credit values
+const ERRBADDATE=-5;		// Date field too short
+const ERRDATENOTSAME=-6	// Date field doesn't match others
+const ERRSPLITDESC=-7;	// "split" descriptions don't match
+const COLSPLIT='F';		// "split" column
+const csSplit="split";	// split row identifier string
+const csDATENOTSAME="ERRDATESNOTSAME";
+const csSPLITDESC="ERRSPLITDESC";
+
+// error handling vars.
+var sErrMsg;  // error message
+var sErrCode  // error code string
+
+// properties.
+var COLDATE = PropertiesService.getScriptProperties().getProperty('COLDATE');
+var COLTRANS = PropertiesService.getScriptProperties().getProperty('COLTRANS');
+var COLDEBIT = PropertiesService.getScriptProperties().getProperty('COLDEBIT');
+var COLCREDIT = PropertiesService.getScriptProperties().getProperty('COLCREDIT');
+var COLACCT = PropertiesService.getScriptProperties().getProperty('COLACCT');
+var COLREF = PropertiesService.getScriptProperties().getProperty('COLREF');
+
+// local variables.
+var spreadsheet = SpreadsheetApp.getActive();
+var sTempRange;   // scratch range string
+var oTempRange = {};		// scratch range
+var vCellValue;
+var lRetValue;    // set error return, with no error code
+var	lGLCurrRow;
+var	lGLStartRow ;	
+var	lTrans1stRow;	// transaction first data row
+var vDateSplit;
+var sDateSplit;							// mod060520
+var bDateMatched;
+var sTransSplit;
+var vTransDate;
+var vSplitCount;
+var nSplitCount;
+var nSplitTotRows;
+var i;
+var lScanRow;
+var bTransMatched;
+var vTransCurr; // (sTransSplit)
+var vDebitCredit = [{}];
+var vDebit;
+var bBadSplit;
+var bDebitSplits;
+var bCreditSplits;
+var lLastSplitRow;
+
+	// code.
+try{
+	lRetValue = 0;    // set error return, with no error code
+	lGLCurrRow = plSplit1stRow;
+	lGLStartRow = plSplit1stRow;	
+	lTrans1stRow = lGLCurrRow + 1;	// transaction first data row
+
+  sTempRange = COLSPLIT + plSplit1stRow;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  vCellValue = oTempRange.getValue();
+  if(vCellValue != csSplit){
+    lRetValue = ERRNOTSPLIT;
+    forceError();
+  }
+
+  sTempRange = COLACCT + plSplit1stRow;
+  oTempRange = spreadsheet.getRange(sTempRange);
+
+  vSplitCount = oTempRange.getValue();
+  if(typeof vSplitCount == 'string')
+    nSplitCount = 2;
+  else{
+    if(vSplitCount < 0)
+      nSplitCount = -vSplitCount;
+    else
+      nSplitCount = vSplitCount;
+
+  }
+  nSplitTotRows = nSplitCount + 3;
+  lLastSplitRow = plSplit1stRow + nSplitTotRows -1;
+
+	// preserve Date field from "split" 1st row					// mod060520
+  sTempRange = COLDATE + lGLCurrRow;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  vDateSplit = oTempRange.getValue();
+
+	// date must be at least #/#/## long
+  sDateSplit = vDateSplit.toString();
+	if (sDateSplit.length < MINDATELEN){
+    Logger.log('cell ' + COLDATE + lGLCurrRow);		// mod060520
+		lRetValue = ERRBADDATE;										    // mod060520
+		forceError();
+  	}	// end date too short conditional						// mod060520
+	
+	bDateMatched = true;		// for AND in loop to test failure		// mod060520
+
+	// preserve Transaction field from "split" 1st row				// mod060520
+  sTempRange = COLTRANS + lGLCurrRow;
+  oTempRange = spreadsheet.getRange(sTempRange);
+	sTransSplit = oTempRange.getValue();	// Transaction desc			// mod060520
+
+	// check Date in all transaction rows.
+  i = 0;
+  while(bDateMatched && i<(nSplitTotRows-1)){
+    lScanRow = lTrans1stRow + i;
+    sTempRange = COLDATE + lScanRow;
+    oTempRange = spreadsheet.getRange(sTempRange);
+    vTransDate = oTempRange.getValue();
+	  bDateMatched = bDateMatched &&
+			(vTransDate ==  sDateSplit);	// mod060520
+    i++;
+  } // end date matched and in transaction
+
+	if(!bDateMatched){										// mod060520
+    Logger.log('cell = ' + COLDATE +lScanRow);								// mod060520
+		lRetValue = ERRDATENOTSAME;									// mod060520
+		forceError();												// mod060520
+  }
+
+  bTransMatched = true;
+
+	// check transaction in all rows.
+  i = 0;
+  while(bTransMatched && i<(nSplitTotRows-1)){
+    lScanRow = lTrans1stRow + i;
+    sTempRange = COLTRANS + lScanRow;
+    oTempRange = spreadsheet.getRange(sTempRange);
+    vTransCurr = oTempRange.getValue();
+    bTransMatched = bTransMatched &&
+     (vTransCurr == sTransSplit);
+    i++;
+  }
+
+	if(!bTransMatched){										// mod060520
+    Logger.log('cell = ' + COLTRANS +lScanRow);								// mod060520
+		lRetValue = ERRSPLITDESC;									// mod060520
+		forceError();												// mod060520
+  }
+
+	// load debit, and credit, cells from 1st transaction line
+  // and check that one or the other is nonempty.
+
+//ErrLogSetCellInfo(COLDEBIT, lTrans1stRow)
+  Logger.log('cell = ' + COLDEBIT + lTrans1stRow);
+  sTempRange = COLDEBIT + lTrans1stRow + ':' + COLCREDIT + lTrans1stRow;
+  oTempRange = spreadsheet.getRange(sTempRange);
+
+  bBadSplit = oTempRange.isBlank();
+
+  vDebitCredit = oTempRange.getValues();
+  vDebit = vDebitCredit[0];   // array to single dimension
+ 
+  bDebitSplits = (typeof vDebit[0] == 'number');
+  bCreditSplits = (typeof vDebit[1] == 'number');
+  bBadSplit = bBadSplit || (bDebitSplits && bCreditSplits);
+
+/*		
+	// declare tally vars as double dTransTotal, dSplitTally
+	sDebit = oCellDebit.Text.String
+	sCredit = oCellCredit.Text.String
+*/
+
+	if(bBadSplit){
+		lRetValue = ERRBADVALS;
+		forceError();
+  }
+
+  // now check all split rows debit/credit fields and tally.
+  var dTally;     // tally is type double
+  dTally = 0.0;
+  lScanRow = lTrans1stRow + 1;
+  i = 0;
+  while(!bBadSplit && lScanRow < lLastSplitRow-1){
+    lScanRow = lTrans1stRow+1 + i;
+    sTempRange = COLDEBIT + lScanRow + ':' + COLCREDIT + lScanRow;
+    oTempRange = spreadsheet.getRange(sTempRange);
+    // check debit/credit both empty or both nonempty.
+    bBadSplit = oTempRange.isBlank();
+    if(bBadSplit)
+      break;
+    vDebitCredit = oTempRange.getValues();
+    vDebit = vDebitCredit[0];   // array to single dimension
+    bBadSplit = (typeof vDebit[0] == 'number' && typeof vDebit[1] == 'number');
+    if(bBadSplit)
+      break;
+    // accumulate amount in tally
+    if(bDebitSplits){
+      // tally credit fields
+      dTally = dTally + vDebit[1];
+    } // DebitSplits
+    else{   // credit splits
+      // tally debit fields
+      dTally = dTally + vDebit[0];
+    } // CreditSplits
+
+    i++;
+  } // end loop on split entries
+
+  if(bBadSplit){
+    Logger.log('cell = ' + COLDEBIT + lScanRow + ':' + COLCREDIT + lScanRow);
+		lRetValue = ERRBADVALS;
+		forceError();
+  }
+
+  // compare tally against total in last 'split' row (E:lLastSplitRow).
+  sTempRange = COLACCT + lLastSplitRow;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  var vTally;
+  vTally = oTempRange.getValue();
+
+  if(vTally != dTally){
+    Logger.log('cell = ' + sTempRange);
+    lRetValue = ERRBADTALLY;
+    forceError();
+  }
+
+}   // end try block
+
+catch(e){
+  spreadsheet.toast('in CheckSplitTrans - unprocessed error.','Error Handler');
+  Logger.log('in CheckSplitTrans - unprocessed error.','Error Handler')
+  if(lRetValue >= 0){
+    lRetValue = -1;
+    return lRetValue;
+  }
+
+	switch(lRetValue){
+		case ERRNOTSPLIT:
+			sErrMsg = "Transaction not 'split'..." +"stopped.";
+			sErrCode = "ERRNOTSPLIT";
+      break;
+			
+		case ERRBADVALS:
+			sErrMsg = "Bad Debit/Credit field(s); check values..." +"stopped.";
+			sErrCode = "ERRBADVALS";
+      break;
+					
+		case ERRBADTALLY:
+			sErrMsg = "Debit and Credit values do not balance..."+"stopped.";
+			sErrCode = "ERRBADTALLY"
+      break;
+			
+		case ERRROWSEXCEEDED:
+			sErrMsg = "Too few or too many rows in 'split'..."+ "\n"+"stopped."
+			sErrCode = "ERRROWSEXCEEDED";
+      break;
+
+		case ERRBADDATE:
+			sErrMsg = "Date field too short or empty..."
+					+ "\n"+"stopped.";		
+			sErrCode = "ERRBADDATE";
+      break;
+
+
+		case ERRDATENOTSAME:	// Date field doesn't match others			// mod060520
+			sErrCode = csDATENOTSAME;
+			sErrMsg = "Split - one or more dates don't match";
+      break;
+		case ERRSPLITDESC:	// "split" descriptions don't match		// mod060520
+			sErrCode = csSPLITDESC;
+			sErrMsg = "Split - at least 1 split description doesn't match";
+      break;
+		default:
+			sErrMsg = "Split transaction funky; check it..."
+					+ "\n" + "stopped.";
+			sErrCode = "ERRUNKNOWN";
+      break;
+  }
+		
+	//Call LogError(sErrCode, sErrMsg)
+  //Logger.log(sErrCode + ' ' + sErrMsg);
+  lRetValue = sErrCode;
+	return lRetValue;
+}   // end catch block
+
+  lRetValue = lLastSplitRow;
+  return lRetValue;
+
+}   // end CheckSplitTrans	9/2/24.
+//**/
+
+// PlaceSplitTrans.bas
+//------------------------------------------------------------------
+// PlaceSplitTrans - Place split transaction into multiple accounts.
+//		9/3/24.	wmk.	07:27
+//-------------------------------------------------------------------
+
+function PlaceSplitTrans(plSplit1stRow){
+
+//	Usage.	lSplitEndRow = PlaceSplitTrans(lSplit1stRow)
+//			call PlaceSplitTrans(lSplit1stRow)
+//
+//		lSplit1stRow = row index of first row of split transaction
+//
+// Entry.	GL sheet processing has found row with "split";the
+//			.Text.String value in COLSPLIT. The split entry contains
+//			multiple rows until another row is found with "split";the
+//			.Text.String value in COLSPLIT. The second row of the split
+//			transaction MUST contain the COA target and the total amount
+//			of the split, regardless of whether it is a Debit or Credit.
+//			Subsequent rows contain the amounts split into the opposing
+//			COAs, and their value sums MUST equal the COA target amount.
+//
+//	Exit.	lSplitEndRow >=0 - row index of GL last row of split
+//						 <0 - error, caller should terminate processing`
+//			ErrLogDisable() called, so caller will have to re-enable
+//			caller error logging
+//
+//	Calls.	CheckSplitTrans, GetTransSheetName, GetInsRow, GetMonthName
+//			ErrLogSetup, LogError, ErrLogDisable
+//
+// Modification history.
+// ---------------------
+// 9/3/24.    wmk.  bug fix where total line Ref cell not set to LTGREEN
+// 9/3/24.     after completion.
+// 9/2/24.    wmk.  CheckSplitTrans call activated.
+// 9/1/24.		wmk.	original; gs code adapted from bas code; call sequence
+// 9/1/24.		 changed eliminating sheet object.
+// Legacy mods.
+// 5/22/20.		wmk.	original code
+// 5/23/20.		wmk.	code added to put lines in split accounts; bug
+// 5/23/20.		 fixes; fix splits loop count; changes insed
+// 5/23/20.		 rows Date field color to LTGREEN
+// 5/24/20.		wmk.	start adding code to copy rows into COA total;
+// 5/24/20.		 add insert error code checking and ErrorHandler
+// 5/26/20.		wmk.	error handling modified; error logging code added
+// 5/27/20.		wmk.	bug fixed where COA error in GL sheet being reported
+// 5/27/20.		 as in accounting category sheet; error code string
+// 5/27/20.		 ERRCOANOTFOUND corrected in constants fix bug where
+// 5/27/20.		 last split row with "split" not being copied into
+// 5/27/20.		 account where other accounts split from
+// 5/28/20.		wmk.	bug fix where debit/credit column swap copying 1
+// 5/28/20.		 too many rows; SUM formula insertion fix for COA
+// 5/28/20.		 category sheet entry of split details; feature implemented
+// 5/28/20.		 where split block inserted in sheet gets LTGREEN Date
+// 5/28/20.		 cell background color
+// 6/3/20.		wmk.	add code to change source transaction REF fields
+// 6/3/20.		 cell background color to LTGREEN between "split"
+// 6/3/20.		 rows; dead code block removed
+// 6/4/20.		wmk.	modularize code; add PlaceSplitTotal function;
+// 6/4/20.		 dead code and unused vars removed
+// 6/5/20.		wmk.	adjust code for SplitOutCOAs call; dead code
+// 6/5/20.		 removed; additional error codes from SplitTrans
+// 7/8/20.		wmk.	debugging superfluous msgbox removed
+//
+//	Notes.
+//	Any return value < 0 should be treated;a termination error,
+// and the caller should stop processing rows,;likely there will
+// only be errors in the subsequent rows until the user corrects
+// the GL spreadsheet entries.
+// Feature; 5/17/20; transfer "split" transaction to appropriate
+// multiple accounts (generalized add code to process split
+// transactions; caveat: all split transactions should have total in
+// first line with COA that will be used in all other line items as
+// moved to ease cross-referencing, regardless of whether total is a
+// debit or credit.
+//	Method.
+//	Stolen code from PlaceTransM. Only use oCat2Sheet, since only 
+// dealing with one target account sheet at a time. oGLSheet contains
+// the original "split" transaction lines. oCat2Sheet is the
+// category account sheet that gets each inserted line.
+
+//	constants. (see module-wide definitions, and add these)
+
+// local constants.
+
+/* ----------------------begin basic block ----------------------------------
+// split controls and error codes.
+const MAXSPLITROWS=13;	// maximum rows in "split" to "split"; 10 subaccounts
+const ERRNOTSPLIT=-1;	// first fow not "split" in COLSPLIT
+const ERRBADTALLY=-2;	// split values don't add to total
+const ERRROWSEXCEEDED=-3;	// too many rows bedore second "split" found
+const ERRBADVALS=-4;		// bad values, either missing or don't add
+const ERRBADDATE=-5;		// Date field too short
+const ERRDATENOTSAME=-6;	// Date field doesn't match others			// mod060520
+const ERRSPLITDESC=-7;	// "split" descriptions don't match		// mod060520
+
+// insert error codes.
+const ERRCOANOTFOUND=-;1
+const ERROUTOFROOM=-2;
+const ERRCOACHANGED=-3;
+
+//------------------begin error handling block---------------
+// LogError setup snippet.
+
+// split error code strings.
+const csERRUNKNOWN="ERRUNKNOWN";
+const csERRNOTSPLIT="ERRNOTSPLIT";
+const csERRBADTALLY="ERRBADTALLY"
+const csERRROWSEXCEEDED="ERRROWSEXCEEDED";
+const csERRBADVALS="ERRBADVALS";
+const csERRBADDATE="ERRBADDATE";
+
+// insert error codes.
+const csERRCOANOTFOUND="ERRCOANOTFOUND"
+const csERROUTOFROOM="ERROUTOFROOM"
+const csERRCOACHANGED="ERRCOACHANGED"
+
+//------------------end error handling block---------------
+*/ //--------------------------------end bas block --------------
+
+//	local variables.
+
+/* ------------------------ bas block ---------------------
+Dim Doc As Object			// This component
+Dim oSheets;Object		// Sheets() collection
+
+//	GL XCell information objects (original line)
+dim oGLCellDate;Object
+dim oGLCellTrans;Object
+dim oGLCellDebit;Object
+dim oGLCellCredit;Object
+dim oGLCellAcct;Object
+dim oGLCellRef;Object
+
+//	oCat2Sheet XCell information objects.
+dim oCat2Date;object		// date of transaction
+dim oCat2Trans;object	// transaction description
+dim oCat2Debit;object	// debit amount
+dim oCat2Credit;object	// credit amount
+dim oCat2Acct;object		// COA account number
+dim oCat2Ref;object		// reference info
+
+// GL field data extraction objects (.Text or .Value) and strings
+dim sStyle;String		// Text.Style string
+
+// Date field variables for both GL objects.
+dim sDate;String
+dim lDateFormat;long		// date format mm/dd/yy
+dim sMonth;String
+
+//	CellRange content variables for GL sheet.
+dim lGLStartRow;long
+dim lGLEndCol;long
+dim lGLCurrRow;long		// current row in GL
+
+// more local vars.
+dim iStatus;integer		// general status return var
+dim sAcctCat2;String		// account category of 2nd line of transaction
+dim oCat2Sheet;Object	// account sheet object of 2nd category in transaction
+dim lCat2InsRow;long		// insert index for 2nd cateory in transaction
+
+// row processing variables; use to process selected area
+dim i;long				// loop counter
+dim li;Long				// long loop counter
+dim sBadCOA2;String		// bad acct # in 2nd line
+dim sCOA2Msg	as String	// bad 2nd line message
+
+// other local vars.
+dim iBrkPt;integer		// easy breakpoint reference
+dim l1stRow;Long			// 1st row defining "split"
+dim sSplitAcct;String	// account splitting into
+dim lLastRow;Long		// last line of "split" block
+dim sAcct2;String		// COA target account
+dim lTrans1stRow;Long	// first row after "split"
+dim lRowCount;Long		// transaction row count
+
+// error handling setup------------------------------------------------
+const sMyName="PlaceSplitTrans"
+dim sErrCode;String	// error code string for user code
+Dim sErrMsg As String	// error message for LogError
+dim lLogRow;long		// cell row working on
+dim lLogCol;Long		// cell column working on
+dim iLogSheetIx;Integer	// sheet index module working on
+dim oLogRange;new com.sun.star.table.CellRangeAddress
+*/ //-------------------- end bas block ------------------------------
+
+// properties.
+var CODATE = PropertiesService.getScriptProperties().getProperty('COLDATE');
+var COlTRANS = PropertiesService.getScriptProperties().getProperty('COLTRANS');
+var COLDEBIT = PropertiesService.getScriptProperties().getProperty('COLDEBIT');
+var COLCREDIT = PropertiesService.getScriptProperties().getProperty('COLCREDIT');
+var COLACCT = PropertiesService.getScriptProperties().getProperty('COLACCT');
+var COLREF = PropertiesService.getScriptProperties().getProperty('COLREF');
+var LTGRAY = PropertiesService.getScriptProperties().getProperty('LTGRAY');
+var LTGREEN = PropertiesService.getScriptProperties().getProperty('LTGREEN');
+var TAN = PropertiesService.getScriptProperties().getProperty('TAN');
+var YELLOW = PropertiesService.getScriptProperties().getProperty('YELLOW');
+var Financial = PropertiesService.getScriptProperties().getProperty('Financial');
+
+// process control constants.
+const ERRCONTINUE=-1;	// error, but continue with next transaction
+const ERRSTOP=-2;		// error, stop processing transactions
+const ERRNOTSPLIT = -1;
+
+// variables.
+var spreadsheet = SpreadsheetApp.getActive();
+var oRange = {};
+var oGLRange = {};
+var oTempRange = {};  // temporary range
+var sTempRange;       // temporary range string
+
+var lRetValue;		// returned value
+var	lGLStartRow;	// one of these is superfluous
+var lGLEndRow;    // ending row of split
+var	l1stRow;		  // set local ptr to 1st "split" row
+var	lGLTotalRow;	// first actual transaction data row
+var vTotAccount;        // COA account from total line
+var vDebitCredit = [{}];     // debit/credit values
+var vDebit;       // debit value
+var bSplitDebit;       // true if total is in debit column
+
+  // code.
+try{
+	lRetValue = ERRNOTSPLIT;	// set bad return
+  oRange = spreadsheet.getActiveRange();
+	lGLStartRow = plSplit1stRow	// one of these is superfluous?
+	l1stRow = plSplit1stRow		// set local ptr to 1st "split" row
+	lGLTotalRow = l1stRow + 1	// first actual transaction data row
+ 
+  /* code from PlaceTransM
+  oRange = spreadsheet.getActiveRange();
+  nFirstRow = oRange.getRow();
+  nLastRow = oRange.getLastRow();
+  lGLStartRow = nFirstRow;
+  lGLEndRow = nLastRow;
+  lRowsSelected = lGLEndRow+1 - lGLStartRow;
+  lGLCurrRow = lGLStartRow -1;	// loop processing current row (incremented first)
+*/
+
+	// CheckSplitTrans validates and returns last "split" row
+	lRetValue = CheckSplitTrans(l1stRow);
+	if(lRetValue < 0){		// if invalid split, get out
+	  forceError();			// CheckSplitTrans handled error 
+	}
+	else{
+		lGLEndRow = lRetValue;	// set last row of split block
+	}
+	
+  // get data from transaction 1st data (total) row.
+  // this data, except for amount, will be used as "double-entry"
+  // opposing entry in the account from the first (total) row.
+  // the account from the first row will be stored as the xref
+  // account when the subsequent rows are placed.
+  sTempRange = COLACCT + lGLTotalRow;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  vTotAccount = oTempRange.getValue();
+
+  sTempRange = COLDEBIT + lGLTotalRow + ':' + COLCREDIT + lGLTotalRow;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  vDebitCredit = oTempRange.getValues();
+  vDebit = vDebitCredit[0];   // array to single dimension
+ 
+  bDebitSplits = (typeof vDebit[0] == 'number');
+
+  // if Debit total splits, copy Credit amounts in all lines after total
+  //  into Debit column of vTotAccount
+  // if Credit total splits, copy Debit amounts in all lines after total
+  //  into Credit column of vTotAccount, leaving COA account intact.
+    // vTotAccount = target account for PlaceGLAmount.
+    // loop placing inverse items in total account sheet.
+    var bPlacedOK;
+    var iStatus;
+    bPlacedOK = true;
+    // loop placing actual items.
+    lGLCurrRow = lGLTotalRow + 1;
+    while(bPlacedOK && (lGLCurrRow < lGLEndRow)){
+      iStatus = PlaceGLAmount(lGLCurrRow,vTotAccount);
+      bPlacedOK = (iStatus == 0);
+      if(!bPlacedOK){
+        lRetValue = iStatus;
+        forceError();
+      }
+      lGLCurrRow++;
+    }   // end placing items
+
+    // loop placing inverse items.
+    lGLCurrRow = lGLTotalRow + 1;
+    while(bPlacedOK && (lGLCurrRow < lGLEndRow)){ 
+      iStatus = PlaceGLInvAmount(lGLCurrRow,vTotAccount);
+      bPlacedOK = (iStatus == 0);
+      if(!bPlacedOK){
+        lRetValue = iStatus;
+        forceError();
+      }
+      lGLCurrRow++;
+    }   // end placing inverse items
+
+    // set LTGREEN in total row Ref field.
+    sTempRange = COLREF + lGLTotalRow;
+    oTempRange = spreadsheet.getRange(sTempRange);
+    oTempRange.setBackground(LTGREEN);
+
+}   // end try block
+
+catch(e){
+  spreadsheet.toast("in PlaceSplitTrans - unprocessed error.","Error Handler");
+  return lRetValue;
+}
+
+	return lRetValue;
+	
+}	// end PlaceSplitTrans	9/4/24.
+//**/
+
+// CompleteTransaction.gs
+//-----------------------------------------------------------------
+//	CompleteTransaction - Complete transaction from 1st line entry.
+//		9/3/24.	wmk.  23:59
+//-----------------------------------------------------------------
+function CompleteTransaction(){
+
+// Entry. user has entered 1st line of a transaction.
+//
+// Exit.
+//
+// Calls. EnterDETransaction, EnterSplitTransaction.
+//
+// Modification History.
+// ---------------------
+// 9/3/24.		wmk.	original.
+//
+
+// local constants.
+
+// properties.
+var COLDEBIT = PropertiesService.getScriptProperties().getProperty('COLDEBIT');
+var COLCREDIT = PropertiesService.getScriptProperties().getProperty('COLCREDIT');
+var COLREF = PropertiesService.getScriptProperties().getProperty('COLREF');
+
+// variables.
+var spreadsheet = SpreadsheetApp.getActive();
+var oRange = {};
+var sTempRange;
+var oTempRange = {};
+var glCurrRow;
+var vDebit;
+var vRefStr;
+
+// code.
+try{
+  oRange = spreadsheet.getActiveRange();
+  glCurrRow = oRange.getRow();
+  sTempRange = COLREF + glCurrRow;
+  oTempRange = spreadsheet.getRange(sTempRange);
+  vRefStr = oTempRange.getValue();
+  if(typeof vRefStr == 'string' && vRefStr == 'split'){
+    EnterSplitTrans();
+  }
+  else{
+    // now AddDebitTrans or AddCreditTrans
+    sTempRange = COLDEBIT + glCurrRow;
+    oTempRange = spreadsheet.getRange(sTempRange);
+    vDebit = oTempRange.getValue();
+    if(typeof vDebit == 'number')
+      AddCreditTrans();
+    else
+      AddDebitTrans();
+
+  } // end is split
+  
+}
+catch(e){
+  spreadsheet.toast('in CompleteTransaction - unprocessed error', 'Error Handler');
+}
+ return;
+ 
+}	// end CompleteTransaction		9/3/24.
+//**/

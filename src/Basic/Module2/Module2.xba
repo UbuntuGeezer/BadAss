@@ -2,10 +2,13 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Module2" script:language="StarBasic">REM  *****  BASIC  *****
 &apos;// Module2Hdr.bas
-&apos;// Module2 code (complete with publics_2) for dialogs
-&apos;//	Module2 subs/functions index.	7/5/20.
+&apos;// Module2 code (complete with publics_2) for dialogs.
+&apos;// Modification History.
+&apos;// ---------------------
+&apos;// 7/5/20.	Module2 subs/functions index.
+&apos;// 4/19/25.	superfluous dot bas instances removed.
 &apos;//
-&apos;//	Main - Module2 Main - clear pbDlgLibLoaded flag.
+&apos;// Main - Module2 Main - clear pbDlgLibLoaded flag.
 &apos;// F - First attempt at dialog box processing. (COADialog)
 &apos;// RunCOADlg - Run COA Dialog.
 &apos;// G - Enter Transaction Dialog test procedure.
@@ -2630,9 +2633,10 @@ public sub H()
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
+&apos;//	4/19/25.	wmk.	eliminate superfluous dot bas instances.
 &apos;//	6/18/20.	wmk.	original code; adapted from G. bas.
 &apos;//	6/23/20.	wmk.	change to use fDialogReset.
-&apos;// 8/26/22.	wmk.	add intervening space to G. bas and H . bas in comments.
+&apos;// 8/26/22.	wmk.	add intervening space to G. bas and H. bas  in comments.
 &apos;//
 &apos;//	Notes.
 &apos;//
@@ -2979,7 +2983,7 @@ end function 	&apos;// end LoadStdLibrary	7/5/20
 &apos;// PlaceSplitTotal.bas
 &apos;//------------------------------------------------------------------
 &apos;// PlaceSplitTotal - Itemize split transaction in total COA account.
-&apos;//		7/8/20.	wmk.	15:00
+&apos;//		4/19/25.	wmk.
 &apos;//------------------------------------------------------------------
 
 public function PlaceSplitTotal(poGLRange As Object, psAcct As String) As Integer
@@ -3003,6 +3007,7 @@ public function PlaceSplitTotal(poGLRange As Object, psAcct As String) As Intege
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
+&apos;// 4/19/25.	wmk.	Function &gt; function at end for block parsing.
 &apos;//	6/4/20.		wmk.	original code
 &apos;//	6/6/20.		wmk.
 &apos;//	6/27/20.	wmk.	superfluous &quot;if&quot; removed
@@ -3316,7 +3321,7 @@ NormalExit:
 
 	PlaceSplitTotal = iRetValue
 
-end Function		&apos;// end PlaceSplitTotal		7/8/20
+end function		&apos;// end PlaceSplitTotal		4/19/25.
 &apos;/**/
 &apos;// RunCOADlg.bas
 &apos;//---------------------------------------------------------------

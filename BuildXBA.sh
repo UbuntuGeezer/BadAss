@@ -1,4 +1,5 @@
 #!/bin/bash
+# 2025-04-18   wmk.   (automated) Accounting path fixes (Lenovo).
 cat \
 Module1/Module1Hdr.bas \
 Module1/errhandling.bas \

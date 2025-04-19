@@ -1,4 +1,5 @@
 #!/bin/bash
+echo " ** CopyToGit.sh out-of-date **";exit 1
 # CopyToGit.sh - sed editing for BadAssLibrary project.
 #	8/25/22.	wmk.
 #

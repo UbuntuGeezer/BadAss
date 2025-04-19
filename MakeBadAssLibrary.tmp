@@ -1,5 +1,5 @@
 # MakeBadAssLibrary.tmp - Makefile (template) for MakeBadAssLibrary.
-#   8/30/22. wmk.
+#   4/18/25. wmk.
 #
 # This makefile uses the BuildList.txt file as a list of files to concatentate,
 # in order, to produce a valid <module-name>.xba file. BuildList.txt is copied
@@ -9,26 +9,13 @@
 #
 # Modification History.
 # ---------------------
-# 8/31/22.	wmk.	substitute "doit" for any shell file invocations from
-#			 flash drive Projects-Geany/<project>/.sh files.
-# Legacy mods.
-# 8/22/22.	wmk.	original makefile; adapted from MakeReplaceBas.
-# 8/23/22.	wmk.	<module-name> placeholder added to be replaced by DoSed.
-# 8/24/22.	wmk.	abandoned code removed.
-# 8/25/22.	wmk.	copy finished .xba up to *projpath.
-
-ifndef folderbase
- ifeq ($(USER),ubuntu)
-  folderbase = /media/ubuntu/Windows/Users/Bill
- else
-  folderbase = $(HOME)
- endif
-endif
-
-ifndef pathbase
- pathbase = $(folderbase)/Accounting
-endif
-
+# 4/18/25.	wmk.	(automated) Modification History sorted.
+# 8/31/22.	wmk.	substitute "doit" for any shell file invocations from 
+# 8/31/22.	 flash drive Projects-Geany/<project>/.sh files. 
+# 8/25/22.	wmk.	copy finished .xba up to *projpath. 
+# 8/24/22.	wmk.	abandoned code removed. 
+# 8/23/22.	wmk.	<module-name> placeholder added to be replaced by DoSed. 
+# 8/22/22.	wmk.	original makefile; adapted from MakeReplaceBas. 
 
 ifndef AWK
  AWK = mawk
@@ -37,7 +24,7 @@ endif
 .PHONY : Always JustDoIt
 .ONESHELL : ;
 
-projpath = $(folderbase)/Accounting/Projects-Geany/BadAssLibrary
+projpath = $(codebase)/Projects-Geany/BadAssLibrary
 targpath = $(projpath)/<module-name>
 
 # <filepath>/<filebase>.sql

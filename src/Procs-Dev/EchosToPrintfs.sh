@@ -1,6 +1,6 @@
 #!/bin/bash
 # EchosToPrintfs.sh - change echo,s to printf,s in shell.
-# 1/12/24.	wmk.
+# 4/8/24.	wmk.
 #
 # Usage. bash  EchosToPrintfs.sh <file> [<path>]
 #
@@ -15,7 +15,9 @@
 # Modification History.
 # ---------------------
 # 11/24/23.	wmk.	original shell.
-# 1/12/24.	wmk.	SetToday shell path integrated for BadAss/src/Procs-Dev.
+# 3/16/24.	wmk.	code checked for 4.0.x compatibility; -v added to SetToday;
+#			 P1 preserved across SetToday call.
+# 4/8/24.	wmk.	'. added at end of printf,s insertion comment.
 # Notes. 
 #
 # P1=<file>, [P2=<path>]
@@ -30,11 +32,13 @@ if [ -z "$P2" ];then
 fi
 #	Environment vars:
 if [ -z "$TODAY" ];then
- . $codebase/BadAss/src/Procs-Dev/SetToday.sh
+ lclfile=$P1
+ . $codebase/Procs-Dev/SetToday.sh -v
+ P1=$lclfile
 fi
 #procbodyhere
 sed -i 's?echo?printf "%s\\n"?g' $P2/$P1
-sed -i "/#.*---------/a# $TODAY1.\twmk.\t(automated) echo,s to printf,s throughout" \
+sed -i "/#.*---------/a# $TODAY1.\twmk.\t(automated) echo,s to printf,s throughout." \
  $P2/$P1
 #endprocbody
 if [ $? -eq 0 ];then

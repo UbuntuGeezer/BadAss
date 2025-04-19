@@ -1,0 +1,4 @@
+# sedhelp.txt - insert lines for -h option support.
+6a#	-h = only display <filename> shell help
+/-----/a# 4/17/25.	wmk.	-h option support.
+s?P1=<?P1=-h|<?1

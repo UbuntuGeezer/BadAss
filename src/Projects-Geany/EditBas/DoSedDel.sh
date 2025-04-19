@@ -1,13 +1,10 @@
 #!/bin/bash
-# 2023-11-12.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
-# 2023-11-12.	wmk.	(automated) Version 3.0.9 *libpath introduced (HPPavilion).
 # DoSedDel.sh - Run sed to fix MakeDelBas.tmp > MakeDelBas.
-#	11/12/23.	wmk.
+#	4/19/25.	wmk.
 #
-# Usage. bash DoSedDel.sh <xbafile> <basname>]
+# Usage. bash DoSedDel.sh -h|<xbafile> <basname>]
 #
-#	<xbafile> = .xba to build
-#	<basname> = name of .bas to add (e.g. NewSub)
+#	-h = only display DoSedDel shell help
 #
 # Entry. *pathbase/Basic/<xbafile/<xbafile>Bas.txt = list of .bas blocks in <xbafile.xba>
 #
@@ -16,24 +13,44 @@
 #
 # Modification History.
 # ----------------------
-# 6/25/23.	wmk.	orignal code; adpapted from DoSedAdd.
-# 11/12/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
-# 11/12/23.	wmk.	(automated) Version 3.0.9 *libpath introduced.
-# Legacy mods.
-# 6/25/23.	wmk.	original code; edited for FLsara86777 library; mod to
-#			 rebuild <xbafile>Bas.txt to account for new .bas files.
-# Legacy mods.
-# 6/20/23.	wmk.	original code; adapted from DoSed for Territories.
-# Legacy mods.
-# 3/8/22.	wmk.	original code.
-# 4/24/22.	wmk.	*pathbase* env var included.
-# 9/23/22.  wmk.    (automated) CB *codebase env var support.
+# 4/19/25.	wmk.	(automated) Modification History sorted.
+# 4/17/25.	wmk.	-h option support. 
+# 11/12/23.	wmk.	(automated) Version 3.0.9 *libpath introduced. 
+# 11/12/23.	wmk.	(automated) Version 3.0.6 Make old paths removed. 
+# 6/25/23.	wmk.	orignal code; adpapted from DoSedAdd. 
+# 6/25/23.	wmk.	original code; edited for FLsara86777 library; mod to 
+# 6/25/23.	 rebuild <xbafile>Bas.txt to account for new .bas files. 
+# 6/20/23.	wmk.	original code; adapted from DoSed for Territories. 
+# 9/23/22.	wmk.	(automated) CB *codebase env var support. 
+# 4/24/22.	wmk.	*pathbase* env var included. 
+# 3/8/22.	wmk.	original code. 
 #
 P1=$1
 P2=$2
 P3=$3
+# -h option code
+if [ "${P1:0:1}" == "-" ];then
+ option=${P1,,}
+ if [ "$option" == "-h" ];then
+  printf "%s\n" "DoSedDel - Run sed to fix MakeDelBas.tmp > MakeDelBas."
+  printf "%s\n" "DoSedDel.sh -h|<xbafile> <basname>]"
+  printf "%s\n" ""
+  printf "%s\n" "  -h = only display DoSedDel shell help"
+  printf "%s\n" "  <xbafile> = .xba to build"
+  printf "%s\n" "  <basname> = name of .bas to add (e.g. NewSub)"
+  printf "%s\n" ""
+  printf "%s\n" "Results: *pathbase/Basic/<xbafile>/<xbafile>Bas.txt = new list of .bas blocks"
+  printf "%s\n" "  for building <xbafile>.xba"
+  printf "%s\n" ""
+  exit 0
+ else
+  printf "%s" "DoSedDel.sh -h|<xbafile> <basname>]"
+  printf "%s\n" " unrecognized option '$P1' - exiting."
+  exit 1
+ fi		# have -h
+fi	# have -
 if [ -z "$P1" ] || [ -z "$P2" ];then
- echo "EditBas/DoSedDel <xbafile> <basname> missing parameter(s) - abandoned."
+ echo "EditBas/DoSedDel -h|<xbafile> <basname> missing parameter(s) - abandoned."
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 1
 fi
