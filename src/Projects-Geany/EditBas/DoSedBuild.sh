@@ -1,11 +1,10 @@
 #!/bin/bash
-# 2023-11-12.	wmk.	(automated) Updated for BadAss library (Lenovo).
-# 2023-11-12.	wmk.	(automated) Version 3.0.9 *libpath introduced (HPPavilion).
-# DoSedBuild.sh - Run sed to fix FLsara86777 MakeBuildLib.tmp > MakeBuildLib.
-#	11/12/23.	wmk.
+# DoSedBuild.sh - Run sed to fix BadAss../<xbafile>/MakeBuildLib.tmp > MakeBuildLib.
+#	4/19/25.	wmk.
 #
-# Usage. bash DoSedBuild.sh <xbafile>
+# Usage. bash DoSedBuild.sh -h|<xbafile>
 #
+#	-h = only display DoSedBuild shell help
 #	<xbafile> = .xba to build
 #
 # Entry. *projpath/MakeBuildLib.tmp = MakeBuildLib template
@@ -16,29 +15,50 @@
 #
 # Modification History.
 # ----------------------
-# 8/24/23.	wmk.	ver2.0 mods for using /src as parent folder.
-# 8/31/23.	wmk.	*folderbase definition made unconditional for HPPavilion
-#			 branch of project.
-# 11/12/23.	wmk.	(automated) Updated for BadAss library (Lenovo).
-# 11/12/23.	wmk.	(automated) Version 3.0.9 *libpath introduced.
-# Legacy mods.
-# 8/22/23.	wmk.	modified for FLsara86777 libary.
-# Legacy mods.
-# 6/25/23.	wmk.	original code; edited for FLsara86777 library; mod to
-#			 rebuild <xbafile>Bas.txt to account for new .bas files.
-# 6/27/23.	wmk.	*mawk changed to *gawk; awkbaslist1 added.
-# 8/21/23.	wmk.	*codebase, *pathbase corrected and unconditional;
-#			 MNcrwg44586 added to comments.
-# Legacy mods.
-# 6/20/23.	wmk.	original code; adapted from DoSed for Territories.
-# Legacy mods.
-# 3/8/22.	wmk.	original code.
-# 4/24/22.	wmk.	*pathbase* env var included.
-# 9/23/22.  wmk.    (automated) CB *codebase env var support.
+# 4/19/25.	wmk.	(automated) Modification History sorted.
+# 4/19/25.	wmk.	-h option support. 
+# 11/12/23.	wmk.	(automated) Version 3.0.9 *libpath introduced. 
+# 11/12/23.	wmk.	(automated) Updated for BadAss library (Lenovo). 
+# 8/31/23.	wmk.	*folderbase definition made unconditional for HPPavilion 
+# 8/31/23.	 branch of project. 
+# 8/24/23.	wmk.	ver2.0 mods for using /src as parent folder. 
+# 8/22/23.	wmk.	modified for FLsara86777 libary. 
+# 8/21/23.	wmk.	*codebase, *pathbase corrected and unconditional; 
+# 8/21/23.	 MNcrwg44586 added to comments. 
+# 6/27/23.	wmk.	*mawk changed to *gawk; awkbaslist1 added. 
+# 6/25/23.	wmk.	original code; edited for FLsara86777 library; mod to 
+# 6/25/23.	 rebuild <xbafile>Bas.txt to account for new .bas files. 
+# 6/20/23.	wmk.	original code; adapted from DoSed for Territories. 
+# 9/23/22.	wmk.	(automated) CB *codebase env var support. 
+# 4/24/22.	wmk.	*pathbase* env var included. 
+# 3/8/22.	wmk.	original code. 
+#
+# P1=<xbafile>
 #
 P1=$1
+# -h option code
+if [ "${P1:0:1}" == "-" ];then
+ option=${P1,,}
+ if [ "$option" == "-h" ];then
+  printf "%s\n" "DoSedBuild - Run sed to fix BadAss../<xbafile>/MakeBuildLib.tmp > MakeBuildLib."
+  printf "%s\n" "DoSedBuild.sh -h|<xbafile>"
+  printf "%s\n" ""
+  printf "%s\n" "  -h = only display DoSedBuild shell help"
+  printf "%s\n" "  <xbafile> = .xba to build (e.g.Module1)"
+  printf "%s\n" ""
+  printf "%s\n" "Results: *libbase/src/Basic/<xbafile>/MakeBuildLib = makefile to build"
+  printf "%s\n" "   <xbafile>.xba"
+  printf "%s\n" ""
+  exit 0
+ else
+  printf "%s" "DoSedBuild.sh -h|<xbafile>"
+  printf "%s\n" " unrecognized option '$P1' - exiting."
+  exit 1
+ fi		# have -h
+fi	# have -
 if [ -z "$P1" ];then
- echo "EditBas/DoSedBuild <xbafile> missing parameter(s) - abandoned."
+ printf "%s" "DoSedBuild.sh -h|<xbafile>"
+ printf "%s\n" "EditBas/DoSedBuild -h|<xbafile> missing parameter(s) - abandoned."
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 1
 fi

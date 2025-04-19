@@ -1,7 +1,5 @@
 # MakeDeleteXBAbas.tmp - Makefile (template) for MakeDeleteXBAbas.
-$(error out-of-date)
-$(error out-of-date)
-#	6/24/23.	wmk.
+#	4/19/25.	wmk.
 #
 # MakeDeleteXBAbas deletes a module from the specified .xba file.
 # the module must be bounded by '<modulename>.bas' at the beginning
@@ -9,23 +7,19 @@ $(error out-of-date)
 #
 # Modification History.
 # ---------------------
+# 4/19/25.	wmk.	updated.
 # 6/24/23.	wmk. 	modified for FLsara86777.
 # 3/7/22.	wmk.	original makefile; adapted from MakeAnySHtoSQL.
 
-ifeq ($(USER),ubuntu)
- folderbase = /media/ubuntu/Windows/Users/Bill
-else
- folderbase = $(HOME)
-endif
 AWK = mawk
 .PHONY : Always JustDoIt
-projpath = $(folderbase)/GitHub/Libraries/FLsara86777/EditBas
+projpath = $(codebase)/src/Projects-Geany/EditBas
 
 # <filepath>/<filebase>.sql
 #=======================================================
 Always : JustDoIt
 	sed -i '/\/\/ <basmodule>.bas/,/\/\*\*\//d' \
-	 $pathbase/Basic/<xbafile>/<xbafile>.xba
+	 $(codebase)/src/Basic/<xbafile>/<xbafile>.xba
 	echo "<basmodule> deleted from <xbafile>.xba"
 	~\sysprocs/LOGMSG "  <basmodule> deleted from <xbafile>."
 

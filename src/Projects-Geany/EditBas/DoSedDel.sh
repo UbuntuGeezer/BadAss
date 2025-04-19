@@ -5,6 +5,8 @@
 # Usage. bash DoSedDel.sh -h|<xbafile> <basname>]
 #
 #	-h = only display DoSedDel shell help
+#   <xbafile> = .xba to remove .bas block from (e.g. Module1)"
+#	<basname> = name of .bas to add (e.g. NewSub)"
 #
 # Entry. *pathbase/Basic/<xbafile/<xbafile>Bas.txt = list of .bas blocks in <xbafile.xba>
 #
@@ -36,7 +38,7 @@ if [ "${P1:0:1}" == "-" ];then
   printf "%s\n" "DoSedDel.sh -h|<xbafile> <basname>]"
   printf "%s\n" ""
   printf "%s\n" "  -h = only display DoSedDel shell help"
-  printf "%s\n" "  <xbafile> = .xba to build"
+  printf "%s\n" "  <xbafile> = .xba to remove .bas block from (e.g. Module1)"
   printf "%s\n" "  <basname> = name of .bas to add (e.g. NewSub)"
   printf "%s\n" ""
   printf "%s\n" "Results: *pathbase/Basic/<xbafile>/<xbafile>Bas.txt = new list of .bas blocks"

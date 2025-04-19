@@ -1,45 +1,58 @@
 #!/bin/bash
 # ExtractAllBas.sh - Extract all BadAss .bas blocks from .xba module.
-# 1/13/24.	wmk.
+#	4/19/25.	wmk.
 #
-# Usage. bash  ExtractAllBas.sh <xbamodule>
+# Usage. bash  ExtractAllBas.sh -h|<xbamodule>
 #
+#	-h = only display ExtractAllBas shell help
 #	<xbamodule> = .xba module name (in folder /Basic)
 #
 # Entry. Basic/<xbamodule>Bas.txt = list of modules in <xbamodule>.xba
-#
-# Dependencies.
 #
 # Exit.	/Basic has all .bas blocks extracted from <xbamodule>.xba
 #	into files <blockname>.bas
 #
 # Modification History.
 # ---------------------
-# 8/22/23.	wmk.	*pathbase, *codebase unconditional.
-# 8/23/23.	wmk.	ver2.0 mods to use /src as parent folder.
-# 11/13/23.	wmk.	(automated) UnKillShell to reinstate shell.
-# 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath introduced.
-# 1/13/24.	wmk.	code checked for BadAss/src.
-# Legacy mods.	
-# 6/24/23.	wmk.	edited for FLsara86777 from Territories.
-# Legacy mods.
+# 4/19/25.	wmk.	(automated) Modification History sorted.
+# 4/19/25.	wmk.	-h option support. 
+# 4/19/25.	wmk.	(automated) Modification History sorted. 
+# 1/13/24.	wmk.	code checked for BadAss/src. 
+# 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath introduced. 
+# 11/13/23.	wmk.	(automated) UnKillShell to reinstate shell. 
+# 8/23/23.	wmk.	ver2.0 mods to use /src as parent folder. 
+# 8/22/23.	wmk.	*pathbase, *codebase unconditional. 
+# 6/24/23.	wmk.	edited for FLsara86777 from Territories. 
 # 6/19/23.	wmk.	original shell.
 #
-# Notes. 
-#
-# P1=<xbamodule>
+# P1=-h|<xbamodule>
 #
 P1=$1
+# -h option code
+if [ "${P1:0:1}" == "-" ];then
+ option=${P1,,}
+ if [ "$option" == "-h" ];then
+  printf "%s\n" "ExtractAllBas - Extract all BadAss .bas blocks from .xba module."
+  printf "%s\n" "ExtractAllBas.sh -h|<xbamodule>"
+  printf "%s\n" ""
+  printf "%s\n" "  -h = only display ExtractAllBas shell help"
+  printf "%s\n" "  <xbamodule> = .xba module name (in folder /Basic)"
+  printf "%s\n" ""
+  printf "%s\n" "Results: /Basic has all .bas blocks extracted from <xbamodule>.xba"
+  printf "%s\n" "  into files <blockname>.bas"
+  printf "%s\n" ""
+  exit 0
+ else
+  printf "%s" "ExtractAllBas.sh -h|<xbamodule>"
+  printf "%s\n" " unrecognized option '$P1' - exiting."
+  exit 1
+ fi		# have -h
+fi	# have -
 if [ -z "$P1" ];then
- echo "ExtractAllBas <xbamodule> missing parameter(s) - abandoned."
+ echo "ExtractAllBas -h|<xbamodule> missing parameter(s) - abandoned."
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 1
 fi
-#	Environment vars:
-#if [ -z "$TODAY" ];then
-# . ~/GitHub/TerritoriesCB/Procs-Dev/SetToday.sh
-#TODAY=2022-04-22
-#fi
 #procbodyhere
 projpath=$libbase/src/Projects-Geany/EditBas
 shellpath=$libbase/src/Procs-Dev

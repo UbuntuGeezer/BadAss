@@ -1,7 +1,5 @@
 # MakeReplaceBas.tmp - Makefile (template) for MakeReplaceBas.
-$(error out-of-date)
-$(error out-of-date)
-#	3/8/22.	wmk.
+#	4/19/25.	wmk.
 #
 # This makefile is edited by DoSed.sh with <basmodule> <xbafile> substituted
 # throughout. <basmodule> will be the name of a .bas source file with no
@@ -11,27 +9,19 @@ $(error out-of-date)
 # Modification History.
 # ---------------------
 # 3/8/22.	wmk.	original makefile; adapted from MakeExtractBas;
-#			 add ampersand conversion to sed; note & conversion must come
-#			 first to avoid screwing up other XML & fields.
-
-ifeq ($(USER),ubuntu)
- folderbase = /media/ubuntu/Windows/Users/Bill
-else
- folderbase = $(HOME)
-endif
-
-ifndef pathbase
- pathbase=$(folderbase)/GitHub/Libraries-Project/FLsara86777
-endif
+# 3/8/22.	 add ampersand conversion to sed; note & conversion must come
+# 3/8/22.	 first to avoid screwing up other XML & fields.
 
 AWK = mawk
 .PHONY : Always JustDoIt
+
+projpath = $(codebase)/src/Projects-Geany/EditBas
 
 # <filepath>/<filebase>.sql
 #=======================================================
 Always : JustDoIt
 	cd $(projpath)
-	cp $(pathbase)/Basic/<xbafile>/<basmodule>.bas $$TEMP_PATH/scratch.bas
+	cp $(codebase)/src/Basic/<xbafile>/<basmodule>.bas $$TEMP_PATH/scratch.bas
 	sed -i "s?\&?\&amp\;?g;s?'?\&apos\;?g;s?\"?\&quot\;?g;s?\&lt;?<?g;s?&gt;?>?g" $$TEMP_PATH/scratch.bas
 	# delete 1st and last lines of new .bas
 	sed -i "/\/\ <basmodule>.bas/d;/\/\*\*\//d" $$TEMP_PATH/scratch.bas
