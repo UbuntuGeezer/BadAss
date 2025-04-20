@@ -2061,7 +2061,7 @@ end sub		&apos;// end F	6/15/20
 &apos;// fSTAmtLostFocus.bas
 &apos;//---------------------------------------------------------------
 &apos;// fSTAmtLostFocus - Handle all AmtFld LostFocus events.
-&apos;//		6/22/20.	wmk.	08:00
+&apos;//		4/20/25.	wmk.
 &apos;//---------------------------------------------------------------
 
 public function fSTAmtLostFocus(psFldName As String) As Integer
@@ -2084,13 +2084,14 @@ public function fSTAmtLostFocus(psFldName As String) As Integer
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	6/20/20.	wmk.	original code; cloned from STAmtLostFocus
-&apos;//	6/21/20.	wmk.	check for total reached before activating next row
-&apos;// 6/21/20.	wmk.	change to accept psFldName parameter; to be called by
-&apos;//						all STAmt.LostFocus events; changed totals check and
-&apos;//						activate &lt;Done&gt; conditional
-&apos;//	6/22/20.	wmk.	change name to begin with &quot;f&quot; so can be distinguished
-&apos;//						by sub with same name for testing
+&apos;// 4/20/25.	wmk.	(automated) Modification History sorted.
+&apos;// 6/22/20.	wmk.	change name to begin with &quot;f&quot; so can be distinguished 
+&apos;// 6/22/20.	 by sub with same name for testing. 
+&apos;// 6/21/20.	wmk.	check for total reached before activating next row 
+&apos;// 6/21/20.	wmk.	change to accept psFldName parameter; to be called by 
+&apos;// 6/21/20.	 all STAmt.LostFocus events; changed totals check and 
+&apos;// 6/21/20.	 activate &lt;Done&gt; conditional. 
+&apos;// 6/20/20.	wmk.	original code; cloned from STAmtLostFocus. 
 
 &apos;//	constants.
 
@@ -2167,7 +2168,7 @@ ErrorHandler:
 	iRetValue = iStatus
 	GoTo NormalExit
 	
-end function		&apos;// end fSTAmtLostFocus	6/22/20
+end function		&apos;// end fSTAmtLostFocus		4/20/25.
 &apos;/**/
 &apos;// fVSDialogPreset.bas
 &apos;//---------------------------------------------------------------
@@ -5112,175 +5113,10 @@ ErrorHandler:
 	
 end sub		&apos;// end STAmt9LostFocus	6/23/20
 &apos;/**/
-&apos;// fSTAmtLostFocus.bas
-&apos;//---------------------------------------------------------------
-&apos;// fSTAmtLostFocus - Handle all AmtFld LostFocus events.
-&apos;//		6/22/20.	wmk.	08:00
-&apos;//---------------------------------------------------------------
-
-public function fSTAmtLostFocus(psFldName As String) As Integer
-
-&apos;//	Usage.	iVar = fSTAmtLostFocus(sFldName)
-&apos;//
-&apos;//	Parameters.	sFldName = name of dialog field losing focus
-&apos;//				(e.g. &quot;AmtFld1&quot;)
-&apos;// Entry.	AmtFld1..AmtFld10 lost focus
-&apos;//			gdSTAmts() = updated with newly entered amount
-&apos;//			gsSTObjFocus = name of object with focus
-&apos;//			gdSTAccumTot = accumulated split total
-&apos;//			gdSTTotalAmt = total amount to split
-&apos;//
-&apos;//	Exit.	gsSTAccumTot, gsSTTotalAmt updated with newly entered amount
-&apos;//			&lt;Done&gt; button activated if dialog entries complete
-&apos;//			next row fields activated if row complete
-&apos;//
-&apos;// Calls.	STFld6ToIndex, STUpdateAccumTot, CheckRowComplete, CheckComplete
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	6/20/20.	wmk.	original code; cloned from STAmtLostFocus
-&apos;//	6/21/20.	wmk.	check for total reached before activating next row
-&apos;// 6/21/20.	wmk.	change to accept psFldName parameter; to be called by
-&apos;//						all STAmt.LostFocus events; changed totals check and
-&apos;//						activate &lt;Done&gt; conditional
-&apos;//	6/22/20.	wmk.	change name to begin with &quot;f&quot; so can be distinguished
-&apos;//						by sub with same name for testing
-
-&apos;//	constants.
-
-&apos;//	local variables.
-dim iRetValue 		As Integer			&apos;// returned status
-dim iStatus			As Integer			&apos;// general status
-dim iRowIx			As Integer			&apos;// index of present row
-dim oDlgControl		As Object			&apos;// field ptr
-dim bRowComplete	As Boolean			&apos;// row complete flag
-dim bDlgComplete	As Boolean			&apos;// dialog complete flag
-dim bTotalMet		As Boolean			&apos;// split total met flag
-dim sFldName 		As String			&apos;// local copy of field name
-
-	&apos;// code.
-	iRetValue = -1						&apos;// set bad return
-	ON ERROR GOTO ErrorHandler
-&apos;msgBox(&quot;In fSTAmtLostFocus entry values..&quot; + CHR(13)+CHR(10) _
-&apos;	+ &quot;gdSTAccumTot = &quot; + gdSTAccumTot + CHR(13)+CHR(10) _
-&apos;	+ &quot;gdSTTotalAmt = &quot; + gdSTTotalAmt + CHR(13)+CHR(10) _
-&apos;	+ &quot;gsSTObjFocus = &apos;&quot; + gsSTObjFocus + &quot;&apos;&quot; )
-	
-	sFldName = psFldName				&apos;// use local copy of field name
-&apos;msgBox(&quot;fSTAmtLostFocus - sFldName = &apos;&quot; + sFldName + &quot;&apos;&quot;)
-	if Len(sFldName) &lt; 7 then
-		GoTo ErrorHandler
-	endif	&apos;// error - field name not set up for entry
-	
-	bDlgComplete = false
-	iRowIx = STFld6ToIndex(sFldName)
-	iStatus = STUpdateAccumTot(sFldName)
-&apos;msgBox(&quot;In fSTAmtLostFocus values after update..&quot; + CHR(13)+CHR(10) _
-&apos;	+ &quot;gdSTAccumTot = &quot; + gdSTAccumTot + CHR(13)+CHR(10) _
-&apos;	+ &quot;gdSTTotalAmt = &quot; + gdSTTotalAmt )
-	
-	if iStatus &lt; 0 then
-		GoTo ErrorHandler
-	endif	&apos;// end error in updating accum total conditional
-
-	bTotalMet = (iStatus = 1)
-	bRowComplete = STRowComplete(iRowIx)
-	if bRowComplete then
-		bDlgComplete = STCheckComplete()
-		oDlgControl = puoSTDialog.getControl(&quot;UnsplitTot&quot;)
-&apos;		if gdSTAccumTot &lt; gdSTTotalAmt then		
-		if oDlgControl.Value &gt; 0 then		
-			&apos;// check for next row Enabled; if not, enable it
-			iStatus = STEnableNextRow(iRowIx)
-			if iStatus &lt; 0 then
-				GoTo ErrorHandler
-			endif
-		else
-			bTotalMet = true
-		endif &apos;// end total not met yet conditional
-		
-	endif	&apos;// end row complete conditional
-	
-	&apos;// activate/deactivate &lt;Done&gt; control if dialog complete
-	oDlgControl = puoSTDialog.getControl(&quot;DoneBtn&quot;)
-&apos;	bDlgComplete = (bDlgComplete AND bTotalMet)
-	bDlgComplete = (bDlgComplete OR bTotalMet)
-	if bDlgComplete then
-		oDlgControl.Model.Enabled = true
-	else
-		oDlgControl.Model.Enabled = false
-	endif
-	iRetValue = 0
-	
-NormalExit:
-	fSTAmtLostFocus = iRetValue
-	exit function
-	
-ErrorHandler:
-	msgBox(&quot;In fSTAmtLostFocus - unprocessed error&quot;)
-	iRetValue = iStatus
-	GoTo NormalExit
-	
-end function		&apos;// end fSTAmtLostFocus	6/22/20
-&apos;/**/
-&apos;// STAmtLostFocus.bas
-&apos;//---------------------------------------------------------------
-&apos;// STAmt4LostFocus - Handle AmtFld4 LostFocus event.
-&apos;//		6/23/20.	wmk.	10:30
-&apos;//---------------------------------------------------------------
-
-public sub STAmt4LostFocus()
-
-&apos;//	Usage.	macro call or
-&apos;//			call STAmt4LostFocus()
-&apos;//
-&apos;// Entry.	AmtFld1..AmtFld10 lost focus
-&apos;//
-&apos;//	Exit.	gdSTAccumTot = updated with enterd value if within split bounds
-&apos;//
-&apos;// Calls.	fSTAmtLostFocus
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	6/19/20.	wmk.	original code
-&apos;// 6/20/20.	wmk.	activate/deactivate &lt;Done&gt; control code fixed
-&apos;//	6/21/20.	wmk.	MY_NAME const added
-&apos;//	6/22/20.	wmk.	eliminate MY_NAME const; use STGetObjFocus to retrieve
-&apos;//						this control name in dialog
-&apos;//	6/23/20.	wmk.	rewritten; uses fSTAmtLostFocus
-&apos;//
-&apos;//	Notes.
-
-&apos;//	constants.
-&apos;const MY_NAME=&quot;AmtFld4&quot;
-
-&apos;//	local variables.
-dim iStatus		As Integer		&apos;// general status
-dim sFldName	As String		&apos;// name of this field
-
-	&apos;// code.
-	iStatus = -1
-	ON ERROR GOTO ErrorHandler
-	sFldName = &quot;AmtFld4&quot;
-	
-	iStatus = fSTAmtLostFocus(sFldName)
-	if iStatus &lt; 0 then
-		GoTo ErrorHandler
-	endif
-		
-NormalExit:
-	exit sub
-	
-ErrorHandler:
-	msgBox(&quot;In STAmt4LostFocus - unprocessed error&quot;)
-	GoTo NormalExit
-	
-end sub		&apos;// end STAmt4LostFocus	6/23/20
-&apos;/**/
 &apos;// STAmtLostFocus.bas
 &apos;//---------------------------------------------------------------
 &apos;// STAmtLostFocus - Handle all AmtFld LostFocus events.
-&apos;//		6/22/20.	wmk.	08:00
+&apos;//		4/20/25.	wmk.
 &apos;//---------------------------------------------------------------
 
 public sub STAmtLostFocus()
@@ -5302,6 +5138,8 @@ public sub STAmtLostFocus()
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
+&apos;// 4/20/25.	wmk.	multiple instances of sub/function due to superfluous
+&apos;//	4/20/25		 residual dot bas instances.
 &apos;//	6/20/20.	wmk.	original code; cloned from STAmtLostFocus
 &apos;//	6/21/20.	wmk.	check for total reached before activating next row
 &apos;// 6/21/20.	wmk.	change to accept psFldName parameter; to be called by
@@ -5390,7 +5228,7 @@ ErrorHandler:
 	iRetValue = iStatus
 	GoTo NormalExit
 	
-end sub		&apos;// end STAmtLostFocus	6/22/20
+end sub		&apos;// end STAmtLostFocus	4/20/25.
 &apos;/**/
 &apos;// STCancelBtnRun.bas
 &apos;//---------------------------------------------------------------

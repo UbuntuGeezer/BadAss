@@ -3962,172 +3962,10 @@ ErrorHandler:
 
 end function 	&apos;// end ReverseSplitTrans 7/9/20
 &apos;/**/
-&apos;// CreateReverseTrans.bas
-&apos;//---------------------------------------------------------------
-&apos;// CreateReverseTrans - Create reversal transaction.
-&apos;//		6/28/20.	wmk.	23:15
-&apos;//---------------------------------------------------------------
-
-public function CreateReverseTrans(poGLSheet As Object, _
-					plStartRow As Long, plRowCount As Long) as Integer
-
-&apos;// Usage.	iVal = CreateReverseTrans(oGLSheet, lStartRow, lRowCount)
-&apos;//
-&apos;//		oGLSheet = ledger sheet object
-&apos;//		lStartRow = first row of transaction; if &quot;split&quot;, 1st &quot;split&quot; row
-&apos;//		lRowCount = last row of transaction; if &quot;split&quot;, last &quot;split&quot; row
-&apos;//
-&apos;// Entry.	lStartRow points to the first row of either a &quot;split&quot; or
-&apos;//			double entry transaction.
-&apos;//			lRowCount = the total row count of the transaction
-&apos;//
-&apos;//	Exit.	iVal = 0 - normal exit
-&apos;//				 = -1 - reverse transaction issue
-&apos;//			if normal exit, original transaction is duplicated, with
-&apos;//			the reversal transaction below it in the ledger sheet
-&apos;//
-&apos;// Calls.	none.
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	6/12/20.	wmk.	original code
-&apos;//	6/28/20.	wmk.	ErrLogSetModule call corrected
-&apos;//
-&apos;//	Notes. 
-&apos;//
-
-&apos;//	constants.
-const COLSPLIT=5			&apos;// column index looking for &quot;split&quot;
-const ERRREVERSE=-1			&apos;// error in reverse transaction
-const sERRREVERSE=&quot;ERRREVERSE&quot;
-
-&apos;//	local variables.
-dim iRetValue As Integer	&apos;// returned value
-dim iSheetIx As Integer		&apos;// GL sheet index
-
-&apos;//	CellRange content variables for GL sheet.
-dim oGLRange as Object		&apos;// RangeAddress object of two rows processing
-dim lGLStartRow as long
-dim lGLEndRow as long
-dim lGLCurrRow as long		&apos;// current row in GL
-dim lGLOrigRow As Long		&apos;// original transaction row index
-dim oDateCell As Object		&apos;// Date field cell
-dim lRowCount As Long		&apos;// local row count
-
-&apos;// error handling setup------------------------------------------------
-const sMyName=&quot;CreateReverseTrans&quot;
-dim sErrCode as String	&apos;// error code string for user code
-Dim sErrMsg As String	&apos;// error message for LogError
-dim lLogRow as long		&apos;// cell row working on
-dim lLogCol as Long		&apos;// cell column working on
-dim iLogSheetIx as Integer	&apos;// sheet index module working on
-
-dim iErrSheetIx As Integer	&apos;// entry error sheet index
-dim lErrColumn As Long		&apos;// entry error column ptr
-dim lErrRow As Long			&apos;// entry error row
-dim sErrCallerMod As String	&apos;// caller module name
-&apos;// end error handling setup--------------------------------------------
-
-
-	&apos;// code.
-	
-	iRetValue = -1			&apos;// set abnormal return
-	ON ERROR GOTO ErrorHandler
-&apos;//*
-	&apos;// preserve entry error settings.
-	iErrSheetIx = ErrLogGetSheet()
-	ErrLogGetCellInfo(lErrColumn, lErrRow)
-	sErrCallerMod = ErrLogGetModule()
-&apos;//*	
-	&apos;// set local error settings.
-	ErrLogSetModule(sMyName)
-	ErrLogSetSheet(poGLSheet.RangeAddress.Sheet)
-	ErrLogSetCellInfo(COLSPLIT, plStartRow)
-&apos;//*----------end error handling setup---------------------------
-	
-&apos;//---------------CreateReverseTrans starts here -----------------------
-&apos;// CreateReverseTrans starts here
-&apos;// Usage.	iVal = CreateReverseTrans(poGLSheet, lStartRow, lRowCount)
-&apos;//
-&apos;//		poGLSheet = ledger sheet object
-&apos;//		lStartRow = first row of transaction; if &quot;split&quot;, 1st &quot;split&quot; row
-&apos;//		lRowCount = last row of transaction; if &quot;split&quot;, last &quot;split&quot; row
-
-	&apos;// insert lRowCount new rows above 1st transaction row in ledger
-	iSheetIx = poGLSheet.RangeAddress.Sheet
-	lGLStartRow = plStartRow
-	lRowCount = plRowCount
-	poGLSheet.Rows.insertByIndex(lGLStartRow, lRowCount)	&apos;// insert new transaction rows
-	lGLOrigRow = lGLStartRow + lRowCount				&apos;// old rows moved down
-	
-	&apos;// copy old transaction to new rows above.
-dim oTargetCellAddress As new com.sun.star.table.CellAddress
-	oTargetCellAddress.Sheet = iSheetIx
-	oTargetCellAddress.Column = COLDATE
-	oTargetCellAddress.Row = lGLStartRow
-		
-dim oGLCellRange As new com.sun.star.table.CellRangeAddress
-	oGLCellRange.Sheet = iSheetIx
-	oGLCellRange.StartColumn = COLDATE
-	oGLCellRange.EndColumn = COLREF
-	oGLCellRange.StartRow = lGLOrigRow
-	oGLCellRange.EndRow = lGLOrigRow + lRowCount - 1
-
-	poGLSheet.copyRange(oTargetCellAddress, oGLCellRange)
-
-	&apos;// now swap Debit and Credit columns in 2nd double-entry
-	&apos;// to emulate transaction reversal
-	&apos;// copy Debit Column to Credit column below first
-	oGLCellRange.StartColumn = COLDEBIT
-	oGLCellRange.StartRow = lGLStartRow
-	oGLCellRange.EndColumn = COLDEBIT
-	oGLCellRange.EndRow = lGLStartRow + lRowCount - 1
-	
-	oTargetCellAddress.Column = COLCREDIT
-	oTargetCellAddress.Row = lGLOrigRow
-	poGLSheet.copyRange(oTargetCellAddress, oGLCellRange)
-	
-	&apos;// copy Credit column to Debit column below
-	
-	oGLCellRange.StartColumn = COLCREDIT
-	oGLCellRange.StartRow = lGLStartRow
-	oGLCellRange.EndColumn = COLCREDIT
-	oGLCellRange.EndRow = lGLStartRow + lRowCount - 1
-	
-	oTargetCellAddress.Column = COLDEBIT
-	oTargetCellAddress.Row = lGLOrigRow
-	poGLSheet.copyRange(oTargetCellAddress, oGLCellRange)
-
-&apos;//end CreateReverseTrans-----------------------------------------
-	iRetValue = 0		&apos;// set normal return
-	
-NormalExit:
-	&apos;// restore caller error handling setup
-	&apos;// set local error settings.
-	ErrLogSetModule(sErrCallerMod)
-	ErrLogSetSheet(iErrSheetIx)
-	ErrLogSetCellInfo(lErrColumn, lErrRow)
-	
-	CreateReverseTrans = iRetValue
-	exit function
-	
-ErrorHandler:
-	&apos;// log error and highlight date field in 1st row
-	sErrCode = sERRREVERSE
-	sErrMsg = &quot;Error in reverse transaction...&quot; _
-			+ CHR(13)+CHR(10) + &quot;Reverse transaction failed.&quot;
-	Call LogError(sErrCode, sErrMsg)
-	oDateCell = poGLSheet.getCellByPosition(COLDATE, lGLStartRow)
-	oDateCell.String = oDateCell.String
-	oDateCell.CellBackColor = YELLOW
-	GoTo NormalExit
-	
-end function 	&apos;// end CreateReverseTrans	6/28/20
-&apos;/**/
 &apos;// ReverseTrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// ReverseTrans - Reverse transaction.
-&apos;//		6/12/20.	wmk.	17:45
+&apos;//		4/20/25.	wmk.
 &apos;//---------------------------------------------------------------
 
 public sub ReverseTrans()
@@ -4146,8 +3984,9 @@ public sub ReverseTrans()
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	6/11/20.		wmk.	original code
-&apos;//	6/12/20.		wmk.	add call to SetSheetDate
+&apos;// 4/20/25.	wmk.	superfluous function definition removed from beginning.
+&apos;//	6/12/20.	wmk.	add call to SetSheetDate.
+&apos;//	6/11/20.	wmk.	original code.
 &apos;//
 &apos;//	Notes. Method: For double-entry transaction,insert 2 lines at first
 &apos;// row position with &quot;ROWS&quot; option; copy original transaction to 2 new
@@ -4257,7 +4096,7 @@ NormalExit:
 ErrorHandler:
 
 
-end sub		&apos;// end ReverseTrans	6/12/20
+end sub		&apos;// end ReverseTrans	4/20/25.
 &apos;/**/
 &apos;// SetProcessed.bas
 &apos;//---------------------------------------------------------------
