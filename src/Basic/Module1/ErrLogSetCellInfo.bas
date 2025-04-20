@@ -1,7 +1,7 @@
 '// ErrLogSetCellInfo.bas
 '//-----------------------------------------------------------------
 '// ErrLogSetCellInfo - Set cell information in error log globals.
-'//		wmk. 5/26/20.	16:00
+'//		4/20/25.	wmk.
 '//-----------------------------------------------------------------
 
 public Function ErrLogSetCellInfo(plColumn As Long, plRow As Long) As Void
@@ -17,7 +17,8 @@ public Function ErrLogSetCellInfo(plColumn As Long, plRow As Long) As Void
 '//
 '//	Modification history.
 '//	---------------------
-'//	5/26/20		wmk.	original code
+'// 4/20/25.	wmk.	end Function > end function.
+'//	5/26/20		wmk.	original code.
 '//
 '//	Notes. Complemented by ErrLogGetInfo(lColumn, lRow)
 '//
@@ -28,5 +29,5 @@ public Function ErrLogSetCellInfo(plColumn As Long, plRow As Long) As Void
 	goErrRangeAddress.StartColumn = plColumn
 	goErrRangeAddress.StartRow = plRow
 	
-end Function		'// end ErrLogSetCellnfo
+end function		'// end ErrLogSetCellnfo	4/20/25.
 '/**/

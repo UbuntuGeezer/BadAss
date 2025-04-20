@@ -1,6 +1,6 @@
 #!/bin/bash
 # DoSedBuild.sh - Run sed to fix BadAss../<xbafile>/MakeBuildLib.tmp > MakeBuildLib.
-#	4/19/25.	wmk.
+#	4/20/25.	wmk.
 #
 # Usage. bash DoSedBuild.sh -h|<xbafile>
 #
@@ -15,6 +15,7 @@
 #
 # Modification History.
 # ----------------------
+# 4/20/25.	wmk.	CAUTION messages added.
 # 4/19/25.	wmk.	(automated) Modification History sorted.
 # 4/19/25.	wmk.	-h option support. 
 # 11/12/23.	wmk.	(automated) Version 3.0.9 *libpath introduced. 
@@ -62,8 +63,14 @@ if [ -z "$P1" ];then
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 1
 fi
-echo "** WARNING: Ensure that any NEW .bas files have been added into"
-echo " <xbafile>Bas.txt (MakeAddBas) before continuing..."
+printf "%s\n" "CAUTION: ensure that the following .bas blocknames occur in"
+printf "%s\n" " in order at the top of <xbafile>/<xbafile>Bas.txt:"
+printf "%s\n" "  Module1Hdr"
+printf "%s\n" "  errhandling"
+printf "%s\n" "  publics"
+printf "%s\n" "  Main"
+printf "%s\n" "** WARNING: Ensure that any NEW .bas files have been added into"
+printf "%s\n" " <xbafile>Bas.txt (MakeAddBas) before continuing..."
 read -p "  OK to continue (y/n)? "
 yn=${REPLY^^}
 if [ "$yn" != "Y" ];then

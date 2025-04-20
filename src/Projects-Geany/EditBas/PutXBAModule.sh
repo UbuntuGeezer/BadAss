@@ -1,29 +1,51 @@
 #!/bin/bash
-# 2023-11-13.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
-# 2023-11-13.	wmk.	(automated) Version 3.0.9 *libpath introduced (HPPavilion).
-# PutXBAModule - Copy /Libraries-Project/Territories .xba module to Relese folder.
-#	6/25/23.	wmk.
+# PutXBAModule - Copy src/Basic/<xbamodule>/<xbamodule>.xba module to Release folder.
+#	4/19/25.	wmk.
 #
 # Usage. bash  PutXBAModule  <xbamodule>
 #
+#	-h = only display PutXBAModule shell help
 #	<xbamodule> = module name to "put" to /Release (e.g. Module1)
 #
 # Exit. Edit/<xbamodule>/<xbamodule>.xba copied to ../Release
 #
 # Modification History.
 # ---------------------
-# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
-# 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath introduced.
-# Legacy mods.
-# 6/24/23.	wmk.	modified for FLsara86777.
-# 6/25/23.	wmk.	NEW .bas block warning added.
-# Legacy mods.
-# 3/8/22.	wmk.	original code; adapted from GetXBAModule.
+# 4/19/25.	wmk.	(automated) Modification History sorted.
+# 4/19/25.	wmk.	updated. 
+# 4/19/25.	wmk.	-h option support. 
+# 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath introduced. 
+# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed. 
+# 6/25/23.	wmk.	NEW .bas block warning added. 
+# 6/24/23.	wmk.	modified for FLsara86777. 
+# 3/8/22.	wmk.	original code; adapted from GetXBAModule. 
+#
+# P1=<xbamodule>
+#
 projbase=$libbase/src/Projects-Geany/EditBas
 gitbase=$libbase
 P1=$1
+# -h option code
+if [ "${P1:0:1}" == "-" ];then
+ option=${P1,,}
+ if [ "$option" == "-h" ];then
+  printf "%s\n" "PutXBAModule - Copy /Basic/<xbamodule>/<xbamodule>.xba module to Release folder."
+  printf "%s\n" "PutXBAModule  -h|<xbamodule>"
+  printf "%s\n" ""
+  printf "%s\n" "  -h = only display PutXBAModule shell help"
+  printf "%s\n" "  <xbamodule> = module name to "put" to /Release (e.g. Module1)"
+  printf "%s\n" ""
+  printf "%s\n" "Results: Basic/<xbamodule>/<xbamodule>.xba copied to ../Release"
+  printf "%s\n" ""
+  exit 0
+ else
+  printf "%s" "PutXBAModule  -h|<xbamodule>"
+  printf "%s\n" " unrecognized option '$P1' - exiting."
+  exit 1
+ fi		# have -h
+fi	# have -
 if [ -z "$P1" ];then
- echo "PutXBAModule <xbamodule> missing parameter(s) - PutXBAModule abandoned.**"
+ echo "PutXBAModule -h|<xbamodule> missing parameter(s) - PutXBAModule abandoned.**"
  exit 1
 fi
 cd $gitbase

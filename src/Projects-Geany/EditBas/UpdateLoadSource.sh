@@ -1,7 +1,10 @@
 #!/bin/bash
 echo " ** KillShell.sh out-of-date **";exit 1
-# 2023-11-13.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
-# 2023-11-13.	wmk.	(automated) Version 3.0.9 *libpath introduced (HPPavilion).
+# UpdateLoadSource.sh is a leftover from the initial versions of EditBas and
+# its associated shells. This shell transferred the files back into the *git
+# project repository. Now all library code is maintained within its own
+# repository to maintain continual tracking as modifications are made to
+# individual .bas code blocks.
 # UpdateLoadSource.sh - Update Calc library load source.
 # 6/21/23.	wmk.
 #

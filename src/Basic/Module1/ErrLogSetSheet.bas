@@ -1,7 +1,7 @@
 '// ErrLogSetSheet.bas
 '//---------------------------------------------------------------
 '// ErrLogSetSheet - Set sheet index in error log globals.
-'//		wmk. 5/26/20.
+'//		4/20/25.	wmk.
 '//---------------------------------------------------------------
 
 public Function ErrLogSetSheet(piSheet as Integer) As Void
@@ -18,7 +18,8 @@ public Function ErrLogSetSheet(piSheet as Integer) As Void
 '//
 '//	Modification history.
 '//	---------------------
-'//	5/26/20		wmk.	original code
+'// 4/20/25.	wmk.	end Function > end function.
+'//	5/26/20		wmk.	original code.
 '//
 '//	Notes. Complemented by ErrLogGetSheet()
 '//
@@ -28,5 +29,5 @@ public Function ErrLogSetSheet(piSheet as Integer) As Void
 	'// code.
 	goErrRangeAddress.Sheet = piSheet	'// reset global sheet index
 	
-end Function		'// end ErrLogSetSheet
+end function		'// end ErrLogSetSheet		4/20/25.
 '/**/

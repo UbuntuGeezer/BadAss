@@ -1,0 +1,12 @@
+<-- OOo-dialog.xlc - this is a copy of the XML dialog spec that resides on the path -->
+<-- C:\Users\Bill\AppData\Roaming\OpenOffice\4\basic -->
+<-- it will be modified to contain the pointer to the ../BadAss/dialog.xlb which contains -->
+<-- the specs for the BadAss dialogs -->
+<-- Modification History -->
+<-- 6/28/20.	wmk.	copied from <OpenOffice-user-path>\basic     -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library:libraries PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "libraries.dtd">
+<library:libraries xmlns:library="http://openoffice.org/2000/library" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <library:library library:name="Standard" xlink:href="$(USER)/basic/Standard/dialog.xlb/" xlink:type="simple" library:link="false"/>
+ <library:library library:name="XrayTool" xlink:href="$(USER)/basic/XrayTool/dialog.xlb/" xlink:type="simple" library:link="false"/>
+</library:libraries>

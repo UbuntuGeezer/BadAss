@@ -1,7 +1,7 @@
 '// ErrLogDisable.bas
 '//---------------------------------------------------------------
 '// ErrLogDisable - Disable error logging.
-'//		wmk. 5/26/20.
+'//		4/20/25.	wmk.
 '//---------------------------------------------------------------
 
 public Function ErrLogDisable() As Void
@@ -22,8 +22,9 @@ public Function ErrLogDisable() As Void
 '//
 '//	Modification history.
 '//	---------------------
-'//	5/25/20.	wmk.	original code
-'// 5/26/20.	wmk.	change from sub to function
+'// 4/20/25.	wmk.	end Function > end function.
+'// 5/26/20.	wmk.	change from sub to function.
+'//	5/25/20.	wmk.	original code.
 
 '//	constants.
 
@@ -38,5 +39,5 @@ public Function ErrLogDisable() As Void
 	gsErrModule = ""
 	gsErrSheet = ""
 	
-end Function		'// end ErrLogDisable
+end function		'// end ErrLogDisable	4/20/25.
 '/**/

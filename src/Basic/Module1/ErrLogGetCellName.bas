@@ -1,7 +1,7 @@
 '// ErrLogGetCellName.bas
 '//---------------------------------------------------------------
 '// ErrLogGetCellName - Get cell name from error log globals.
-'//		wmk. 5/26/20.
+'//		wmk. 4/20/25.
 '//---------------------------------------------------------------
 
 public Function ErrLogGetCellName() As String
@@ -16,6 +16,7 @@ public Function ErrLogGetCellName() As String
 '//
 '//	Modification history.
 '//	---------------------
+'// 4/20/25.	wmk.	end Function > end function.
 '//	5/26/20		wmk.	original code; stub
 '//
 '//	Notes. Complemented by ErrLogGetModule()
@@ -28,5 +29,5 @@ dim sRetStr As String		'// returned cell string
 	sRetStr = ""
 	ErrLogGetCellName = sRetStr	'// return current name
 	
-end Function		'// end ErrLogGetCellName
+end function		'// end ErrLogGetCellName	4/20/25.
 '/**/

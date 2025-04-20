@@ -1,7 +1,7 @@
 '// ErrLogGetSheet.bas
 '//---------------------------------------------------------------
 '// ErrLogGetSheet - Get sheet index from error log globals.
-'//		wmk. 5/26/20.
+'//		wmk. 4/20/25.
 '//---------------------------------------------------------------
 
 public Function ErrLogGetSheet() As Integer
@@ -16,7 +16,8 @@ public Function ErrLogGetSheet() As Integer
 '//
 '//	Modification history.
 '//	---------------------
-'//	5/26/20		wmk.	original code
+'// 4/20/25.	wmk.	end Function > end function.
+'//	5/26/20		wmk.	original code.
 '//
 '//	Notes. Complemented by ErrLogSetSheet(iSheet)
 '//
@@ -27,5 +28,5 @@ public Function ErrLogGetSheet() As Integer
 	
 	ErrLogGetSheet = goErrRangeAddress.Sheet	'// return global sheet index
 	
-end Function		'// end ErrLogGetSheet
+end function		'// end ErrLogGetSheet		4/20/25.
 '/**/

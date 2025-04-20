@@ -1,7 +1,7 @@
 '// ErrLogGetModule.bas
 '//---------------------------------------------------------------
 '// ErrLogGetModule - Get module name in error log globals.
-'//		wmk. 5/26/20.
+'//		wmk. 4/20/25.
 '//---------------------------------------------------------------
 
 public Function ErrLogGetModule() As String
@@ -14,7 +14,8 @@ public Function ErrLogGetModule() As String
 '//
 '//	Modification history.
 '//	---------------------
-'//	5/26/20		wmk.	original code
+'// 4/20/25.	wmk.	end Function > end function.
+'//	5/26/20		wmk.	original code.
 '//
 '//	Notes. Complemented by ErrLogGetModule()
 '//
@@ -24,5 +25,5 @@ public Function ErrLogGetModule() As String
 	'// code.
 	ErrLogGetModule = gsErrModule		'// return current name
 	
-end Function		'// end ErrLogGetModule
+end function		'// end ErrLogGetModule		4/20/25.
 '/**/

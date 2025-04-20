@@ -1,6 +1,6 @@
 #!/bin/bash
 # ReplaceXBA.sh - replace .bas into .xba file.
-#	4/19/25.
+#	4/20/25.
 #
 # Usage. ReplaceXBA.sh -h|<modulename> <xbafile>
 #
@@ -12,11 +12,11 @@
 #
 # Modification History.
 # ---------------------
-# 4/19/25.	wmk.	-h option added.
+# 4/20/25.	wmk.	-h option support.
 # 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath introduced (HPPavilion).
 # 3/8/22.	wmk.	original.
 #
-# P1=<modulename>, P2=<xbafile>
+# P1=-h|<modulename>, P2=<xbafile>
 #
 P1=$1
 P2=$2
@@ -31,7 +31,8 @@ if [ "${P1:0:1}" == "-" ];then
   printf "%s\n" "  <modulename> = .bas block name"
   printf "%s\n" "  <xbafile> = .xba filename (e.g. Module1)"
   printf "%s\n" ""
-  printf "%s\n" "Results:"
+  printf "%s\n" "Results: src/Basic/<modulename>/new<modulename>.xba = .xba"
+  printf "%s\n" "  with new .bas block added. "
   printf "%s\n" ""
   exit 0
  else

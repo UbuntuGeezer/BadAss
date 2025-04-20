@@ -1,0 +1,12 @@
+<-- OOo-script.xlc - base taken from C:\Users\Bill\AppData\Roaming\OpenOffice\4\user\basic -->
+<-- this .xlc specs the Libraries and .xlb files that correspond to the respective libraries -->
+<-- the .xlc file resides in the parent directory \basic -->
+<-- each library has its own subdirectory with ..\basic as its parent -->
+<-- in turn, each library subdirectory has two files script.xlb and dialog.xlb that specify the -->
+<-- Basic source files and the dialog files contained in the library -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library:libraries PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "libraries.dtd">
+<library:libraries xmlns:library="http://openoffice.org/2000/library" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <library:library library:name="Standard" xlink:href="$(USER)/basic/Standard/script.xlb/" xlink:type="simple" library:link="false"/>
+ <library:library library:name="XrayTool" xlink:href="$(USER)/basic/XrayTool/script.xlb/" xlink:type="simple" library:link="false"/>
+</library:libraries>

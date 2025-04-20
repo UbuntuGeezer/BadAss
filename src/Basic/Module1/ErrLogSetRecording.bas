@@ -1,7 +1,7 @@
 '// ErrLogSetRecording.bas
 '//---------------------------------------------------------------
 '// ErrLogSetRecording - Set error recording status in error log globals
-'//		wmk. 5/26/20.
+'//		4/20/25.	wmk.
 '//---------------------------------------------------------------
 
 public function ErrLogSetRecording(pbRecordingOn as Boolean) As Void
@@ -19,7 +19,8 @@ public function ErrLogSetRecording(pbRecordingOn as Boolean) As Void
 '//
 '//	Modification history.
 '//	---------------------
-'//	5/26/20		wmk.	original code
+'// 4/20/25.	wmk.	end Function > end function.
+'//	5/26/20		wmk.	original code.
 '//
 '//	Notes. LogError uses the gbErrRecording flag to determine if Error Log
 '// sheet (ERRLOGSHEET) entries are to be made.
@@ -29,5 +30,5 @@ public function ErrLogSetRecording(pbRecordingOn as Boolean) As Void
 	'// code.
 	gbErrRecording = pbRecordingOn
 
-end function 	'// end ErrLogSetRecording
+end function 	'// end ErrLogSetRecording	4/20/25.
 '/**/

@@ -1,7 +1,7 @@
 '// ErrLogSetModule.bas
 '//---------------------------------------------------------------
 '// ErrLogSetModule - Set module name in error log globals.
-'//		wmk. 5/26/20.
+'//		4/20/25.	wmk.
 '//---------------------------------------------------------------
 
 public Function ErrLogSetModule(psName as String) As Void
@@ -18,7 +18,8 @@ public Function ErrLogSetModule(psName as String) As Void
 '//
 '//	Modification history.
 '//	---------------------
-'//	5/26/20		wmk.	original code
+'// 4/20/25.	wmk.	end Function > end function.
+'//	5/26/20		wmk.	original code.
 '//
 '//	Notes. Complemented by ErrLogGetModule()
 '//
@@ -28,5 +29,5 @@ public Function ErrLogSetModule(psName as String) As Void
 	'// code.
 	gsErrModule = psName	'// reset global module name
 	
-end Function		'// end ErrLogSetModule
+end function		'// end ErrLogSetModule		4/20/25.
 '/**/

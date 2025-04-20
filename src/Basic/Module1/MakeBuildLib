@@ -1,6 +1,5 @@
 # MakeBuildLib.tmp - Makefile (template) for BadAss MakeBuildLib.
-# 2024-01-13.	wmk.	(automated) Version 3.0.6 (Lenovo) Make old paths removed.
-#	1/12/24.	wmk.
+#	4/19/25.	wmk.
 #
 # MakeBuildLib takes the list of .bas blocks and
 # creates a <module>.xba from those blocks. 
@@ -14,36 +13,32 @@
 #
 # Modification History.
 # ---------------------
-# 8/31/23.	wmk.	modified for HPPavilion branch; *folderbase definition made
-#			 unconditional.
-# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
-# 11/13/23.	wmk.	(automated) Version 3.0.9 *libbase support added.
-# 1/13/24.	wmk.	(automated) UnKill to reinstate makefile.
-# Legacy mods.
-# 8/22/23.	wmk.	modified for use with FLsara86777.
-# 8/25/23.	wmk.	JustDoIt prerequisite removed from main recipe; *codebase
-#			 corrected to point to /src
-# Legacy mods.
-# 8/22/23.	wmk.	Module1Hdr.xba, ModuleEnd.xba from *projpath; fix
-#			 *codebase to point to MNcrwg44586; *codebase, *pathbase
-#			 unconditional.
-# Legacy mods.
-# 6/25/23.	wmk.	original makefile; edited for FLsara86777 from Territories.
-# 6/26/23.	wmk.	*mawk changed to *gawk for ENDFILE directive.
-# 8/21/23.	wmk.	<module>XbaHdr.bas > <module>XbaHdr.xba from *srcpath folder;
-#			 endscript.txt > ModuleEnd.xba.
-# Legacy mods.
-# 6/20/23.	wmk.	paths corrected for Libraries-Project/Territories; add
-#			 terminating '/**/ go extracted file; comments tidied.
-# 6/25/23.	wmk.	*sed improved to use x26 for & eliminating ambiguity.
-# Legacy mods.
-# 3/7/22.	wmk.	original makefile; adapted from MakeAnySHtoSQL.
-# 3/8/22.	wmk.	completion message added; add conversion for &amp; to
-#			 ampersand (&).
-# 4/24/22.	wmk.	*pathbase* env var included.
-# 5/4/22.	wmk.	(automated) path corrections.
-# 9/22/22.  wmk.    (automated) *codebase env var support.
-# 9/22/22.  wmk.    (automated) CB *codebase env var support.
+# 4/19/25.	wmk.	(automated) Modification History sorted.
+# 1/13/24.	wmk.	(automated) UnKill to reinstate makefile. 
+# 11/13/23.	wmk.	(automated) Version 3.0.9 *libbase support added. 
+# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed. 
+# 8/31/23.	wmk.	modified for HPPavilion branch; *folderbase definition made 
+# 8/31/23.	 unconditional.
+# 8/25/23.	wmk.	JustDoIt prerequisite removed from main recipe; *codebase 
+# 8/25/23.	 corrected to point to /src. corrected to point to /src 
+# 8/22/23.	wmk.	modified for use with FLsara86777. 
+# 8/22/23.	wmk.	Module1Hdr.xba, ModuleEnd.xba from *projpath; fix 
+# 8/22/23.	 *codebase to point to MNcrwg44586; *codebase, *pathbase
+# 8/22/23.	 unconditional.
+# 8/21/23.	wmk.	<module>XbaHdr.bas > <module>XbaHdr.xba from *srcpath folder; 
+# 8/21/23.	 endscript.txt > ModuleEnd.xba. 
+# 6/26/23.	wmk.	*mawk changed to *gawk for ENDFILE directive. 
+# 6/25/23.	wmk.	original makefile; edited for FLsara86777 from Territories. 
+# 6/25/23.	wmk.	*sed improved to use x26 for & eliminating ambiguity. 
+# 6/20/23.	wmk.	paths corrected for Libraries-Project/Territories; add 
+# 6/20/23.	 terminating '/**/ go extracted file; comments tidied. 
+# 9/22/22.	wmk.	(automated) CB *codebase env var support. 
+# 9/22/22.	wmk.	(automated) *codebase env var support. 
+# 5/4/22.	wmk.	(automated) path corrections. 
+# 4/24/22.	wmk.	*pathbase* env var included. 
+# 3/8/22.	wmk.	completion message added; add conversion for &amp; to 
+# 3/8/22.	 ampersand (&). 
+# 3/7/22.	wmk.	original makefile; adapted from MakeAnySHtoSQL. 
 
 ifndef AWK
  AWK = mawk
@@ -80,7 +75,7 @@ Always :
 	sed -i "s?\x26?\&amp\;?g;s?'?\&apos\;?g;s?\"?\&quot\;?g;s?<?\&lt\;?g;s?>?\&gt\;?g" $(targpath)/Module1.xba
 	cat $(srcpath)/Module1Hdr.xba $(targpath)/Module1.xba $(projpath)/ModuleEnd.xba > $$TEMP_PATH/Module1.xba
 	cp -pv $$TEMP_PATH/Module1.xba $(targpath)/Module1.xba
-	 echo "Module1.xba build on $(pathbase)/Release"
+	printf "%s\n" "Module1.xba build on $(targpath)."
 
 #=======================================================
 JustDoIt: ;

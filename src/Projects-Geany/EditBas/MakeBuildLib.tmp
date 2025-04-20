@@ -61,7 +61,7 @@ Always :
 	sed -i "s?\x26?\&amp\;?g;s?'?\&apos\;?g;s?\"?\&quot\;?g;s?<?\&lt\;?g;s?>?\&gt\;?g" $(targpath)/<xbafile>.xba
 	cat $(srcpath)/<xbafile>Hdr.xba $(targpath)/<xbafile>.xba $(projpath)/ModuleEnd.xba > $$TEMP_PATH/<xbafile>.xba
 	cp -pv $$TEMP_PATH/<xbafile>.xba $(targpath)/<xbafile>.xba
-	 echo "<xbafile>.xba build on $(pathbase)/Release"
+	printf "%s\n" "<xbafile>.xba build on $(targpath)."
 
 #=======================================================
 JustDoIt: ;

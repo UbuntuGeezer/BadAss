@@ -19,8 +19,8 @@ REM  *****  BASIC  *****
 &apos;//	5/20/20.	wmk.	added OPTION EXPLICIT for code control
 &apos;//	5/22/20.	wmk.	added PlaceSplitTrans function.
 &apos;//	5/23/20.	wmk.	added BeanField function; bug fix with ASTSHEET
-&apos;//	5/25/20.	wmk.	added errhandling.bas and associated subs
-&apos;//	5/26/20.	wmk.	errhandling.bas update resinserted
+&apos;//	5/25/20.	wmk.	added errhandling and associated subs
+&apos;//	5/26/20.	wmk.	errhandling update resinserted
 &apos;//	6/28/20.	wmk.	Beta Release to BadAss Library
 
 &apos;// Code protection.
@@ -30,13 +30,13 @@ OPTION EXPLICIT				&apos;// every variable must be declared before use
 
 &apos;// errhandling.bas
 &apos;//---------------------------------------------------------------
-&apos;// errhandling.bas - Definitions for development error handling.
+&apos;// errhandling - Definitions for development error handling.
 &apos;//		wmk. 5/26/20.	17:30
 &apos;//---------------------------------------------------------------
 &apos;//
 &apos;// Header Description.
 &apos;// -------------------
-&apos;//	errhandling.bas contains definitions that may be inserted in any
+&apos;//	errhandling contains definitions that may be inserted in any
 &apos;// OOoBasic Module for handing error conditions. This is intended for
 &apos;// use with development modules, and should be removed for Production
 &apos;// spreadsheets. This will ensure clean code released into the
@@ -92,15 +92,15 @@ global goErrRangeAddress As Object				&apos;// cell range address
 &apos;// ErrLogGetSheet - Get sheet index from error log globals.
 &apos;// ErrLogSetSheet - Set sheet index in error log globals.
 &apos;// LogError - make error log entry([goCellRangeAddress], psErrName, psErrMsg)
-&apos;//-----------------end errhandling.bas header--------------------------
+&apos;//-----------------end errhandling header--------------------------
 &apos;/**/
 
 &apos;// publics.bas
-&apos;//---------------------------publics.bas----------------------------------------------
+&apos;//---------------------------publics----------------------------------------------
 &apos;//		8/20/24.	wmk.
-&apos;// publics.bas - module-wide vars for Module1 code in accounts sheets
+&apos;// publics - module-wide vars for Module1 code in accounts sheets
 &apos;// module-wide constants. (used in processing bank download sheets)
-&apos;// (mirrored in file publics.bas)
+&apos;// (mirrored in file publics)
 
 &apos;// Modification History.
 &apos;// ---------------------
@@ -173,7 +173,7 @@ public const LJUST=1		&apos;// left-justify HoriJustify				&apos;// mod052020
 public const CJUST=2		&apos;// center HoriJustify						&apos;// mod052020
 public const RJUST=3		&apos;// right-justify HoriJustify				&apos;// mod052320
 public const MAXTRANSL=50	&apos;// maximum transaction text length			&apos;// mod052020
-&apos;//----------------------end publics.bas---------------------------------------------
+&apos;//----------------------end publics---------------------------------------------
 &apos;/**/
 
 &apos;// Main.bas

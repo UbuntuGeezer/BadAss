@@ -1,7 +1,7 @@
 '// PlaceSplitTotal.bas
 '//------------------------------------------------------------------
 '// PlaceSplitTotal - Itemize split transaction in total COA account.
-'//		7/8/20.	wmk.	15:00
+'//		4/20/25.	wmk.
 '//------------------------------------------------------------------
 
 public function PlaceSplitTotal(poGLRange As Object, psAcct As String) As Integer
@@ -25,10 +25,10 @@ public function PlaceSplitTotal(poGLRange As Object, psAcct As String) As Intege
 '//
 '//	Modification history.
 '//	---------------------
-'//	6/4/20.		wmk.	original code
-'//	6/6/20.		wmk.
-'//	6/27/20.	wmk.	superfluous "if" removed
+'// 4/20/25.	wmk.	end Function > end function for CheckBasEnds utility.
 '//	7/8/20.		wmk.	code to remove extra row in source COA transaction	
+'//	6/27/20.	wmk.	superfluous "if" removed
+'//	6/4/20.		wmk.	original code
 '//
 '//	Notes.
 '// This function adds lines to the splitting account category
@@ -338,5 +338,5 @@ NormalExit:
 
 	PlaceSplitTotal = iRetValue
 
-end Function		'// end PlaceSplitTotal		7/8/20
+end function		'// end PlaceSplitTotal		4/20/25.
 '/**/

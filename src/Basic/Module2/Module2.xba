@@ -3,12 +3,15 @@
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Module2" script:language="StarBasic">REM  *****  BASIC  *****
 &apos;// Module2Hdr.bas
 &apos;// Module2 code (complete with publics_2) for dialogs.
+&apos;// 
 &apos;// Modification History.
 &apos;// ---------------------
-&apos;// 7/5/20.	Module2 subs/functions index.
-&apos;// 4/19/25.	superfluous dot bas instances removed.
+&apos;// 4/20/25.	wmk.	&quot;in library&quot; mods; superfluous dot bas references removed.
+&apos;// 7/5/20.		wmk.	Module2 subs/function index added.
 &apos;//
-&apos;// Main - Module2 Main - clear pbDlgLibLoaded flag.
+&apos;//	Module2 subs/functions index.	7/5/20.
+&apos;//
+&apos;//	Main - Module2 Main - clear pbDlgLibLoaded flag.
 &apos;// F - First attempt at dialog box processing. (COADialog)
 &apos;// RunCOADlg - Run COA Dialog.
 &apos;// G - Enter Transaction Dialog test procedure.
@@ -107,14 +110,14 @@ public puoCOASelectBtn	As Object	&apos;// &lt;Select&gt; button
 &apos;// vars for dialogues interface to accounting package
 
 public puoCOAListBox As Object		&apos;// COA list box object in active form
-public pusCOASelected As String		&apos;// COA selected from list box (..Listener)
+public pusCOASelected As String		&apos;// COA selected from list box (..Listener.bas)
 public pbETActive	 AS Boolean		&apos;// ET dialog active flag
 public pbETDebitList	As Boolean	&apos;// debit list COA button
 public pbETCreditList	As Boolean	&apos;// credit list COA button
 
 OPTION EXPLICIT				&apos;// code protection
 
-&apos;//--------------end publics_2----7/6/20--------------------------
+&apos;//--------------end publics_2.bas----7/6/20--------------------------
 &apos;/**/
 &apos;// Main.bas
 &apos;// COPY CODE FROM MAIN TO COASelectListener, COACancelListener
@@ -2633,10 +2636,9 @@ public sub H()
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	4/19/25.	wmk.	eliminate superfluous dot bas instances.
 &apos;//	6/18/20.	wmk.	original code; adapted from G. bas.
 &apos;//	6/23/20.	wmk.	change to use fDialogReset.
-&apos;// 8/26/22.	wmk.	add intervening space to G. bas and H. bas  in comments.
+&apos;// 8/26/22.	wmk.	add intervening space to G. bas and H .bas in comments.
 &apos;//
 &apos;//	Notes.
 &apos;//

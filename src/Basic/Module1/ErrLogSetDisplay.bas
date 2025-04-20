@@ -1,7 +1,7 @@
 '// ErrLogSetDisplay.bas
 '//---------------------------------------------------------------
 '// ErrLogSetDisplay - Set msgBox error messaging on/off.
-'//		wmk. 5/26/20.
+'//		4/20/25.	wmk.
 '//---------------------------------------------------------------
 
 public function ErrLogSetDisplay(pbDisplayOn As Boolean) As Void
@@ -17,7 +17,8 @@ public function ErrLogSetDisplay(pbDisplayOn As Boolean) As Void
 '//
 '//	Modification history.
 '//	---------------------
-'//	5/26/20.	wmk.	original code
+'// 4/20/25.	wmk.	end Function > end function.
+'//	5/26/20.	wmk.	original code.
 '//
 '// Notes. gbErrDisplay flag is used by LogError to determine if
 '//	error messages are displayed in a msgBox onscreen
@@ -25,5 +26,5 @@ public function ErrLogSetDisplay(pbDisplayOn As Boolean) As Void
 	'// code.
 	gbErrDisplay = pbDisplayOn
 
-end function 	'// end ErrLogSetDisplay
+end function 	'// end ErrLogSetDisplay	4/20/25.
 '/**/

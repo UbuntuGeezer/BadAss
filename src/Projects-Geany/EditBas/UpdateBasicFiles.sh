@@ -1,17 +1,26 @@
 #!/bin/bash
-echo " ** KillShell.sh out-of-date **";exit 1
-# 2023-11-13.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
-# 2023-11-13.	wmk.	(automated) Version 3.0.9 *libpath introduced (HPPavilion).
+echo " ** UpdateBasicFiles.sh out-of-date **";exit 1
+# Note. UpdateBasicFiles is a leftover from the original EditBas project
+# where the .bas files were edited within the EditBas project folder. Now
+# the .bas files reside in the Basic/Module(n) folders, so this shell is
+# no longer necessary.
+#
 # UpdateBasicFiles - Copy newer .bas files from project to /Basic folder.
-#	3/8/22.	wmk.
+#	4/20/25.	wmk.
+#
+# Usage. bash   UpdateBasicFiles.sh [-h]
+#
+#	-h = (optional) only display <filename> shell help
 #
 # Modification History.
 # ---------------------
+# 4/20/25.	wmk.	-h option support.
 # 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
 # 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath introduced.
 # 3/8/22.	wmk.	original code; adapted from PutXBAModule.
-projbase=$folderbase/Territories/Projects-Geany/EditBas
-gitbase=$folderbase/GitHub/Libraries-Project/Territories
+#
+projbase=$codebase/src/Projects-Geany/EditBas
+gitbase=$codebase
 echo "**WARNING - all .bas files in EditBas/ folder will be copied over older files"
 read -p "  in /Basic folder... Do you wish to proceed (Y/N)? "
 yn=${REPLY,,}
