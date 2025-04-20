@@ -24,13 +24,13 @@ public function fSTAmtLostFocus(psFldName As String) As Integer
 '//
 '//	Modification history.
 '//	---------------------
-'//	6/20/20.	wmk.	original code; cloned from STAmtLostFocus
+'//	6/20/20.	wmk.	original code; cloned from STAmtLostFocus.
 '//	6/21/20.	wmk.	check for total reached before activating next row
 '// 6/21/20.	wmk.	change to accept psFldName parameter; to be called by
-'//						all STAmt.LostFocus events; changed totals check and
-'//						activate <Done> conditional
+'// 6/21/20.						1all STAmt.LostFocus events; changed totals check and
+'// 6/21/20.						2activate <Done> conditional.
 '//	6/22/20.	wmk.	change name to begin with "f" so can be distinguished
-'//						by sub with same name for testing
+'//	6/22/20.						by sub with same name for testing.
 
 '//	constants.
 

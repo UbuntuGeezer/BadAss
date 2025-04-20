@@ -2,7 +2,7 @@
 #	6/25/23.	wmk.
 BEGIN {p =0 }
 END {print "'/**/"}
- /PlaceTransM.bas/ {print $0;p = 1; next };
+ /fSTAmtLostFocus.bas/ {print $0;p = 1; next };
  /\/\*\*\// { awkdate = "$1" ; awktime = "$2" ;p = 0; next };
 
 { if(p) { print }

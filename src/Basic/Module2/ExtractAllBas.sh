@@ -1,4 +1,5 @@
 #!/bin/bash
+echo " ** ExtractAllBas.sh out-of-date **";exit 1
 # ExtractAllBas.sh - Extract all .bas modules from .xba.
 #	8/25/22.	wmk.
 #

@@ -1,7 +1,5 @@
 # MakeDeleteXBAbas.tmp - Makefile (template) for MakeDeleteXBAbas.
-$(error out-of-date)
-$(error out-of-date)
-#	6/24/23.	wmk.
+#	4/19/25.	wmk.
 #
 # MakeDeleteXBAbas deletes a module from the specified .xba file.
 # the module must be bounded by '<modulename>.bas' at the beginning
@@ -9,25 +7,21 @@ $(error out-of-date)
 #
 # Modification History.
 # ---------------------
+# 4/19/25.	wmk.	updated.
 # 6/24/23.	wmk. 	modified for FLsara86777.
 # 3/7/22.	wmk.	original makefile; adapted from MakeAnySHtoSQL.
 
-ifeq ($(USER),ubuntu)
- folderbase = /media/ubuntu/Windows/Users/Bill
-else
- folderbase = $(HOME)
-endif
 AWK = mawk
 .PHONY : Always JustDoIt
-projpath = $(folderbase)/GitHub/Libraries/FLsara86777/EditBas
+projpath = $(codebase)/src/Projects-Geany/EditBas
 
 # <filepath>/<filebase>.sql
 #=======================================================
 Always : JustDoIt
-	sed -i '/\/\/ PlaceTransM.bas/,/\/\*\*\//d' \
-	 $pathbase/Basic/Module1/Module1.xba
-	echo "PlaceTransM deleted from Module1.xba"
-	~\sysprocs/LOGMSG "  PlaceTransM deleted from Module1."
+	sed -i '/\/\/ fSTAmtLostFocus.bas/,/\/\*\*\//d' \
+	 $(codebase)/src/Basic/Module2/Module2.xba
+	echo "fSTAmtLostFocus deleted from Module2.xba"
+	~\sysprocs/LOGMSG "  fSTAmtLostFocus deleted from Module2."
 
 #=======================================================
 JustDoIt: ;

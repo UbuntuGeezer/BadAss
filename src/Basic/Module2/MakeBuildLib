@@ -1,6 +1,5 @@
 # MakeBuildLib.tmp - Makefile (template) for BadAss MakeBuildLib.
-# 2024-01-13.	wmk.	(automated) Version 3.0.6 (Lenovo) Make old paths removed.
-#	1/12/24.	wmk.
+#	4/19/25.	wmk.
 #
 # MakeBuildLib takes the list of .bas blocks and
 # creates a <module>.xba from those blocks. 
@@ -14,36 +13,32 @@
 #
 # Modification History.
 # ---------------------
-# 8/31/23.	wmk.	modified for HPPavilion branch; *folderbase definition made
-#			 unconditional.
-# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
-# 11/13/23.	wmk.	(automated) Version 3.0.9 *libbase support added.
-# 1/13/24.	wmk.	(automated) UnKill to reinstate makefile.
-# Legacy mods.
-# 8/22/23.	wmk.	modified for use with FLsara86777.
-# 8/25/23.	wmk.	JustDoIt prerequisite removed from main recipe; *codebase
-#			 corrected to point to /src
-# Legacy mods.
-# 8/22/23.	wmk.	Module1Hdr.xba, ModuleEnd.xba from *projpath; fix
-#			 *codebase to point to MNcrwg44586; *codebase, *pathbase
-#			 unconditional.
-# Legacy mods.
-# 6/25/23.	wmk.	original makefile; edited for FLsara86777 from Territories.
-# 6/26/23.	wmk.	*mawk changed to *gawk for ENDFILE directive.
-# 8/21/23.	wmk.	<module>XbaHdr.bas > <module>XbaHdr.xba from *srcpath folder;
-#			 endscript.txt > ModuleEnd.xba.
-# Legacy mods.
-# 6/20/23.	wmk.	paths corrected for Libraries-Project/Territories; add
-#			 terminating '/**/ go extracted file; comments tidied.
-# 6/25/23.	wmk.	*sed improved to use x26 for & eliminating ambiguity.
-# Legacy mods.
-# 3/7/22.	wmk.	original makefile; adapted from MakeAnySHtoSQL.
-# 3/8/22.	wmk.	completion message added; add conversion for &amp; to
-#			 ampersand (&).
-# 4/24/22.	wmk.	*pathbase* env var included.
-# 5/4/22.	wmk.	(automated) path corrections.
-# 9/22/22.  wmk.    (automated) *codebase env var support.
-# 9/22/22.  wmk.    (automated) CB *codebase env var support.
+# 4/19/25.	wmk.	(automated) Modification History sorted.
+# 1/13/24.	wmk.	(automated) UnKill to reinstate makefile. 
+# 11/13/23.	wmk.	(automated) Version 3.0.9 *libbase support added. 
+# 11/13/23.	wmk.	(automated) Version 3.0.6 Make old paths removed. 
+# 8/31/23.	wmk.	modified for HPPavilion branch; *folderbase definition made 
+# 8/31/23.	 unconditional.
+# 8/25/23.	wmk.	JustDoIt prerequisite removed from main recipe; *codebase 
+# 8/25/23.	 corrected to point to /src. corrected to point to /src 
+# 8/22/23.	wmk.	modified for use with FLsara86777. 
+# 8/22/23.	wmk.	Module1Hdr.xba, ModuleEnd.xba from *projpath; fix 
+# 8/22/23.	 *codebase to point to MNcrwg44586; *codebase, *pathbase
+# 8/22/23.	 unconditional.
+# 8/21/23.	wmk.	<module>XbaHdr.bas > <module>XbaHdr.xba from *srcpath folder; 
+# 8/21/23.	 endscript.txt > ModuleEnd.xba. 
+# 6/26/23.	wmk.	*mawk changed to *gawk for ENDFILE directive. 
+# 6/25/23.	wmk.	original makefile; edited for FLsara86777 from Territories. 
+# 6/25/23.	wmk.	*sed improved to use x26 for & eliminating ambiguity. 
+# 6/20/23.	wmk.	paths corrected for Libraries-Project/Territories; add 
+# 6/20/23.	 terminating '/**/ go extracted file; comments tidied. 
+# 9/22/22.	wmk.	(automated) CB *codebase env var support. 
+# 9/22/22.	wmk.	(automated) *codebase env var support. 
+# 5/4/22.	wmk.	(automated) path corrections. 
+# 4/24/22.	wmk.	*pathbase* env var included. 
+# 3/8/22.	wmk.	completion message added; add conversion for &amp; to 
+# 3/8/22.	 ampersand (&). 
+# 3/7/22.	wmk.	original makefile; adapted from MakeAnySHtoSQL. 
 
 ifndef AWK
  AWK = mawk
@@ -57,46 +52,47 @@ endif
  targpath = $(libbase)/src/Release
 
 #insertbaslist
-baslist =   Module2Hdr.bas  publics2.bas  Main.bas\
-  COACancelListener.bas  COAListBoxListener.bas  COASelectListener.bas\
-  ET.bas  ETAmountListener.bas  ETCOA1ListListener.bas\
-  ETCOA1Listener.bas  ETCOA2ListListener.bas  ETCOA2Listener.bas\
-  ETCancelListener.bas  ETCheckComplete.bas  ETDateListener.bas\
-  ETDescListener.bas  ETDialogRecord.bas  ETDialogReset.bas\
-  ETDlgSplitRecord.bas  ETPubVarsReset.bas  ETRecdContListener.bas\
-  ETRecdDoneListener.bas  ETRefHelpListener.bas  ETRefListener.bas\
-  ETSplitRun.bas  ETViewSplitRun.bas  F.bas\
-  fSTAmtLostFocus.bas  fVSDialogPreset.bas  G.bas\
-  GA.bas  GetCOA.bas  H.bas\
-  LoadBadAssLib.bas  LoadCOAs.bas  LoadStdLibrary.bas\
-  PlaceSplitTotal.bas  RunCOADlg.bas  STAcct10FocusListener.bas\
-  STAcct1FocusListener.bas  STAcct1LostFocus.bas  STAcct2FocusListener.bas\
-  STAcct3FocusListener.bas  STAcct4FocusListener.bas  STAcct5FocusListener.bas\
-  STAcct6FocusListener.bas  STAcct7FocusListener.bas  STAcct8FocusListener.bas\
-  STAcct9FocusListener.bas  STAcctLostFocus.bas  STAmt10FocusListener.bas\
-  STAmt10LostFocus.bas  STAmt1FocusListener.bas  STAmt1LostFocus.bas\
-  STAmt2FocusListener.bas  STAmt2LostFocus.bas  STAmt3FocusListener.bas\
-  STAmt3LostFocus.bas  STAmt4FocusListener.bas  STAmtLostFocus.bas\
-  STAmt5FocusListener.bas  STAmt5LostFocus.bas  STAmt6FocusListener.bas\
-  STAmt6LostFocus.bas  STAmt7FocusListener.bas  STAmt7LostFocus.bas\
-  STAmt8FocusListener.bas  STAmt8LostFocus.bas  STAmt9FocusListener.bas\
-  STAmt9LostFocus.bas  STAmtLostFocus.bas  STCOAListBtnListener.bas\
-  STCancelBtnRun.bas  STCheckComplete.bas  STClrObjFocus.bas\
-  STCredRBListener.bas  STDebtRBListener.bas  STDesc10LostFocus.bas\
-  STDesc1LostFocus.bas  STDesc2LostFocus.bas  STDesc3LostFocus.bas\
-  STDesc4LostFocus.bas  STDesc5LostFocus.bas  STDesc6LostFocus.bas\
-  STDesc7LostFocus.bas  STDesc8LostFocus.bas  STDesc9LostFocus.bas\
-  STDescLostFocus.bas  STDialogReset.bas  STDialogReset.bas\
-  STDlgCtrlsReset.bas  STDlgCtrlsRestore.bas  STDoneBtnRun.bas\
-  STEnableNextRow.bas  STFld6ToIndex.bas  STFld7ToIndex.bas\
-  STGetAccumTot.bas  STGetObjFocus.bas  STPubVarsReset.bas\
-  STRef10LostFocus.bas  STRef1LostFocus.bas  STRef2LostFocus.bas\
-  STRef3LostFocus.bas  STRef4LostFocus.bas  STRef5LostFocus.bas\
-  STRef6LostFocus.bas  STRef7LostFocus.bas  STRef8LostFocus.bas\
-  STRef9LostFocus.bas  STRefLostFocus.bas  STRowComplete.bas\
-  STSetAccumTot.bas  STSetObjFocus.bas  STTotalAcctLostFocus.bas\
-  STUpdateAccumTot.bas  STUpdateCOAArray.bas  STUpdateDescArray.bas\
-  STUpdateRefArray.bas  VSDoneBtnRun.bas  VSEditSplitBtnRun.bas
+baslist =   Module2.bas  Module2Hdr.bas  publics2.bas\
+  Main.bas  COACancelListener.bas  COAListBoxListener.bas\
+  COASelectListener.bas  ETAmountListener.bas  ET.bas\
+  ETCancelListener.bas  ETCheckComplete.bas  ETCOA1Listener.bas\
+  ETCOA1ListListener.bas  ETCOA2Listener.bas  ETCOA2ListListener.bas\
+  ETDateListener.bas  ETDescListener.bas  ETDialogRecord.bas\
+  ETDialogReset.bas  ETDlgSplitRecord.bas  ETPubVarsReset.bas\
+  ETRecdContListener.bas  ETRecdDoneListener.bas  ETRefHelpListener.bas\
+  ETRefListener.bas  ETSplitRun.bas  ETViewSplitRun.bas\
+  F.bas  fSTAmtLostFocus.bas  fVSDialogPreset.bas\
+  GA.bas  G.bas  GetCOA.bas\
+  H.bas  LoadBadAssLib.bas  LoadCOAs.bas\
+  LoadStdLibrary.bas  PlaceSplitTotal.bas  PlaceSplitTrans.bas\
+  RunCOADlg.bas  STAcct10FocusListener.bas  STAcct1FocusListener.bas\
+  STAcct1LostFocus.bas  STAcct2FocusListener.bas  STAcct3FocusListener.bas\
+  STAcct4FocusListener.bas  STAcct5FocusListener.bas  STAcct6FocusListener.bas\
+  STAcct7FocusListener.bas  STAcct8FocusListener.bas  STAcct9FocusListener.bas\
+  STAcctLostFocus.bas  STAmt10FocusListener.bas  STAmt10LostFocus.bas\
+  STAmt1FocusListener.bas  STAmt1LostFocus.bas  STAmt2FocusListener.bas\
+  STAmt2LostFocus.bas  STAmt3FocusListener.bas  STAmt3LostFocus.bas\
+  STAmt4FocusListener.bas  STAmt4LostFocus.bas  STAmt5FocusListener.bas\
+  STAmt5LostFocus.bas  STAmt6FocusListener.bas  STAmt6LostFocus.bas\
+  STAmt7FocusListener.bas  STAmt7LostFocus.bas  STAmt8FocusListener.bas\
+  STAmt8LostFocus.bas  STAmt9FocusListener.bas  STAmt9LostFocus.bas\
+  STAmtLostFocus.bas  STCancelBtnRun.bas  STCheckComplete.bas\
+  STClrObjFocus.bas  STCOAListBtnListener.bas  STCredRBListener.bas\
+  STDebtRBListener.bas  STDesc10LostFocus.bas  STDesc1LostFocus.bas\
+  STDesc2LostFocus.bas  STDesc3LostFocus.bas  STDesc4LostFocus.bas\
+  STDesc5LostFocus.bas  STDesc6LostFocus.bas  STDesc7LostFocus.bas\
+  STDesc8LostFocus.bas  STDesc9LostFocus.bas  STDescLostFocus.bas\
+  STDialogReset.bas  STDlgCtrlsReset.bas  STDlgCtrlsRestore.bas\
+  STDoneBtnRun.bas  STEnableNextRow.bas  STFld6ToIndex.bas\
+  STFld7ToIndex.bas  STGetAccumTot.bas  STGetObjFocus.bas\
+  STPubVarsReset.bas  STRef10LostFocus.bas  STRef1LostFocus.bas\
+  STRef2LostFocus.bas  STRef3LostFocus.bas  STRef4LostFocus.bas\
+  STRef5LostFocus.bas  STRef6LostFocus.bas  STRef7LostFocus.bas\
+  STRef8LostFocus.bas  STRef9LostFocus.bas  STRefLostFocus.bas\
+  STRowComplete.bas  STSetAccumTot.bas  STSetObjFocus.bas\
+  STTotalAcctLostFocus.bas  STUpdateAccumTot.bas  STUpdateCOAArray.bas\
+  STUpdateDescArray.bas  STUpdateRefArray.bas  VSDoneBtnRun.bas\
+  VSEditSplitBtnRun.bas
 
 # <filepath>/<filebase>.sql
 #=======================================================
@@ -106,7 +102,7 @@ Always :
 	sed -i "s?\x26?\&amp\;?g;s?'?\&apos\;?g;s?\"?\&quot\;?g;s?<?\&lt\;?g;s?>?\&gt\;?g" $(targpath)/Module2.xba
 	cat $(srcpath)/Module2Hdr.xba $(targpath)/Module2.xba $(projpath)/ModuleEnd.xba > $$TEMP_PATH/Module2.xba
 	cp -pv $$TEMP_PATH/Module2.xba $(targpath)/Module2.xba
-	 echo "Module2.xba build on $(pathbase)/Release"
+	printf "%s\n" "Module2.xba build on $(targpath)."
 
 #=======================================================
 JustDoIt: ;

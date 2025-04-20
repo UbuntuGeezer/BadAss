@@ -1,4 +1,5 @@
 #!/bin/bash
+echo " ** DelimAllBas.sh out-of-date **";exit 1
 # DelimAllBas.sh - Delim all .bas modules from .xba.
 #	8/25/22.	wmk.
 #

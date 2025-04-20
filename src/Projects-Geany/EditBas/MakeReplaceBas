@@ -1,52 +1,42 @@
 # MakeReplaceBas.tmp - Makefile (template) for MakeReplaceBas.
-$(error out-of-date)
-$(error out-of-date)
-#	3/8/22.	wmk.
+#	4/19/25.	wmk.
 #
-# This makefile is edited by DoSed.sh with PlaceTransM Module1 substituted
-# throughout. PlaceTransM will be the name of a .bas source file with no
-# filename extension; Module1 will be the complete name of an XBA file with
+# This makefile is edited by DoSed.sh with fSTAmtLostFocus Module2 substituted
+# throughout. fSTAmtLostFocus will be the name of a .bas source file with no
+# filename extension; Module2 will be the complete name of an XBA file with
 # the .xba filename extension.
 #
 # Modification History.
 # ---------------------
 # 3/8/22.	wmk.	original makefile; adapted from MakeExtractBas;
-#			 add ampersand conversion to sed; note & conversion must come
-#			 first to avoid screwing up other XML & fields.
-
-ifeq ($(USER),ubuntu)
- folderbase = /media/ubuntu/Windows/Users/Bill
-else
- folderbase = $(HOME)
-endif
-
-ifndef pathbase
- pathbase=$(folderbase)/GitHub/Libraries-Project/FLsara86777
-endif
+# 3/8/22.	 add ampersand conversion to sed; note & conversion must come
+# 3/8/22.	 first to avoid screwing up other XML & fields.
 
 AWK = mawk
 .PHONY : Always JustDoIt
+
+projpath = $(codebase)/src/Projects-Geany/EditBas
 
 # <filepath>/<filebase>.sql
 #=======================================================
 Always : JustDoIt
 	cd $(projpath)
-	cp $(pathbase)/Basic/Module1/PlaceTransM.bas $$TEMP_PATH/scratch.bas
+	cp $(codebase)/src/Basic/Module2/fSTAmtLostFocus.bas $$TEMP_PATH/scratch.bas
 	sed -i "s?\&?\&amp\;?g;s?'?\&apos\;?g;s?\"?\&quot\;?g;s?\&lt;?<?g;s?&gt;?>?g" $$TEMP_PATH/scratch.bas
 	# delete 1st and last lines of new .bas
-	sed -i "/\/\ PlaceTransM.bas/d;/\/\*\*\//d" $$TEMP_PATH/scratch.bas
-	cp $(pathbase)/Module1/Module1.xba $TEMP_PATH/scratch.xba
+	sed -i "/\/\ fSTAmtLostFocus.bas/d;/\/\*\*\//d" $$TEMP_PATH/scratch.bas
+	cp $(pathbase)/Module2/Module2.xba $TEMP_PATH/scratch.xba
 	sed -i "1,4d" scratch.xba
 	# find module.bas in scratch.xba file; read lines from stripped .bas file
-	mawk "/\/\/ PlaceTransM.bas/{f=1;print;while(getline < \"$$TEMP_PATH/scratch.bas\")\
-	 {print}}/\/\*\*\//{f=0}!f" $TEMP_PATH/scratch.xba > $TEMP_PATH/newModule1.xba
-	sed -i '1i newline\;' $TEMP_PATH/newModule1.xba
-	sed -i "1r ModuleHdr.xba" $TEMP_PATH/newModule1.xba
-	sed -i "1d" $TEMP_PATH/newModule1.xba
-	mv $(pathbase)/Module1/Module1.xba $(pathbase)/Module1/oldModule1.xba
-	mv $TEMP_PATH/newModule1 $(pathbase)/Module1/Module1.xba
-	echo "module PlaceTransM.bas replaced into Module1..."
-	echo "use PutXBAModule.sh to copy the new Module1 over GitHub/Module1 after changes checked."
+	mawk "/\/\/ fSTAmtLostFocus.bas/{f=1;print;while(getline < \"$$TEMP_PATH/scratch.bas\")\
+	 {print}}/\/\*\*\//{f=0}!f" $TEMP_PATH/scratch.xba > $TEMP_PATH/newModule2.xba
+	sed -i '1i newline\;' $TEMP_PATH/newModule2.xba
+	sed -i "1r ModuleHdr.xba" $TEMP_PATH/newModule2.xba
+	sed -i "1d" $TEMP_PATH/newModule2.xba
+	mv $(pathbase)/Module2/Module2.xba $(pathbase)/Module2/oldModule2.xba
+	mv $TEMP_PATH/newModule2 $(pathbase)/Module2/Module2.xba
+	echo "module fSTAmtLostFocus.bas replaced into Module2..."
+	echo "use PutXBAModule.sh to copy the new Module2 over GitHub/Module2 after changes checked."
 
 #=======================================================
 JustDoIt: ;

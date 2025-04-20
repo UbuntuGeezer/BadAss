@@ -21,7 +21,7 @@ public sub H()
 '//	---------------------
 '//	6/18/20.	wmk.	original code; adapted from G. bas.
 '//	6/23/20.	wmk.	change to use fDialogReset.
-'// 8/26/22.	wmk.	add intervening space to G. bas and H . bas in comments.
+'// 8/26/22.	wmk.	add intervening space to G. bas and H .bas in comments.
 '//
 '//	Notes.
 '//

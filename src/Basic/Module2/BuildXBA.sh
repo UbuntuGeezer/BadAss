@@ -1,4 +1,5 @@
 #!/bin/bash
+echo " ** BuildXBA.sh out-of-date **";exit 1
 cat \
 Module1/Module1Hdr.bas \
 Module1/errhandling.bas \

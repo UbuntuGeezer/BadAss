@@ -2,7 +2,13 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Module2" script:language="StarBasic">REM  *****  BASIC  *****
 &apos;// Module2Hdr.bas
-&apos;// Module2 code (complete with publics_2) for dialogs
+&apos;// Module2 code (complete with publics_2) for dialogs.
+&apos;// 
+&apos;// Modification History.
+&apos;// ---------------------
+&apos;// 4/20/25.	wmk.	&quot;in library&quot; mods; superfluous dot bas references removed.
+&apos;// 7/5/20.		wmk.	Module2 subs/function index added.
+&apos;//
 &apos;//	Module2 subs/functions index.	7/5/20.
 &apos;//
 &apos;//	Main - Module2 Main - clear pbDlgLibLoaded flag.
@@ -104,14 +110,14 @@ public puoCOASelectBtn	As Object	&apos;// &lt;Select&gt; button
 &apos;// vars for dialogues interface to accounting package
 
 public puoCOAListBox As Object		&apos;// COA list box object in active form
-public pusCOASelected As String		&apos;// COA selected from list box (..Listener)
+public pusCOASelected As String		&apos;// COA selected from list box (..Listener.bas)
 public pbETActive	 AS Boolean		&apos;// ET dialog active flag
 public pbETDebitList	As Boolean	&apos;// debit list COA button
 public pbETCreditList	As Boolean	&apos;// credit list COA button
 
 OPTION EXPLICIT				&apos;// code protection
 
-&apos;//--------------end publics_2----7/6/20--------------------------
+&apos;//--------------end publics_2.bas----7/6/20--------------------------
 &apos;/**/
 &apos;// Main.bas
 &apos;// COPY CODE FROM MAIN TO COASelectListener, COACancelListener
@@ -282,6 +288,64 @@ ErrorHandler:
 	GOTO NormalExit
 end sub		&apos;// end COASelectListener	6/17/20
 &apos;/**/
+&apos;// ETAmountListener.bas
+&apos;//---------------------------------------------------------------------
+&apos;// ETAmountListener - Event handler &lt;amount&gt; from Enter Transaction.
+&apos;//		6/24/20.	wmk.	17:45
+&apos;//---------------------------------------------------------------------
+
+public sub ETAmountListener()
+
+&apos;//	Usage.	macro call or
+&apos;//			call ETAmountListener()
+&apos;//
+&apos;// Entry.	normal entry from event handler for dialogue where
+&apos;//			user changed the &lt;amount&gt; field in Enter Transaction
+&apos;//			puoETDialog = Enter Transaction dialog object
+&apos;//
+&apos;//	Exit.	gdETAmount = entered amount
+&apos;//			gbETAmtEntered = true if nonempty string
+&apos;//
+&apos;// Calls.	ETCheckComplete
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/15/20.	wmk.	original code
+&apos;// 6/17/20.	wmk.	bug fix enabling &lt;record&gt; buttons
+&apos;//	6/24/20.	wmk.	change to use type Double gdETAmount
+&apos;//
+&apos;//	Notes. This sub is the linked macro to the changed status event linked
+&apos;// to the &lt;debit&gt; text field in the Enter Transaction dialog.
+
+&apos;//	constants.
+dim bFormComplete	As Boolean		&apos;// all fields complete flag
+dim oETDlgCtrl		As Object		&apos;// reusable field object
+dim oETRecordBtn	As Object		&apos;// Record &amp;&apos; Finish button
+dim oETRecordCont	As Object		&apos;// Record &amp;&apos; Continue button
+
+&apos;//	local variables.
+
+	&apos;// code.
+	oETDlgCtrl = puoETDialog.getControl(&quot;AmtField1&quot;)
+	gdETAmount = oETDlgCtrl.getValue()
+	gbETAmtEntered = (Len(gdETAmount)&gt;0)
+	
+	&apos;// Enable SplitOption if amount entered &gt; 0
+	if gbETAmtEntered then
+		oETDlgCtrl = puoETDialog.getControl(&quot;SplitOption&quot;)
+		oETDlgCtrl.Model.Enabled = true
+	endif
+	
+	bFormComplete = ETCheckComplete()
+	if bFormComplete then
+		oETRecordBtn = puoETDialog.getControl(&quot;RecordBtn&quot;)
+		oETRecordBtn.Model.Enabled = true
+		oETRecordCont = puoETDialog.getControl(&quot;RecordContBtn&quot;)
+		oETRecordCont.Model.Enabled = true
+	endif	
+
+end sub		&apos;// end ETAmountListener	6/24/20
+&apos;/**/
 &apos;// ET.bas
 &apos;//---------------------------------------------------------------
 &apos;// ET - Enter Transaction Dialog run procedure.
@@ -371,291 +435,6 @@ endif
 	
 end sub		&apos;// end ET	9/8/22
 &apos;/**/
-&apos;// ETAmountListener.bas
-&apos;//---------------------------------------------------------------------
-&apos;// ETAmountListener - Event handler &lt;amount&gt; from Enter Transaction.
-&apos;//		6/24/20.	wmk.	17:45
-&apos;//---------------------------------------------------------------------
-
-public sub ETAmountListener()
-
-&apos;//	Usage.	macro call or
-&apos;//			call ETAmountListener()
-&apos;//
-&apos;// Entry.	normal entry from event handler for dialogue where
-&apos;//			user changed the &lt;amount&gt; field in Enter Transaction
-&apos;//			puoETDialog = Enter Transaction dialog object
-&apos;//
-&apos;//	Exit.	gdETAmount = entered amount
-&apos;//			gbETAmtEntered = true if nonempty string
-&apos;//
-&apos;// Calls.	ETCheckComplete
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	6/15/20.	wmk.	original code
-&apos;// 6/17/20.	wmk.	bug fix enabling &lt;record&gt; buttons
-&apos;//	6/24/20.	wmk.	change to use type Double gdETAmount
-&apos;//
-&apos;//	Notes. This sub is the linked macro to the changed status event linked
-&apos;// to the &lt;debit&gt; text field in the Enter Transaction dialog.
-
-&apos;//	constants.
-dim bFormComplete	As Boolean		&apos;// all fields complete flag
-dim oETDlgCtrl		As Object		&apos;// reusable field object
-dim oETRecordBtn	As Object		&apos;// Record &amp;&apos; Finish button
-dim oETRecordCont	As Object		&apos;// Record &amp;&apos; Continue button
-
-&apos;//	local variables.
-
-	&apos;// code.
-	oETDlgCtrl = puoETDialog.getControl(&quot;AmtField1&quot;)
-	gdETAmount = oETDlgCtrl.getValue()
-	gbETAmtEntered = (Len(gdETAmount)&gt;0)
-	
-	&apos;// Enable SplitOption if amount entered &gt; 0
-	if gbETAmtEntered then
-		oETDlgCtrl = puoETDialog.getControl(&quot;SplitOption&quot;)
-		oETDlgCtrl.Model.Enabled = true
-	endif
-	
-	bFormComplete = ETCheckComplete()
-	if bFormComplete then
-		oETRecordBtn = puoETDialog.getControl(&quot;RecordBtn&quot;)
-		oETRecordBtn.Model.Enabled = true
-		oETRecordCont = puoETDialog.getControl(&quot;RecordContBtn&quot;)
-		oETRecordCont.Model.Enabled = true
-	endif	
-
-end sub		&apos;// end ETAmountListener	6/24/20
-&apos;/**/
-&apos;// ETCOA1ListListener.bas
-&apos;//--------------------------------------------------------------------
-&apos;// ETCOA1ListListener - Process user click on &lt;...&gt; with COA1 account.
-&apos;//		6/17/20.	wmk.	07:45
-&apos;//--------------------------------------------------------------------
-
-public sub ETCOA1ListListener()
-
-&apos;//	Usage.	macro call or
-&apos;//			call ETCOA1ListListener()
-&apos;//
-&apos;// Entry.	User clicked on &lt;...&gt; next to COA1 field
-&apos;//			&lt;DebitField&gt; in ET dialog is text field for result
-&apos;//
-&apos;//	Exit.	If user selected a COA from the COADialog then
-&apos;//			gsETAcct1 = the COA # selected
-&apos;//			DebitField.Text = the COA # selected
-&apos;//			otherwise the above remain unchanged
-&apos;//
-&apos;// Calls.
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	6/16/20.	wmk.	original code
-&apos;//	6/17/20.	wmk.	bug fix setting selection in text box
-&apos;//
-&apos;//	Notes. If the user does not select a new COA from GetCOA, the
-&apos;//	current COA for the Debit field (gsETAcct1) will remain unchanged.
-&apos;//
-
-&apos;//	constants.
-
-&apos;//	local variables.
-dim oETCOA1Text	As Object			&apos;// account text field
-dim sAcct1		As String			&apos;// returned account from GetCOA
-
-	&apos;// code.
-	sAcct1 = &quot;&quot;
-	ON ERROR GOTO ErrorHandler
-	
-	pbETDebitList=true
-	pbETCreditList=false	
-	sAcct1 = GetCOA(1)			&apos;// get COA from dialog
-	if Len(sAcct1)&gt;0 then
-	    puoETDialog.Model.DebitField.Text = sAcct1
-&apos;		oETCOA1Text = puoETDialog.getControl(&quot;DebitField&quot;)
-&apos;		oETCOA1Text.Text = sAcct1
-		gsETAcct1 = sAcct1
-	endif
-	
-NormalExit:
-	exit sub
-	
-ErrorHandler:
-	gsETAcct1 = sAcct1
-	GoTo NormalExit
-	
-end sub		&apos;// end ETCOA1ListListener	6/17/20
-&apos;/**/
-&apos;// ETCOA1Listener.bas
-&apos;//---------------------------------------------------------------------
-&apos;// ETCOA1Listener - Event handler &lt;COA1 account&gt; from Enter Transaction.
-&apos;//		6/17/20.	wmk.	14:30
-&apos;//---------------------------------------------------------------------
-
-public sub ETCOA1Listener()
-
-&apos;//	Usage.	macro call or
-&apos;//			call ETCOA1Listener()
-&apos;//
-&apos;// Entry.	normal entry from event handler for dialogue where
-&apos;//			user changed the &lt;COA1 account&gt; field in Enter Transaction
-&apos;//			puoETDialog = Enter Transaction dialog object
-&apos;//
-&apos;//	Exit.	gsETAcct1 = entered amount
-&apos;//			gbETCOA1Entered = true if nonempty string
-&apos;//			pbETDebitList = true
-&apos;//			pbETCreditList = false
-&apos;//
-&apos;// Calls.	ETCheckComplete
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	6/15/20.	wmk.	original code.
-&apos;//	6/17/20.	wmk.	bug fix enabling [Record..] buttons
-&apos;//
-&apos;//	Notes. This sub is the linked macro to the changed status event linked
-&apos;// to the &lt;debit&gt; text field in the Enter Transaction dialog.
-
-&apos;//	constants.
-dim bFormComplete	As Boolean		&apos;// all fields complete flag
-dim oETCOA1Text	As Object			&apos;// account text field
-dim oETRecordBtn	As Object		&apos;// Record &amp;&apos; Finish button
-dim oETRecordCont	As Object		&apos;// Record &amp;&apos; Continue button
-
-&apos;//	local variables.
-
-	&apos;// code.
-	pbETDebitList = true
-	pbETCreditList = false
-	oETCOA1Text = puoETDialog.getControl(&quot;DebitField&quot;)
-	gsETAcct1 = oETCOA1Text.Text
-	gbETCOA1Entered = (Len(gsETAcct1)&gt;0)
-	bFormComplete = ETCheckComplete()
-	if bFormComplete then
-		oETRecordBtn = puoETDialog.getControl(&quot;RecordBtn&quot;)
-		oETRecordBtn.Model.Enabled = true
-		oETRecordCont = puoETDialog.getControl(&quot;RecordContBtn&quot;)
-		oETRecordCont.Model.Enabled = true
-	endif	
-
-end sub		&apos;// end ETCOA1Listener	6/17/20
-&apos;/**/
-&apos;// ETCOA2ListListener.bas
-&apos;//--------------------------------------------------------------------
-&apos;// ETCOA2ListListener - Process user click on &lt;...&gt; with COA2 account.
-&apos;//		6/17/20.	wmk.	10:15
-&apos;//--------------------------------------------------------------------
-
-public sub ETCOA2ListListener()
-
-&apos;//	Usage.	macro call or
-&apos;//			call ETCOA2ListListener()
-&apos;//
-&apos;// Entry.	User clicked on &lt;...&gt; next to COA2 field
-&apos;//			&lt;DebitField&gt; in ET dialog is text field for result
-&apos;//
-&apos;//	Exit.	If user selected a COA from the COADialog then
-&apos;//			gsETAcct1 = the COA # selected
-&apos;//			DebitField.Text = the COA # selected
-&apos;//			otherwise the above remain unchanged
-&apos;//
-&apos;// Calls.
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	6/17/20.	wmk.	original code; cloned from ETCOA1ListListener
-&apos;//
-&apos;//	Notes. If the user does not select a new COA from GetCOA, the
-&apos;//	current COA for the Credit field (gsETAcct2) will remain unchanged.
-&apos;//
-
-&apos;//	constants.
-
-&apos;//	local variables.
-dim oETCOA2Text	As Object			&apos;// account text field
-dim sAcct2		As String			&apos;// returned account from GetCOA
-
-	&apos;// code.
-	sAcct2 = &quot;&quot;
-	ON ERROR GOTO ErrorHandler
-
-	pbETDebitList=false
-	pbETCreditList=true
-	sAcct2 = GetCOA(1)			&apos;// get COA from dialog
-	if Len(sAcct2)&gt;0 then
-		puoETDialog.Model.CreditField.Text = sAcct2
-&apos;		oETCOA2Text = puoETDialog.getControl(&quot;CreditField&quot;)
-&apos;		oETCOA2Text.Text = sAcct2
-		gsETAcct2 = sAcct2
-	endif
-	
-NormalExit:
-	exit sub
-	
-ErrorHandler:
-	gsETAcct2 = sAcct2
-	GoTo NormalExit
-	
-end sub		&apos;// end ETCOA2ListListener	6/17/20
-&apos;/**/
-&apos;// ETCOA2Listener.bas
-&apos;//---------------------------------------------------------------------
-&apos;// ETCOA2Listener - Event handler &lt;COA1 account&gt; from Enter Transaction.
-&apos;//		9/8/22.	wmk.	15:07
-&apos;//---------------------------------------------------------------------
-
-public sub ETCOA2Listener()
-
-&apos;//	Usage.	macro call or
-&apos;//			call ETCOA2Listener()
-&apos;//
-&apos;// Entry.	normal entry from event handler for dialogue where
-&apos;//			user changed the &lt;COA2 account&gt; field in Enter Transaction
-&apos;//			puoETDialog = Enter Transaction dialog object
-&apos;//
-&apos;//	Exit.	gsETAcct2 = entered account
-&apos;//			gbETCOA2Entered = true if nonempty string
-&apos;//			pbETCreditList = true
-&apos;//			pbETDebitList = false
-&apos;//
-&apos;// Calls.	ETCheckComplete
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;// 9/8/22.		wmk.	text modified; eliminate all other code except
-&apos;//				 to check if form complete.
-&apos;// Legacy mods.
-&apos;//	6/16/20.	wmk.	original code
-&apos;//	6/17/20.	wmk.	bug fix enabling Select buttons
-&apos;//	Notes. This sub is the linked macro to the changed status event linked
-&apos;// to the &lt;Credit account&gt; text field in the Enter Transaction dialog.
-
-&apos;//	constants.
-dim bFormComplete	As Boolean		&apos;// all fields complete flag
-dim oETCOA2Text	As Object			&apos;// account text field
-dim oETRecordBtn	As Object		&apos;// Record &amp;&apos; Finish button
-dim oETRecordCont	As Object		&apos;// Record &amp;&apos; Continue button
-
-&apos;//	local variables.
-
-	&apos;// code.
-	pbETCreditList = true
-	pbETDebitList = false
-	oETCOA2Text = puoETDialog.getControl(&quot;CreditField&quot;)
-	gsETAcct2 = oETCOA2Text.Text
-	gbETCOA2Entered = (Len(gsETAcct2)&gt;0)
-	bFormComplete = ETCheckComplete()
-	if bFormComplete then
-		oETRecordBtn = puoETDialog.getControl(&quot;RecordBtn&quot;)
-		oETRecordBtn.Model.Enabled = true
-		oETRecordCont = puoETDialog.getControl(&quot;RecordContBtn&quot;)
-		oETRecordCont.Model.Enabled = true
-	endif	
-
-end sub		&apos;// end ETCOA2Listener	9/8/22
-&apos;/**/
 &apos;// ETCancelListener.bas
 &apos;//---------------------------------------------------------------------
 &apos;// ETCancelListener - Event handler &lt;Cancel&gt; from Enter Transaction.
@@ -742,6 +521,233 @@ dim bRetValue As Boolean
 	ETCheckComplete = bRetValue
 
 end function 	&apos;// end ETCheckComplete		6/15/20
+&apos;/**/
+&apos;// ETCOA1Listener.bas
+&apos;//---------------------------------------------------------------------
+&apos;// ETCOA1Listener - Event handler &lt;COA1 account&gt; from Enter Transaction.
+&apos;//		6/17/20.	wmk.	14:30
+&apos;//---------------------------------------------------------------------
+
+public sub ETCOA1Listener()
+
+&apos;//	Usage.	macro call or
+&apos;//			call ETCOA1Listener()
+&apos;//
+&apos;// Entry.	normal entry from event handler for dialogue where
+&apos;//			user changed the &lt;COA1 account&gt; field in Enter Transaction
+&apos;//			puoETDialog = Enter Transaction dialog object
+&apos;//
+&apos;//	Exit.	gsETAcct1 = entered amount
+&apos;//			gbETCOA1Entered = true if nonempty string
+&apos;//			pbETDebitList = true
+&apos;//			pbETCreditList = false
+&apos;//
+&apos;// Calls.	ETCheckComplete
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/15/20.	wmk.	original code.
+&apos;//	6/17/20.	wmk.	bug fix enabling [Record..] buttons
+&apos;//
+&apos;//	Notes. This sub is the linked macro to the changed status event linked
+&apos;// to the &lt;debit&gt; text field in the Enter Transaction dialog.
+
+&apos;//	constants.
+dim bFormComplete	As Boolean		&apos;// all fields complete flag
+dim oETCOA1Text	As Object			&apos;// account text field
+dim oETRecordBtn	As Object		&apos;// Record &amp;&apos; Finish button
+dim oETRecordCont	As Object		&apos;// Record &amp;&apos; Continue button
+
+&apos;//	local variables.
+
+	&apos;// code.
+	pbETDebitList = true
+	pbETCreditList = false
+	oETCOA1Text = puoETDialog.getControl(&quot;DebitField&quot;)
+	gsETAcct1 = oETCOA1Text.Text
+	gbETCOA1Entered = (Len(gsETAcct1)&gt;0)
+	bFormComplete = ETCheckComplete()
+	if bFormComplete then
+		oETRecordBtn = puoETDialog.getControl(&quot;RecordBtn&quot;)
+		oETRecordBtn.Model.Enabled = true
+		oETRecordCont = puoETDialog.getControl(&quot;RecordContBtn&quot;)
+		oETRecordCont.Model.Enabled = true
+	endif	
+
+end sub		&apos;// end ETCOA1Listener	6/17/20
+&apos;/**/
+&apos;// ETCOA1ListListener.bas
+&apos;//--------------------------------------------------------------------
+&apos;// ETCOA1ListListener - Process user click on &lt;...&gt; with COA1 account.
+&apos;//		6/17/20.	wmk.	07:45
+&apos;//--------------------------------------------------------------------
+
+public sub ETCOA1ListListener()
+
+&apos;//	Usage.	macro call or
+&apos;//			call ETCOA1ListListener()
+&apos;//
+&apos;// Entry.	User clicked on &lt;...&gt; next to COA1 field
+&apos;//			&lt;DebitField&gt; in ET dialog is text field for result
+&apos;//
+&apos;//	Exit.	If user selected a COA from the COADialog then
+&apos;//			gsETAcct1 = the COA # selected
+&apos;//			DebitField.Text = the COA # selected
+&apos;//			otherwise the above remain unchanged
+&apos;//
+&apos;// Calls.
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/16/20.	wmk.	original code
+&apos;//	6/17/20.	wmk.	bug fix setting selection in text box
+&apos;//
+&apos;//	Notes. If the user does not select a new COA from GetCOA, the
+&apos;//	current COA for the Debit field (gsETAcct1) will remain unchanged.
+&apos;//
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim oETCOA1Text	As Object			&apos;// account text field
+dim sAcct1		As String			&apos;// returned account from GetCOA
+
+	&apos;// code.
+	sAcct1 = &quot;&quot;
+	ON ERROR GOTO ErrorHandler
+	
+	pbETDebitList=true
+	pbETCreditList=false	
+	sAcct1 = GetCOA(1)			&apos;// get COA from dialog
+	if Len(sAcct1)&gt;0 then
+	    puoETDialog.Model.DebitField.Text = sAcct1
+&apos;		oETCOA1Text = puoETDialog.getControl(&quot;DebitField&quot;)
+&apos;		oETCOA1Text.Text = sAcct1
+		gsETAcct1 = sAcct1
+	endif
+	
+NormalExit:
+	exit sub
+	
+ErrorHandler:
+	gsETAcct1 = sAcct1
+	GoTo NormalExit
+	
+end sub		&apos;// end ETCOA1ListListener	6/17/20
+&apos;/**/
+&apos;// ETCOA2Listener.bas
+&apos;//---------------------------------------------------------------------
+&apos;// ETCOA2Listener - Event handler &lt;COA1 account&gt; from Enter Transaction.
+&apos;//		9/8/22.	wmk.	15:07
+&apos;//---------------------------------------------------------------------
+
+public sub ETCOA2Listener()
+
+&apos;//	Usage.	macro call or
+&apos;//			call ETCOA2Listener()
+&apos;//
+&apos;// Entry.	normal entry from event handler for dialogue where
+&apos;//			user changed the &lt;COA2 account&gt; field in Enter Transaction
+&apos;//			puoETDialog = Enter Transaction dialog object
+&apos;//
+&apos;//	Exit.	gsETAcct2 = entered account
+&apos;//			gbETCOA2Entered = true if nonempty string
+&apos;//			pbETCreditList = true
+&apos;//			pbETDebitList = false
+&apos;//
+&apos;// Calls.	ETCheckComplete
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;// 9/8/22.		wmk.	text modified; eliminate all other code except
+&apos;//				 to check if form complete.
+&apos;// Legacy mods.
+&apos;//	6/16/20.	wmk.	original code
+&apos;//	6/17/20.	wmk.	bug fix enabling Select buttons
+&apos;//	Notes. This sub is the linked macro to the changed status event linked
+&apos;// to the &lt;Credit account&gt; text field in the Enter Transaction dialog.
+
+&apos;//	constants.
+dim bFormComplete	As Boolean		&apos;// all fields complete flag
+dim oETCOA2Text	As Object			&apos;// account text field
+dim oETRecordBtn	As Object		&apos;// Record &amp;&apos; Finish button
+dim oETRecordCont	As Object		&apos;// Record &amp;&apos; Continue button
+
+&apos;//	local variables.
+
+	&apos;// code.
+	pbETCreditList = true
+	pbETDebitList = false
+	oETCOA2Text = puoETDialog.getControl(&quot;CreditField&quot;)
+	gsETAcct2 = oETCOA2Text.Text
+	gbETCOA2Entered = (Len(gsETAcct2)&gt;0)
+	bFormComplete = ETCheckComplete()
+	if bFormComplete then
+		oETRecordBtn = puoETDialog.getControl(&quot;RecordBtn&quot;)
+		oETRecordBtn.Model.Enabled = true
+		oETRecordCont = puoETDialog.getControl(&quot;RecordContBtn&quot;)
+		oETRecordCont.Model.Enabled = true
+	endif	
+
+end sub		&apos;// end ETCOA2Listener	9/8/22
+&apos;/**/
+&apos;// ETCOA2ListListener.bas
+&apos;//--------------------------------------------------------------------
+&apos;// ETCOA2ListListener - Process user click on &lt;...&gt; with COA2 account.
+&apos;//		6/17/20.	wmk.	10:15
+&apos;//--------------------------------------------------------------------
+
+public sub ETCOA2ListListener()
+
+&apos;//	Usage.	macro call or
+&apos;//			call ETCOA2ListListener()
+&apos;//
+&apos;// Entry.	User clicked on &lt;...&gt; next to COA2 field
+&apos;//			&lt;DebitField&gt; in ET dialog is text field for result
+&apos;//
+&apos;//	Exit.	If user selected a COA from the COADialog then
+&apos;//			gsETAcct1 = the COA # selected
+&apos;//			DebitField.Text = the COA # selected
+&apos;//			otherwise the above remain unchanged
+&apos;//
+&apos;// Calls.
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/17/20.	wmk.	original code; cloned from ETCOA1ListListener
+&apos;//
+&apos;//	Notes. If the user does not select a new COA from GetCOA, the
+&apos;//	current COA for the Credit field (gsETAcct2) will remain unchanged.
+&apos;//
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim oETCOA2Text	As Object			&apos;// account text field
+dim sAcct2		As String			&apos;// returned account from GetCOA
+
+	&apos;// code.
+	sAcct2 = &quot;&quot;
+	ON ERROR GOTO ErrorHandler
+
+	pbETDebitList=false
+	pbETCreditList=true
+	sAcct2 = GetCOA(1)			&apos;// get COA from dialog
+	if Len(sAcct2)&gt;0 then
+		puoETDialog.Model.CreditField.Text = sAcct2
+&apos;		oETCOA2Text = puoETDialog.getControl(&quot;CreditField&quot;)
+&apos;		oETCOA2Text.Text = sAcct2
+		gsETAcct2 = sAcct2
+	endif
+	
+NormalExit:
+	exit sub
+	
+ErrorHandler:
+	gsETAcct2 = sAcct2
+	GoTo NormalExit
+	
+end sub		&apos;// end ETCOA2ListListener	6/17/20
 &apos;/**/
 &apos;// ETDateListener.bas
 &apos;//---------------------------------------------------------------------
@@ -2326,73 +2332,6 @@ ErrorHandler:
 	
 end function 	&apos;// end fVSDialogPreset	6/27/20
 &apos;/**/
-&apos;// G.bas
-&apos;//---------------------------------------------------------------
-&apos;// G - Enter Transaction Dialog test procedure.
-&apos;//		8/26/22.	wmk.	10:26	
-&apos;//----------------------------------------------------------------
-
-public sub G()
-
-&apos;//	Usage.	macro call or
-&apos;//			call G()
-&apos;//
-&apos;//		Run ET dialog...
-&apos;//
-&apos;// Entry.	Button click in dialog box		
-&apos;//			puoETDialog = declared object for COA dialog
-&apos;//
-&apos;//	Exit.	msgBox message displayed
-&apos;//
-&apos;// Calls.	ETPubVarsReset
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	6/15/20.	wmk.	original code.
-&apos;// 6/16/10.	wmk.	message boxes for verifification.
-&apos;//	6/17/20.	wmk.	add ETPubVars reset call on Cancel.
-&apos;//	6/25/20.	wmk.	gsETAmount corrected to new gdETAmount.
-&apos;//	6/27/20.	wmk.	msgBoxes commented to deactivate.
-&apos;// 8/26/22.	wmk.	eliminate references to G. bas.
-&apos;//
-&apos;//	Notes.
-&apos;//
-
-&apos;//	constants.
-
-&apos;//	local variables.
-&apos;dim oListBox As com.sun.star.awt.UnoControlListBox
-dim iStatus As Integer
-
-&apos;// code.
-DialogLibraries.LoadLibrary(&quot;Standard&quot;)
-
-&apos;// Initialize ET dialog.
-	puoETDialog = CreateUnoDialog(DialogLibraries.Standard.TransEntry)
-
-	Select Case puoETDialog.Execute()
-	Case 2		&apos;// Record &amp;&apos; Finish clicked
-&apos;		msgBox(&quot;Record &amp;&apos; Finish clicked in Enter Transaction&quot;)
-		&apos;// iStatus = ETDialogRecord... called by [Record &amp;&apos; Finish]
-	Case 0		&apos;// Cancel
-&apos;		pusCOASelected = &quot;&quot;		&apos;// since cancel, Execute() event skipped
-		iStatus = ETPubVarsReset(1)	&apos;// reset everything
-&apos;		msgBox(&quot;Cancel or FormClose clicked&quot;)
-	Case else
-		msgBox(&quot;G- unevaluated dialog return&quot;)
-	End Select
-
-&apos;msgbox(&quot;Date entered: &quot; + gsETDate)
-&apos;msgbox(&quot;Decription: &quot; + gsETDescription)
-&apos;msgBox(&quot;Amount: &quot; + gdETAmount)
-&apos;msgBox(&quot;Debit Account: &quot; + gsETAcct1)
-&apos;msgBox(&quot;Credit Account: &quot; + gsETAcct2)
-&apos;msgBox(&quot;Reference: &quot; + gsETRef)
-
-puoETDialog.dispose()
-	
-end sub		&apos;// end G	8/26/22
-&apos;/**/
 &apos;// GA.bas
 &apos;//---------------------------------------------------------------
 &apos;// GA - Store user selected COA in first cell in selected range
@@ -2499,6 +2438,73 @@ ErrorHandler:
 	GoTo NormalExit
 	
 end sub		&apos;// end GA		9/7/22
+&apos;/**/
+&apos;// G.bas
+&apos;//---------------------------------------------------------------
+&apos;// G - Enter Transaction Dialog test procedure.
+&apos;//		8/26/22.	wmk.	10:26	
+&apos;//----------------------------------------------------------------
+
+public sub G()
+
+&apos;//	Usage.	macro call or
+&apos;//			call G()
+&apos;//
+&apos;//		Run ET dialog...
+&apos;//
+&apos;// Entry.	Button click in dialog box		
+&apos;//			puoETDialog = declared object for COA dialog
+&apos;//
+&apos;//	Exit.	msgBox message displayed
+&apos;//
+&apos;// Calls.	ETPubVarsReset
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/15/20.	wmk.	original code.
+&apos;// 6/16/10.	wmk.	message boxes for verifification.
+&apos;//	6/17/20.	wmk.	add ETPubVars reset call on Cancel.
+&apos;//	6/25/20.	wmk.	gsETAmount corrected to new gdETAmount.
+&apos;//	6/27/20.	wmk.	msgBoxes commented to deactivate.
+&apos;// 8/26/22.	wmk.	eliminate references to G. bas.
+&apos;//
+&apos;//	Notes.
+&apos;//
+
+&apos;//	constants.
+
+&apos;//	local variables.
+&apos;dim oListBox As com.sun.star.awt.UnoControlListBox
+dim iStatus As Integer
+
+&apos;// code.
+DialogLibraries.LoadLibrary(&quot;Standard&quot;)
+
+&apos;// Initialize ET dialog.
+	puoETDialog = CreateUnoDialog(DialogLibraries.Standard.TransEntry)
+
+	Select Case puoETDialog.Execute()
+	Case 2		&apos;// Record &amp;&apos; Finish clicked
+&apos;		msgBox(&quot;Record &amp;&apos; Finish clicked in Enter Transaction&quot;)
+		&apos;// iStatus = ETDialogRecord... called by [Record &amp;&apos; Finish]
+	Case 0		&apos;// Cancel
+&apos;		pusCOASelected = &quot;&quot;		&apos;// since cancel, Execute() event skipped
+		iStatus = ETPubVarsReset(1)	&apos;// reset everything
+&apos;		msgBox(&quot;Cancel or FormClose clicked&quot;)
+	Case else
+		msgBox(&quot;G- unevaluated dialog return&quot;)
+	End Select
+
+&apos;msgbox(&quot;Date entered: &quot; + gsETDate)
+&apos;msgbox(&quot;Decription: &quot; + gsETDescription)
+&apos;msgBox(&quot;Amount: &quot; + gdETAmount)
+&apos;msgBox(&quot;Debit Account: &quot; + gsETAcct1)
+&apos;msgBox(&quot;Credit Account: &quot; + gsETAcct2)
+&apos;msgBox(&quot;Reference: &quot; + gsETRef)
+
+puoETDialog.dispose()
+	
+end sub		&apos;// end G	8/26/22
 &apos;/**/
 &apos;// GetCOA.bas
 &apos;//---------------------------------------------------------------
@@ -2631,7 +2637,7 @@ public sub H()
 &apos;//	---------------------
 &apos;//	6/18/20.	wmk.	original code; adapted from G. bas.
 &apos;//	6/23/20.	wmk.	change to use fDialogReset.
-&apos;// 8/26/22.	wmk.	add intervening space to G. bas and H . bas in comments.
+&apos;// 8/26/22.	wmk.	add intervening space to G. bas and H .bas in comments.
 &apos;//
 &apos;//	Notes.
 &apos;//
@@ -2978,7 +2984,7 @@ end function 	&apos;// end LoadStdLibrary	7/5/20
 &apos;// PlaceSplitTotal.bas
 &apos;//------------------------------------------------------------------
 &apos;// PlaceSplitTotal - Itemize split transaction in total COA account.
-&apos;//		7/8/20.	wmk.	15:00
+&apos;//		4/19/25.	wmk.
 &apos;//------------------------------------------------------------------
 
 public function PlaceSplitTotal(poGLRange As Object, psAcct As String) As Integer
@@ -3002,6 +3008,7 @@ public function PlaceSplitTotal(poGLRange As Object, psAcct As String) As Intege
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
+&apos;// 4/19/25.	wmk.	Function &gt; function at end for block parsing.
 &apos;//	6/4/20.		wmk.	original code
 &apos;//	6/6/20.		wmk.
 &apos;//	6/27/20.	wmk.	superfluous &quot;if&quot; removed
@@ -3315,7 +3322,7 @@ NormalExit:
 
 	PlaceSplitTotal = iRetValue
 
-end Function		&apos;// end PlaceSplitTotal		7/8/20
+end function		&apos;// end PlaceSplitTotal		4/19/25.
 &apos;/**/
 &apos;// RunCOADlg.bas
 &apos;//---------------------------------------------------------------
@@ -4585,286 +4592,6 @@ ErrorHandler:
 	
 end sub		&apos;// end STAmt4FocusListener	6/20/20
 &apos;/**/
-&apos;// fSTAmtLostFocus.bas
-&apos;//---------------------------------------------------------------
-&apos;// fSTAmtLostFocus - Handle all AmtFld LostFocus events.
-&apos;//		6/22/20.	wmk.	08:00
-&apos;//---------------------------------------------------------------
-
-public function fSTAmtLostFocus(psFldName As String) As Integer
-
-&apos;//	Usage.	iVar = fSTAmtLostFocus(sFldName)
-&apos;//
-&apos;//	Parameters.	sFldName = name of dialog field losing focus
-&apos;//				(e.g. &quot;AmtFld1&quot;)
-&apos;// Entry.	AmtFld1..AmtFld10 lost focus
-&apos;//			gdSTAmts() = updated with newly entered amount
-&apos;//			gsSTObjFocus = name of object with focus
-&apos;//			gdSTAccumTot = accumulated split total
-&apos;//			gdSTTotalAmt = total amount to split
-&apos;//
-&apos;//	Exit.	gsSTAccumTot, gsSTTotalAmt updated with newly entered amount
-&apos;//			&lt;Done&gt; button activated if dialog entries complete
-&apos;//			next row fields activated if row complete
-&apos;//
-&apos;// Calls.	STFld6ToIndex, STUpdateAccumTot, CheckRowComplete, CheckComplete
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	6/20/20.	wmk.	original code; cloned from STAmtLostFocus
-&apos;//	6/21/20.	wmk.	check for total reached before activating next row
-&apos;// 6/21/20.	wmk.	change to accept psFldName parameter; to be called by
-&apos;//						all STAmt.LostFocus events; changed totals check and
-&apos;//						activate &lt;Done&gt; conditional
-&apos;//	6/22/20.	wmk.	change name to begin with &quot;f&quot; so can be distinguished
-&apos;//						by sub with same name for testing
-
-&apos;//	constants.
-
-&apos;//	local variables.
-dim iRetValue 		As Integer			&apos;// returned status
-dim iStatus			As Integer			&apos;// general status
-dim iRowIx			As Integer			&apos;// index of present row
-dim oDlgControl		As Object			&apos;// field ptr
-dim bRowComplete	As Boolean			&apos;// row complete flag
-dim bDlgComplete	As Boolean			&apos;// dialog complete flag
-dim bTotalMet		As Boolean			&apos;// split total met flag
-dim sFldName 		As String			&apos;// local copy of field name
-
-	&apos;// code.
-	iRetValue = -1						&apos;// set bad return
-	ON ERROR GOTO ErrorHandler
-&apos;msgBox(&quot;In fSTAmtLostFocus entry values..&quot; + CHR(13)+CHR(10) _
-&apos;	+ &quot;gdSTAccumTot = &quot; + gdSTAccumTot + CHR(13)+CHR(10) _
-&apos;	+ &quot;gdSTTotalAmt = &quot; + gdSTTotalAmt + CHR(13)+CHR(10) _
-&apos;	+ &quot;gsSTObjFocus = &apos;&quot; + gsSTObjFocus + &quot;&apos;&quot; )
-	
-	sFldName = psFldName				&apos;// use local copy of field name
-&apos;msgBox(&quot;fSTAmtLostFocus - sFldName = &apos;&quot; + sFldName + &quot;&apos;&quot;)
-	if Len(sFldName) &lt; 7 then
-		GoTo ErrorHandler
-	endif	&apos;// error - field name not set up for entry
-	
-	bDlgComplete = false
-	iRowIx = STFld6ToIndex(sFldName)
-	iStatus = STUpdateAccumTot(sFldName)
-&apos;msgBox(&quot;In fSTAmtLostFocus values after update..&quot; + CHR(13)+CHR(10) _
-&apos;	+ &quot;gdSTAccumTot = &quot; + gdSTAccumTot + CHR(13)+CHR(10) _
-&apos;	+ &quot;gdSTTotalAmt = &quot; + gdSTTotalAmt )
-	
-	if iStatus &lt; 0 then
-		GoTo ErrorHandler
-	endif	&apos;// end error in updating accum total conditional
-
-	bTotalMet = (iStatus = 1)
-	bRowComplete = STRowComplete(iRowIx)
-	if bRowComplete then
-		bDlgComplete = STCheckComplete()
-		oDlgControl = puoSTDialog.getControl(&quot;UnsplitTot&quot;)
-&apos;		if gdSTAccumTot &lt; gdSTTotalAmt then		
-		if oDlgControl.Value &gt; 0 then		
-			&apos;// check for next row Enabled; if not, enable it
-			iStatus = STEnableNextRow(iRowIx)
-			if iStatus &lt; 0 then
-				GoTo ErrorHandler
-			endif
-		else
-			bTotalMet = true
-		endif &apos;// end total not met yet conditional
-		
-	endif	&apos;// end row complete conditional
-	
-	&apos;// activate/deactivate &lt;Done&gt; control if dialog complete
-	oDlgControl = puoSTDialog.getControl(&quot;DoneBtn&quot;)
-&apos;	bDlgComplete = (bDlgComplete AND bTotalMet)
-	bDlgComplete = (bDlgComplete OR bTotalMet)
-	if bDlgComplete then
-		oDlgControl.Model.Enabled = true
-	else
-		oDlgControl.Model.Enabled = false
-	endif
-	iRetValue = 0
-	
-NormalExit:
-	fSTAmtLostFocus = iRetValue
-	exit function
-	
-ErrorHandler:
-	msgBox(&quot;In fSTAmtLostFocus - unprocessed error&quot;)
-	iRetValue = iStatus
-	GoTo NormalExit
-	
-end function		&apos;// end fSTAmtLostFocus	6/22/20
-&apos;/**/
-&apos;// STAmtLostFocus.bas
-&apos;//---------------------------------------------------------------
-&apos;// STAmt4LostFocus - Handle AmtFld4 LostFocus event.
-&apos;//		6/23/20.	wmk.	10:30
-&apos;//---------------------------------------------------------------
-
-public sub STAmt4LostFocus()
-
-&apos;//	Usage.	macro call or
-&apos;//			call STAmt4LostFocus()
-&apos;//
-&apos;// Entry.	AmtFld1..AmtFld10 lost focus
-&apos;//
-&apos;//	Exit.	gdSTAccumTot = updated with enterd value if within split bounds
-&apos;//
-&apos;// Calls.	fSTAmtLostFocus
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	6/19/20.	wmk.	original code
-&apos;// 6/20/20.	wmk.	activate/deactivate &lt;Done&gt; control code fixed
-&apos;//	6/21/20.	wmk.	MY_NAME const added
-&apos;//	6/22/20.	wmk.	eliminate MY_NAME const; use STGetObjFocus to retrieve
-&apos;//						this control name in dialog
-&apos;//	6/23/20.	wmk.	rewritten; uses fSTAmtLostFocus
-&apos;//
-&apos;//	Notes.
-
-&apos;//	constants.
-&apos;const MY_NAME=&quot;AmtFld4&quot;
-
-&apos;//	local variables.
-dim iStatus		As Integer		&apos;// general status
-dim sFldName	As String		&apos;// name of this field
-
-	&apos;// code.
-	iStatus = -1
-	ON ERROR GOTO ErrorHandler
-	sFldName = &quot;AmtFld4&quot;
-	
-	iStatus = fSTAmtLostFocus(sFldName)
-	if iStatus &lt; 0 then
-		GoTo ErrorHandler
-	endif
-		
-NormalExit:
-	exit sub
-	
-ErrorHandler:
-	msgBox(&quot;In STAmt4LostFocus - unprocessed error&quot;)
-	GoTo NormalExit
-	
-end sub		&apos;// end STAmt4LostFocus	6/23/20
-&apos;/**/
-&apos;// STAmtLostFocus.bas
-&apos;//---------------------------------------------------------------
-&apos;// STAmtLostFocus - Handle all AmtFld LostFocus events.
-&apos;//		6/22/20.	wmk.	08:00
-&apos;//---------------------------------------------------------------
-
-public sub STAmtLostFocus()
-
-&apos;//	Usage.	call STAmtLostFocus()
-&apos;//			or macro call
-&apos;//
-&apos;// Entry.	AmtFld1..AmtFld10 lost focus
-&apos;//			gdSTAmts() = updated with newly entered amount
-&apos;//			gsSTObjFocus = name of object with focus
-&apos;//			gdSTAccumTot = accumulated split total
-&apos;//			gdSTTotalAmt = total amount to split
-&apos;//
-&apos;//	Exit.	gdSTAccumTot, gdSTTotalAmt updated with newly entered amount
-&apos;//			&lt;Done&gt; button activated if dialog entries complete
-&apos;//			next row fields activated if row complete
-&apos;//
-&apos;// Calls.	STFld6ToIndex, CheckRowComplete, CheckComplete
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	6/20/20.	wmk.	original code; cloned from STAmtLostFocus
-&apos;//	6/21/20.	wmk.	check for total reached before activating next row
-&apos;// 6/21/20.	wmk.	change to accept psFldName parameter; to be called by
-&apos;//						all STAmt.LostFocus events; changed totals check and
-&apos;//						activate &lt;Done&gt; conditional
-&apos;//	6/22/20.	wmk.	change name to begin with &quot;f&quot; so can be distinguished
-&apos;//						by sub with same name for testing
-
-&apos;//	constants.
-
-&apos;//	local variables.
-dim iRetValue 		As Integer			&apos;// returned status
-dim iStatus			As Integer			&apos;// general status
-dim iRowIx			As Integer			&apos;// index of present row
-dim oDlgControl		As Object			&apos;// field ptr
-dim bRowComplete	As Boolean			&apos;// row complete flag
-dim bDlgComplete	As Boolean			&apos;// dialog complete flag
-dim bTotalMet		As Boolean			&apos;// split total met flag
-dim sFldName 		As String			&apos;// local copy of field name
-dim oHasFocus		As Object
-
-	&apos;// code.
-	iRetValue = -1						&apos;// set bad return
-	ON ERROR GOTO ErrorHandler
-&apos;msgBox(&quot;In sub STAmtLostFocus entry values..&quot; + CHR(13)+CHR(10) _
-&apos;	+ &quot;gdSTAccumTot = &quot; + gdSTAccumTot + CHR(13)+CHR(10) _
-&apos;	+ &quot;gdSTTotalAmt = &quot; + gdSTTotalAmt + CHR(13)+CHR(10) _
-&apos;	+ &quot;gsSTObjFocus = &apos;&quot; + gsSTObjFocus + &quot;&apos;&quot; )
-	
-	oHasFocus = puoSTDialog.getControl(&quot;HasFocus&quot;)
-	sFldName = oHasFocus.Text	
-&apos;	sFldName = gsSTObjFocus				&apos;// use local copy of field name
-&apos;msgBox(&quot;sub STAmtLostFocus - sFldName = &apos;&quot; + sFldName + &quot;&apos;&quot;)
-	if Len(sFldName) &lt; 7 then
-		GoTo ErrorHandler
-	endif	&apos;// error - field name not set up for entry
-	
-	bDlgComplete = false
-&apos;	iRowIx = STFld6ToIndex(sFldName)
-&apos;	iStatus = STUpdateAccumTot(sFldName)
-	iRowIx = STFld6ToIndex(gsSTObjFocus)
-	iStatus = STUpdateAccumTot(gsSTObjFocus)
-&apos;msgBox(&quot;In sub STAmtLostFocus values after update..&quot; + CHR(13)+CHR(10) _
-&apos;	+ &quot;gdSTAccumTot = &quot; + gdSTAccumTot + CHR(13)+CHR(10) _
-&apos;	+ &quot;gdSTTotalAmt = &quot; + gdSTTotalAmt )
-	
-	if iStatus &lt; 0 then
-		GoTo ErrorHandler
-	endif	&apos;// end error in updating accum total conditional
-
-	bTotalMet = (iStatus = 1)
-	bRowComplete = STRowComplete(iRowIx)
-	if bRowComplete then
-		bDlgComplete = STCheckComplete()
-		oDlgControl = puoSTDialog.getControl(&quot;UnsplitTot&quot;)
-&apos;		if gdSTAccumTot &lt; gdSTTotalAmt then		
-		if oDlgControl.Value &gt; 0 then		
-			&apos;// check for next row Enabled; if not, enable it
-			iStatus = STEnableNextRow(iRowIx)
-			if iStatus &lt; 0 then
-				GoTo ErrorHandler
-			endif
-		else
-			bTotalMet = true
-		endif &apos;// end total not met yet conditional
-		
-	endif	&apos;// end row complete conditional
-	
-	&apos;// activate/deactivate &lt;Done&gt; control if dialog complete
-	oDlgControl = puoSTDialog.getControl(&quot;DoneBtn&quot;)
-&apos;	bDlgComplete = (bDlgComplete AND bTotalMet)
-	bDlgComplete = (bDlgComplete OR bTotalMet)
-	if bDlgComplete then
-		oDlgControl.Model.Enabled = true
-	else
-		oDlgControl.Model.Enabled = false
-	endif
-	iRetValue = 0
-	
-NormalExit:
-&apos;	fSTAmtLostFocus = iRetValue
-	exit sub
-	
-ErrorHandler:
-	msgBox(&quot;In sub STAmtLostFocus - unprocessed error&quot;)
-	iRetValue = iStatus
-	GoTo NormalExit
-	
-end sub		&apos;// end STAmtLostFocus	6/22/20
-&apos;/**/
 &apos;// STAmt5FocusListener.bas
 &apos;//---------------------------------------------------------------
 &apos;// STAmt5FocusListener - Handle AmtFldn GotFocus event.
@@ -5665,71 +5392,6 @@ ErrorHandler:
 	
 end sub		&apos;// end STAmtLostFocus	6/22/20
 &apos;/**/
-&apos;// STCOAListBtnListener.bas
-&apos;//---------------------------------------------------------------
-&apos;// STCOAListBtnListener - Handle COA List Button event.
-&apos;//		6/18/20.	wmk.
-&apos;//---------------------------------------------------------------
-
-public sub STCOAListBtnListener()
-
-&apos;//	Usage.	macro call or
-&apos;//			call STCOAListBtnListener()
-&apos;//
-&apos;// Entry.	gsSTAcctFocus = name of last COA object to get focus
-&apos;//			puoSTDialog = ST Dialog object
-&apos;//
-&apos;//	Exit.	gsSTCOAs(n-1) updated with COA selection from GetCOA	
-&apos;//
-&apos;// Calls.	GetCOA
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	6/18/20.		wmk.	original code
-&apos;//
-&apos;//	Notes.
-&apos;//
-
-&apos;//	constants.
-
-&apos;//	local variables.
-dim iNameLen	As Integer	&apos;// length of name string
-dim sFldName	As String	&apos;// full field name from gsSTAcctFocus var
-dim sAcctIx		As String	&apos;// account index extracted from field name
-dim iDigCount	As Integer	&apos;// field name digit count
-dim iArrayIx	As Integer	&apos;// array index into gsSTCOAs string array
-dim oSTDlgCtrl	As Object	&apos;// account field in STdialog
-dim sCOANum		As String	&apos;// COA from GetCOA
-
-	&apos;// code.
-	ON ERROR GOTO ErrorHandler
-	sFldName = gsSTAcctFocus		&apos;// get &quot;AcctFldxx&quot; string
-	iNameLen = Len(sFldName)		&apos;// get length, either 8 or 9
-	Select Case iNameLen
-	Case 8
-		iDigCount = 1
-	Case 9
-		iDigCount = 2
-	Case else
-		iDigCount = 1
-	End Select
-	
-	sAcctIx = Right(sFldName,iDigCount)
-	iArrayIx = Val(sAcctIx) - 1
-	
-	sCOANum = GetCOA(1)		&apos;// get COA from dialog
-	gsSTCOAs(iArrayIx) = sCOANum
-	oSTDlgCtrl = puoSTDialog.getControl(sFldName)
-	oSTDlgCtrl.Text = sCOANum
-	
-NormalExit:
-	exit sub
-
-ErrorHandler:
-	msgBox(&quot;Error getting COA from list...&quot;)
-	GoTo NormalExit
-end sub		&apos;// end STCOAListBtnListener		6/18/20
-&apos;/**/
 &apos;// STCancelBtnRun.bas
 &apos;//---------------------------------------------------------------
 &apos;// STCancelBtnRun - ST dialog &lt;Cancel&gt; button Execute() event handler.
@@ -5886,6 +5548,71 @@ ErrorHandler:
 	GoTo NormalExit
 	
 end function 	&apos;// end STClrObjFocus	6/22/20
+&apos;/**/
+&apos;// STCOAListBtnListener.bas
+&apos;//---------------------------------------------------------------
+&apos;// STCOAListBtnListener - Handle COA List Button event.
+&apos;//		6/18/20.	wmk.
+&apos;//---------------------------------------------------------------
+
+public sub STCOAListBtnListener()
+
+&apos;//	Usage.	macro call or
+&apos;//			call STCOAListBtnListener()
+&apos;//
+&apos;// Entry.	gsSTAcctFocus = name of last COA object to get focus
+&apos;//			puoSTDialog = ST Dialog object
+&apos;//
+&apos;//	Exit.	gsSTCOAs(n-1) updated with COA selection from GetCOA	
+&apos;//
+&apos;// Calls.	GetCOA
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/18/20.		wmk.	original code
+&apos;//
+&apos;//	Notes.
+&apos;//
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim iNameLen	As Integer	&apos;// length of name string
+dim sFldName	As String	&apos;// full field name from gsSTAcctFocus var
+dim sAcctIx		As String	&apos;// account index extracted from field name
+dim iDigCount	As Integer	&apos;// field name digit count
+dim iArrayIx	As Integer	&apos;// array index into gsSTCOAs string array
+dim oSTDlgCtrl	As Object	&apos;// account field in STdialog
+dim sCOANum		As String	&apos;// COA from GetCOA
+
+	&apos;// code.
+	ON ERROR GOTO ErrorHandler
+	sFldName = gsSTAcctFocus		&apos;// get &quot;AcctFldxx&quot; string
+	iNameLen = Len(sFldName)		&apos;// get length, either 8 or 9
+	Select Case iNameLen
+	Case 8
+		iDigCount = 1
+	Case 9
+		iDigCount = 2
+	Case else
+		iDigCount = 1
+	End Select
+	
+	sAcctIx = Right(sFldName,iDigCount)
+	iArrayIx = Val(sAcctIx) - 1
+	
+	sCOANum = GetCOA(1)		&apos;// get COA from dialog
+	gsSTCOAs(iArrayIx) = sCOANum
+	oSTDlgCtrl = puoSTDialog.getControl(sFldName)
+	oSTDlgCtrl.Text = sCOANum
+	
+NormalExit:
+	exit sub
+
+ErrorHandler:
+	msgBox(&quot;Error getting COA from list...&quot;)
+	GoTo NormalExit
+end sub		&apos;// end STCOAListBtnListener		6/18/20
 &apos;/**/
 &apos;// STCredRBListener.bas
 &apos;//---------------------------------------------------------------
@@ -6550,209 +6277,6 @@ ErrorHandler:
 	GoTo NormalExit
 	
 end function		&apos;// end STDescLostFocus	6/25/20
-&apos;/**/
-&apos;// STDialogReset.bas
-&apos;//---------------------------------------------------------------
-&apos;// STDialogReset - Reset Split Transaction Dialog.
-&apos;//		7/7/20.	wmk.	07:15
-&apos;//---------------------------------------------------------------
-
-public sub STDialogReset()
-
-&apos;//	Usage.	call STDialogReset()
-&apos;//			or macro call
-&apos;//
-&apos;// Entry.	puoSTDialog = Split Transaction dialog object
-&apos;//
-&apos;//	Exit.	iVar = 0 - normal return.
-&apos;//				 &lt;&gt; 0 = abnormal return
-&apos;//
-&apos;// Calls.	STPubVarsReset, STDlgCtrlsReset
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	6/18/20.	wmk.	original code
-&apos;//	6/23/20.	wmk.	sub to support &lt;Reset Form&gt; execute() event
-&apos;//	7/7/20.		wmk.	remove reference to deleted &quot;HasFocus&quot; field
-&apos;//
-&apos;//	Notes.
-
-&apos;//	constants.
-
-&apos;//	local variables.
-dim iRetValue 	As Integer
-dim i			As Integer
-dim oSTDlgCtrl	As Object
-dim sFldNum		As String
-dim sCtrlName	As String
-
-	&apos;// code.
-	
-	iRetValue = -1		&apos;// abnormal return
-	ON ERROR GOTO ErrorHandler
-&apos;XRay puoSTDialog
-	gdSTAccumTot = 0.			&apos;// clear accumulated total
-	giSTLastIx = 0				&apos;// last active row index
-	gbSTSplitCredits = true		&apos;// assume Debits as total
-	gsSTAcctFocus = &quot;&quot;			&apos;// clear account object focus
-	gsSTObjFocus = &quot;&quot;			&apos;// object name with focus
-	redim gsSTDescs(0)	&apos;// scrap descriptions array
-	redim gdSTAmts(0)	&apos;// scrap amounts array
-	redim gsSTCOAs(0)	&apos;// scrap COAs array
-	redim gsSTRefs(0)	&apos;// scrap refs array
-
-	&apos;// set State of Debit/Credit radio buttons to Debit.State = true
-	oSTDlgCtrl = puoSTDialog.getControl(&quot;DebitTotRB&quot;)
-	oSTDlgCtrl.State = true
-	
-	&apos;// set Total field to gdSTTotalAmt
-	oSTDlgCtrl = puoSTDialog.getControl(&quot;TotalAmt&quot;)
-	oSTDlgCtrl.Value = gdSTTotalAmt
-
-	if false then
-	GoTo JumpAround
-	endif
-		
-	&apos;// clear all 10 Description, Amount, and COA fields
-	&apos;// and set .Enabled attribute to false for last 9 of each
-	for i = 0 to 9
-		sFldNum = Trim(Str(i+1))
-		sCtrlName = &quot;DescFld&quot; + sFldNum
-		oSTDlgCtrl = puoSTDialog.getControl(sCtrlName)
-		oSTDlgCtrl.Text = &quot;&quot;
-		if i &gt; 0 then
-			oSTDlgCtrl.Model.Enabled = false
-		endif
-		
-		if false then 
-		GoTo ContFor
-		endif
-		
-		sCtrlName = &quot;AmtFld&quot; + sFldNum
-		oSTDlgCtrl = puoSTDialog.getControl(sCtrlName)
-		oSTDlgCtrl.Text = &quot;&quot;
-		if i &gt; 0 then
-			oSTDlgCtrl.Model.Enabled = false
-		endif
-		
-		sCtrlName = &quot;AcctFld&quot; + sFldNum
-		oSTDlgCtrl = puoSTDialog.getControl(sCtrlName)
-		oSTDlgCtrl.Text = &quot;&quot;
-		if i &gt; 0 then
-			oSTDlgCtrl.Model.Enabled = false
-		endif
-		
-		sCtrlName = &quot;RefFld&quot; + sFldNum
-		oSTDlgCtrl = puoSTDialog.getControl(sCtrlName)
-		oSTDlgCtrl.Text = &quot;&quot;
-		if i &gt; 0 then
-			oSTDlgCtrl.Model.Enabled = false
-		endif
-ContFor:		
-	next i	&apos;// advance to next control name for each field
-JumpAround:
-	oSTDlgCtrl = puoSTDialog.getControl(&quot;DescFld1&quot;)
-	oSTDlgCtrl.Text = &quot;&quot;
-	oSTDlgCtrl = puoSTDialog.getControl(&quot;AmtFld1&quot;)
-	oSTDlgCtrl.Text = &quot;&quot;
-	
-&apos;	oSTDlgCtrl = puoSTDialog.getControl(&quot;HasFocusFld&quot;)
-&apos;	oSTDlgCtrl.Text = &quot;MyohMy&quot;		
-	&apos;// clear Accumulated Total field to 0; set Unsplit field to gdSTTotalAmt
-	oSTDlgCtrl = puoSTDialog.getControl(&quot;AccumTot&quot;)
-	oSTDlgCtrl.Value = 0.
-	oSTDlgCtrl = puoSTDialog.getControl(&quot;UnsplitTot&quot;)
-	oSTDlgCtrl.Value = gdSTTotalAmt
-	
-	&apos;// set DoneBtn Enabled to false
-	oSTDlgCtrl = puoSTDialog.getControl(&quot;DoneBtn&quot;)
-	oSTDlgCtrl.Model.Enabled = false
-	
-
-	if true then
-		GoTo NormalExit
-	endif	
-	&apos;// reset dialog public variables
-	iRetValue = STPubVarsReset()
-	if iRetValue &lt; 0 then
-		GoTo ErrorHandler
-	endif	&apos;// end bad controls reset conditional
-	
-	&apos;// reset dialog controls
-	iRetValue = STDlgCtrlsReset()
-	if iRetValue &lt; 0 then
-		GoTo ErrorHandler
-	endif	&apos;// end bad controls reset conditional
-	
-	iRetValue = 0		&apos;// no errors - exit
-	
-NormalExit:
-	
-	exit sub
-	
-ErrorHandler:
-	msgBox(&quot;STDialogReset - i = &quot; + i + &quot; ..unprocessed error.&quot;)
-	GoTo NormalExit
-	
-end sub 	&apos;// end STDialogReset		7/7/20
-&apos;/**/
-&apos;// STDialogReset.bas
-&apos;//---------------------------------------------------------------
-&apos;// fSTDialogReset - Reset Split Transaction Dialog.
-&apos;//		6/23/20.	wmk.
-&apos;//---------------------------------------------------------------
-
-public function fSTDialogReset() as Integer
-
-&apos;//	Usage.	iVar = fSTDialogReset()
-&apos;//
-&apos;// Entry.	puoSTDialog = Split Transaction dialog object
-&apos;//
-&apos;//	Exit.	iVar = 0 - normal return.
-&apos;//				 &lt;&gt; 0 = abnormal return
-&apos;//
-&apos;// Calls.	STPubVarsReset, STDlgCtrlsReset
-&apos;//
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	6/18/20.	wmk.	original code
-&apos;//	6/23/20.	wmk.	name change to fSTDialogReset to support
-&apos;//						STDialogReset sub for event processing
-&apos;//
-&apos;//	Notes.
-
-&apos;//	constants.
-
-&apos;//	local variables.
-dim iRetValue As Integer
-
-	&apos;// code.
-	
-	iRetValue = -1		&apos;// abnormal return
-	
-	&apos;// reset dialog public variables
-	iRetValue = STPubVarsReset()
-	if iRetValue &lt; 0 then
-		GoTo ErrorHandler
-	endif	&apos;// end bad controls reset conditional
-	
-	&apos;// reset dialog controls
-	iRetValue = STDlgCtrlsReset()
-	if iRetValue &lt; 0 then
-		GoTo ErrorHandler
-	endif	&apos;// end bad controls reset conditional
-	
-	iRetValue = 0		&apos;// no errors - exit
-	
-NormalExit:
-	fSTDialogReset = iRetValue
-	exit function
-	
-ErrorHandler:
-	msgBox(&quot;fSTDialogReset - unprocessed error.&quot;)
-	GoTo NormalExit
-	
-end function 	&apos;// end fSTDialogReset		6/18/20
 &apos;/**/
 &apos;// STDialogReset.bas
 &apos;//---------------------------------------------------------------
