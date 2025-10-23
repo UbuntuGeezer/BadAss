@@ -1,7 +1,7 @@
 '// LoadCOAs.bas
 '//---------------------------------------------------------------
 '// LoadCOAs - Load COA account#s for list boxes.
-'//		7/6/20.	wmk.	07:30
+'//		10/22/25.	wmk.	17:59
 '//---------------------------------------------------------------
 
 public function LoadCOAs() as Integer
@@ -27,11 +27,11 @@ public function LoadCOAs() as Integer
 '//
 '//	Modification history.
 '//	---------------------
-'//	6/13/20.	wmk.	original code; stub
-'//	6/14/20.	wmk.	code completed.
-'//	6/30/20.	wmk.	comments updated.
-'//	7/6/20.		wmk.	modified to get COA entry count from 2 columns to
-'//						right of "BEGIN COA" (COA_COLROWS)
+'// 10/22/25.	wmk.	(automated) Modification History sorted.
+'// 7/6/20.		wmk.	modified to get COA entry count from 2 columns to 
+'// 7/6/20.		 right of "BEGIN COA" (COA_COLROWS). 
+'// 6/30/20.	wmk.	comments updated. 
+'// 6/14/20.	wmk.	original. 
 '//
 '//	Notes. Initial version knows how many rows to expect by public constants
 '//	set internally for each accounting category. Future version can be
@@ -177,5 +177,5 @@ ErrorHandler:
 	Call LogError(sErrName, sErrMsg)
 	GoTo NormalExit
 	
-end function 	'// end LoadCOAs	7/6/20
+end function 	'// end LoadCOAs	10/23/25.
 '/**/

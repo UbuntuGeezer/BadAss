@@ -1,6 +1,9 @@
 # folders.sh - function definitions for Accounting/BadAss folders. 1/12/24. wmk.
+#	4/20/25.	wmk.
+#
 # Modification History.
 # ---------------------
+# 4/20/25.	wmk.	cdv added to change to version control folder.
 # 10/23/23.	wmk.	paths for Lenovo/Accounting folders.
 # 1/4/24.	wmk.	cdb added to change to Basic folders.
 # 1/5/24.	wmk.	cda mod to accept P1 subfolder; cdb mod using *acct_yr.
@@ -45,6 +48,9 @@ function cdr(){
 }
 function cdt(){
  echo "cdt stubbed."
+}
+function cdv(){
+ cd $folderbase/Accounting/AcctngVersion
 }
 function cdts(){
  echo "cdts stubbed."
