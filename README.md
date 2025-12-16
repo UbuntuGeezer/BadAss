@@ -1,16 +1,22 @@
 README - BadAss Library project documentation.<br>
-1/11/24.    wmk.
-###Modification History.
-<pre><code>8/23/22.    wmk.   original document.
-10/23/22.	wmk.    Project Overview section documentation.
-11/5/22.    wmk.    Project Overview section updated.
-1/11/24.    wmk.    Updated for Accounting/BadAss *git project.
+12/16/25.    wmk.
+<h3>Modification History.</h3>
+12/16/25.	wmk.	Runtime Error Handling section added.
+12/16/25.	wmk.	(automated) Modification History sorted.
+<pre><code>
+12/16/25.	wmk.	.md additional formatting. 
+1/11/24.	wmk.	Updated for Accounting/BadAss *git project. 
+11/5/22.	wmk.	Project Overview section updated. 
+10/23/22.	wmk.	Project Overview section documentation. 
+8/23/22.	wmk.	original document. 
 </code></pre>
 <h3 id="IX">Document Sections.</h3>
 <pre><code><a href="#1.0">link</a> 1.0 Project Overview - overall project description.
 <a href="#2.0">link</a> 2.0 Project Files - files comprising the project.
 <a href="#3.0">link</a> 3.0 Build Process - step-by-step library build instructions.
+<a href="#4.0">link</a> 4.0 Runtime Error Handling.
 </code></pre>
+<!--============================================================================-->
 <h3 id="1.0">1.0 Project Overview.</h3>
 The BadAss project contains all files that Calc or Excel need in order
 to build the BadAss library for either app. The primary files required
@@ -43,7 +49,9 @@ the running library from the Calc Macros/Organizer. This will make the "build"
 source .bas files out-of-date with the running library. Whenever this is
 done it will be necessary to re-sync the .bas source files to the code that
 was exported into the .xba files for the build process to correctly regenerate
-the library code.<br><a href="#IX">Index</a>
+the library code.
+<br><a href="#IX">Index</a>
+<!--============================================================================-->
 <h3 id="2.0">2.0 Project Files.</h3>
  The files fall into 4 categories:
 1) macro source code, 2) dialog source files, 3) library definition files, 
@@ -94,7 +102,21 @@ the filename extensions *.xlb* and *.xlc*.<br><a href="#IX">Index</a>
 The library build files are stored in the BadAss project folder. These files are
 of multiple types with filenames <i>Make\*</i>, \*.sh, \*.txt and are used by the utility
 apps *make*, *sed*, and *awk*.<br><a href="#IX">Index</a>
-
+<br><a href="#IX">Index</a>
+<!--============================================================================-->
 <h3 id="3.0">3.0 Build Process.</h3>
+<br><a href="#IX">Index</a>
+<!--============================================================================-->
+<h3 id="4.0">4.0 Runtime Error Handling.</h3>
+The BadAss library contains a full complement of error handling macro
+definitions that may be invoked at any point in runtime macro execution. This
+allows for any workbook to have an active "ErrorLog" worksheet into which
+runtime error messages may be recorded. In addition most macros within the
+BadAss library contain an "ON ERROR GOTO" statement along with two labels
+"NormalExit:" and "ErrorHandler:" for trapping errors.
+
+<strong>ON ERROR GOTO Handling.</strong><br>
+
+<strong>Error Log Usage.</strong><br>
 <br><a href="#IX">Index</a>
 
