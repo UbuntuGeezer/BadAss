@@ -1,6 +1,14 @@
+ # awklistbasends.txt - list .bas block endings.
+ #	12/17/25.	wmk.
+ #
+ # Modification History.
+ # ---------------------
+ # 12/17/25.	wmk.	add check for 'end hdr'.
+ #
  BEGIN{buffix=0}
  END{for(i=0;i<buffix;i++)print buff[i]}
  {
+  if(index($0,"end hdr") > 0){buff[buffix]=$0;buffix++};;
   if(index($0,"end sub") > 0){buff[buffix]=$0;buffix++};;
   if(index($0,"end function")>0){buff[buffix]=$0;buffix++};;
   if(index($0,"/**/") > 0){buff[buffix]=$0;buffix++};;

@@ -62,5 +62,5 @@ global goErrRangeAddress As Object				'// cell range address
 '// ErrLogGetSheet - Get sheet index from error log globals.
 '// ErrLogSetSheet - Set sheet index in error log globals.
 '// LogError - make error log entry([goCellRangeAddress], psErrName, psErrMsg)
-'//-----------------end errhandling header--------------------------
+'// end hdr		'// end errhandling		12/17/25.
 '/**/

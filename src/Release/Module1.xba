@@ -6,7 +6,9 @@ REM  *****  BASIC  *****
 &apos;// Module1Hdr - BadAss Library Module1 header.
 &apos;// Module1 (Beta Release) - Local macros for Chase Activity Download Spreadsheet and
 &apos;//	transaction processing in Production Alpha Clean Accounting spreadsheet.
-&apos;// 8/22/22.	wmk.	&apos;/**/ and // &lt;module-name&gt;bas bracketing lines added; application
+&apos;// 12/17/25.	wmk.	&apos;/**/ and // &lt;module-name&gt;bas bracketing lines added; application
+&apos;// end hdr		&apos;// end Module1Hdr.bas
+&apos;/**/
 &apos;// errhandling.bas
 &apos;//---------------------------------------------------------------
 &apos;// errhandling - Definitions for development error handling.
@@ -71,22 +73,23 @@ global goErrRangeAddress As Object				&apos;// cell range address
 &apos;// ErrLogGetSheet - Get sheet index from error log globals.
 &apos;// ErrLogSetSheet - Set sheet index in error log globals.
 &apos;// LogError - make error log entry([goCellRangeAddress], psErrName, psErrMsg)
-&apos;//-----------------end errhandling header--------------------------
+&apos;// end hdr		&apos;// end errhandling		12/17/25.
 &apos;/**/
 &apos;// publics.bas
 &apos;//---------------------------publics.bas----------------------------------------------
-&apos;//		8/20/24.	wmk.
+&apos;//		12/16/25.	wmk.
 &apos;// publics.bas - module-wide vars for Module1 code in accounts sheets
 &apos;// module-wide constants. (used in processing bank download sheets)
 &apos;// (mirrored in file publics.bas)
 
 &apos;// Modification History.
 &apos;// ---------------------
+&apos;// 12/16/25.	wmk.	TIMEFORMATID added for formatting date/time cells.
 &apos;// 8/20/24.	wmk.	const BLACK added for background color.
 &apos;//	5/??/20.	wmk.	Original code
 &apos;//	5/20/20.	wmk.	Released as Production into Alpha Clean Accounting.ods
 &apos;//	5/23/20.	wmk.	ASTSHEET, LIASHEET, INCSHEET, corrected to match
-&apos;//						Production spreadsheet; RJUST corrected
+&apos;//	5/23/20.	 Production spreadsheet; RJUST corrected
 &apos;//	5/27/20.	wmk.	DEVDEBUG constant added
 &apos;//	5/28/20.	wmk.	ERRUNKNOWN universal error code value added
 &apos;//	6/6/20.		wmk.	FMTDATETIME, DATEROW constants added
@@ -151,17 +154,18 @@ public const LJUST=1		&apos;// left-justify HoriJustify				&apos;// mod052020
 public const CJUST=2		&apos;// center HoriJustify						&apos;// mod052020
 public const RJUST=3		&apos;// right-justify HoriJustify				&apos;// mod052320
 public const MAXTRANSL=50	&apos;// maximum transaction text length			&apos;// mod052020
-&apos;//----------------------end publics.bas---------------------------------------------
+public const TIMEFORMATID=577	&apos;// time format ID with date time		&apos;// mod121625
+&apos;// end hdr		&apos;// end publics	12/16/25.
 &apos;/**/
 &apos;// Main.bas
 &apos;//---------------------------------------------------------------
 &apos;// Main - generic Main sub for module.
-&apos;//		wmk. 5/15/20.
+&apos;//		12/17/25.	wmk.
 &apos;//---------------------------------------------------------------
 
 Sub Main
 
-End Sub
+end sub		&apos;// end Main	12/17/25.
 &apos;/**/
 &apos;// CheckDoubleEntry.bas
 &apos;//---------------------------------------------------------------
@@ -1819,7 +1823,7 @@ end function		&apos;// end ErrLogGetSheet		4/20/25.
 &apos;// ErrLogMakeEntry.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogMakeEntry - record entry in ERRLOGSHEET spreadsheet.
-&apos;//		wmk. 6/6/20. 09:45
+&apos;//		wmk. 12/16/25. 23:22
 &apos;//---------------------------------------------------------------
 
 public function ErrLogMakeEntry() As Integer
@@ -1837,12 +1841,13 @@ public function ErrLogMakeEntry() As Integer
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	5/26/20.	wmk.	original code
-&apos;//	5/28/20.	wmk.	time stamp column added
+&apos;// 12/16/25.	wmk.	use TIMEFORMATID to format time stamp.
+&apos;// 6/6/20.		wmk.	update SetSheetDate call with format spec.
 &apos;//	6/3/20.		wmk.	add date/time stamp to error log sheet heading.
-&apos;// 6/6/20.		wmk.	update SetSheetDate call with format spec
+&apos;//	5/28/20.	wmk.	time stamp column added.
+&apos;//	5/26/20.	wmk.	original code.
 &apos;//
-&apos;//	Notes. &lt;Insert notes here&gt;
+&apos;//	Notes. Error Log fields:
 &apos;//	Sheet	Column	Row	Module	ERRCODE	Message
 
 &apos;//	constants.
@@ -1908,6 +1913,7 @@ dim oErrSheet As Object		&apos;// sheet error occurred in
 						com.sun.star.sheet.CellInsertMode.ROWS)
 	
 	&apos;// set values in new row fields from global error variables
+const iTimeFormatID = 577
 iBrkPt=1
 	oCellTime = oLogSheet.getCellByPosition(COLTIME, ERRINSROW)		&apos;// Time stamp cell
 	oCellSheet = oLogSheet.getCellByPosition(COLSHEET, ERRINSROW)	&apos;// Sheet cell
@@ -1919,7 +1925,8 @@ iBrkPt=1
 	oErrSheet = oSheets.getByIndex(goErrRangeAddress.Sheet)
 
 	oCellTime.setValue(Now())					&apos;// time stamp
-	oCellTime.NumberFormat = FMTDATETIME		&apos;// set number format
+&apos;	oCellTime.NumberFormat = FMTDATETIME		&apos;// set number format
+	oCellTime.FormatID = TIMEFORMATID			&apos;// set date/time format
 	oCellSheet.String = oErrSheet.CodeName		&apos;// set sheet name
 	oCellColumn.String = Str(goErrRangeAddress.StartColumn)
 	oCellRow.String = Str(goErrRangeAddress.StartRow)
@@ -1928,7 +1935,7 @@ iBrkPt=1
 	oCellErrMsg.String = gsErrMsg
 	
 	&apos;// set sheet modification date in log sheet header
-	iStatus = SetSheetDate(oRangeAdd, FMTDATETIME)
+	iStatus = SetSheetDate(oRangeAdd, iTimeFormatID)
 	
 	&apos;// set iRetValue = 0 for success
 
@@ -1942,7 +1949,7 @@ BailOut:
 	
 	ErrLogMakeEntry = iRetValue
 
-end function 	&apos;// end ErrLogMakeEntry	6/3/20
+end function 	&apos;// end ErrLogMakeEntry	12/16/25.
 &apos;/**/
 &apos;// ErrLogSetCellInfo.bas
 &apos;//-----------------------------------------------------------------
@@ -4139,7 +4146,7 @@ end function 	&apos;// end SetProcessed  6/1/20
 &apos;// SetSheetDate.bas
 &apos;//---------------------------------------------------------------
 &apos;// SetSheetDate - Set date/time stamp in common sheet date field.
-&apos;//		6/8/20.	wmk.
+&apos;//		12/16/25.	wmk.	23:31
 &apos;//---------------------------------------------------------------
 
 public function SetSheetDate(poRange As Object, piFmt As Integer) As Integer
@@ -4161,10 +4168,10 @@ public function SetSheetDate(poRange As Object, piFmt As Integer) As Integer
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	6/3/20.		wmk.	original code
-&apos;//	6/6/20.		wmk.	date/time format parameter added	
+&apos;// 12/16/25.	wmk.	use TIMEFORMATID for formatting sheet date.
 &apos;//	6/8/20.		wmk.	add LTGRN background color to new date
-&apos;//	Notes.
+&apos;//	6/6/20.		wmk.	date/time format parameter added	
+&apos;//	6/3/20.		wmk.	original code.
 
 
 &apos;//	constants.
@@ -4205,7 +4212,8 @@ dim iDateFormat As Integer	&apos;// date/time format to set
 		
 	End Select
 	
-	oCellTime.NumberFormat = iDateFormat		&apos;// set number format
+&apos;	oCellTime.NumberFormat = iDateFormat		&apos;// set number format
+	oCellTime.FormatID = TIMEFORMATID			&apos;// date/time format
 	oCellTime.CellBackColor = LTGREEN			&apos;// set changed color
 	GoTo NormalExit
 	
@@ -4215,7 +4223,7 @@ Abnormal:
 NormalExit:
 	SetSheetDate = iRetValue
 
-end function 	&apos;// end SetSheetDate	6/8/20
+end function 	&apos;// end SetSheetDate	12/16/25.
 &apos;/**/
 &apos;// SetSumFormula.bas
 &apos;//---------------------------------------------------------------
