@@ -6,28 +6,7 @@ REM  *****  BASIC  *****
 &apos;// Module1Hdr - BadAss Library Module1 header.
 &apos;// Module1 (Beta Release) - Local macros for Chase Activity Download Spreadsheet and
 &apos;//	transaction processing in Production Alpha Clean Accounting spreadsheet.
-&apos;// 8/22/22.	wmk.	&apos;/**/ and // &lt;module-name&gt;.bas bracketing lines added; application
-&apos;//				 extended to general banking activity in Accounting subsystem.
-&apos;// Legacy Mods.
-&apos;//	5/14/20.	wmk.	original code with mods
-&apos;//	5/16/20.	wmk.	new functions and subs to span sheets for
-&apos;//						transaction mapping to accounts sheets
-&apos;//	5/17/20.	wmk.	correct test constant EXPSHEET to match this
-&apos;//						document &apos;Expense Accounts_2&apos;
-&apos;//	5/18/20.	wmk.	row data processing constants added.
-&apos;//	5/19/20.	wmk.	sheet name constants changed to match production
-&apos;//	5/20/20.	wmk.	added OPTION EXPLICIT for code control
-&apos;//	5/22/20.	wmk.	added PlaceSplitTrans function.
-&apos;//	5/23/20.	wmk.	added BeanField function; bug fix with ASTSHEET
-&apos;//	5/25/20.	wmk.	added errhandling and associated subs
-&apos;//	5/26/20.	wmk.	errhandling update resinserted
-&apos;//	6/28/20.	wmk.	Beta Release to BadAss Library
-
-&apos;// Code protection.
-OPTION EXPLICIT				&apos;// every variable must be declared before use
-
-&apos;/**/
-
+&apos;// 8/22/22.	wmk.	&apos;/**/ and // &lt;module-name&gt;bas bracketing lines added; application
 &apos;// errhandling.bas
 &apos;//---------------------------------------------------------------
 &apos;// errhandling - Definitions for development error handling.
@@ -93,22 +72,23 @@ global goErrRangeAddress As Object				&apos;// cell range address
 &apos;// ErrLogSetSheet - Set sheet index in error log globals.
 &apos;// LogError - make error log entry([goCellRangeAddress], psErrName, psErrMsg)
 &apos;//-----------------end errhandling header--------------------------
+&apos;// end hdr			&apos;// end errhandling
 &apos;/**/
-
 &apos;// publics.bas
-&apos;//---------------------------publics----------------------------------------------
-&apos;//		8/20/24.	wmk.
-&apos;// publics - module-wide vars for Module1 code in accounts sheets
+&apos;//---------------------------publics.bas----------------------------------------------
+&apos;//		12/16/26.	wmk.
+&apos;// publics.bas - module-wide vars for Module1 code in accounts sheets
 &apos;// module-wide constants. (used in processing bank download sheets)
-&apos;// (mirrored in file publics)
+&apos;// (mirrored in file publics.bas)
 
 &apos;// Modification History.
 &apos;// ---------------------
+&apos;// 12/16/25.	wmk.	TIMEFORMATID added for formatting date/time cells.
 &apos;// 8/20/24.	wmk.	const BLACK added for background color.
 &apos;//	5/??/20.	wmk.	Original code
 &apos;//	5/20/20.	wmk.	Released as Production into Alpha Clean Accounting.ods
 &apos;//	5/23/20.	wmk.	ASTSHEET, LIASHEET, INCSHEET, corrected to match
-&apos;//						Production spreadsheet; RJUST corrected
+&apos;//	5/23/20.	 Production spreadsheet; RJUST corrected
 &apos;//	5/27/20.	wmk.	DEVDEBUG constant added
 &apos;//	5/28/20.	wmk.	ERRUNKNOWN universal error code value added
 &apos;//	6/6/20.		wmk.	FMTDATETIME, DATEROW constants added
@@ -173,9 +153,9 @@ public const LJUST=1		&apos;// left-justify HoriJustify				&apos;// mod052020
 public const CJUST=2		&apos;// center HoriJustify						&apos;// mod052020
 public const RJUST=3		&apos;// right-justify HoriJustify				&apos;// mod052320
 public const MAXTRANSL=50	&apos;// maximum transaction text length			&apos;// mod052020
-&apos;//----------------------end publics---------------------------------------------
+public const TIMEFORMATID=577	&apos;// time format ID with date time		&apos;// mod121625
+&apos;// end hdr		&apos;// end publics	12/16/25.
 &apos;/**/
-
 &apos;// Main.bas
 &apos;//---------------------------------------------------------------
 &apos;// Main - generic Main sub for module.
@@ -184,9 +164,8 @@ public const MAXTRANSL=50	&apos;// maximum transaction text length			&apos;// mo
 
 Sub Main
 
-End Sub
+End Sub		&apos;// end Main
 &apos;/**/
-
 &apos;// CheckDoubleEntry.bas
 &apos;//---------------------------------------------------------------
 &apos;// CheckDoubleEntry - Check double entry transaction fields.
@@ -542,7 +521,6 @@ AdvanceTrans:
 
 end function 	&apos;// end CheckDoubleEntry	7/3/20
 &apos;/**/
-
 &apos;// CheckInserts.bas
 &apos;//------------------------------------------------------------------
 &apos;// CheckInserts - Check target COA sheet(s) for insertion available.
@@ -825,7 +803,6 @@ AdvanceTrans:
 	
 end function 	&apos;// end CheckInserts	7/3/20
 &apos;/**/
-
 &apos;// CheckSplitTrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// CheckSplitTrans - Check split transaction for validity.
@@ -1262,7 +1239,6 @@ ExitNormal:
 	
 end function 	&apos;// end CheckSplitTrans	7/4/20
 &apos;/**/
-
 &apos;// CreateReverseTrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// CreateReverseTrans - Create reversal transaction.
@@ -1425,7 +1401,6 @@ ErrorHandler:
 	
 end function 	&apos;// end CreateReverseTrans	6/28/20
 &apos;/**/
-
 &apos;// D.bas
 &apos;//------------------------------------------------------------------
 &apos;// D - stub function to enable calls to development subs/functions.
@@ -1524,7 +1499,6 @@ iBrkPt=1
 				
 end function	&apos;// end D
 &apos;/**/
-
 &apos;// DayName.bas
 &apos;// DayName - Return text name of day from week day number
 public Function DayName(nDay as integer) as string
@@ -1564,7 +1538,6 @@ end select
 DayName = strDay
 end function	&apos;// end Dayname
 &apos;/**/
-
 &apos;// E.bas
 &apos;//------------------------------------------------------------------
 &apos;// E - stub function to test error handling capabilities.
@@ -1616,11 +1589,10 @@ dim oRange As Object		&apos;// CellRangeAddress object
 					
 end function	&apos;// end E
 &apos;/**/
-
 &apos;// ErrLogDisable.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogDisable - Disable error logging.
-&apos;//		wmk. 5/26/20.
+&apos;//		4/20/25.	wmk.
 &apos;//---------------------------------------------------------------
 
 public Function ErrLogDisable() As Void
@@ -1641,8 +1613,9 @@ public Function ErrLogDisable() As Void
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	5/25/20.	wmk.	original code
-&apos;// 5/26/20.	wmk.	change from sub to function
+&apos;// 4/20/25.	wmk.	end Function &gt; end function.
+&apos;// 5/26/20.	wmk.	change from sub to function.
+&apos;//	5/25/20.	wmk.	original code.
 
 &apos;//	constants.
 
@@ -1657,13 +1630,12 @@ public Function ErrLogDisable() As Void
 	gsErrModule = &quot;&quot;
 	gsErrSheet = &quot;&quot;
 	
-end Function		&apos;// end ErrLogDisable
+end function		&apos;// end ErrLogDisable	4/20/25.
 &apos;/**/
-
 &apos;// ErrLogGetCellInfo.bas
 &apos;//-----------------------------------------------------------------
 &apos;// ErrLogGetCellInfo - Get cell information from error log globals.
-&apos;//		wmk. 5/26/20.
+&apos;//		wmk. 4/20/25.
 &apos;//-----------------------------------------------------------------
 
 public Function ErrLogGetCellInfo(rplColumn As Long, rplRow As Long) As Void
@@ -1679,6 +1651,7 @@ public Function ErrLogGetCellInfo(rplColumn As Long, rplRow As Long) As Void
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
+&apos;// 4/20/25.	wmk.	end Function &gt; end function.
 &apos;//	5/26/20		wmk.	original code
 &apos;//
 &apos;//	Notes. Complemented by ErrLogSetInfo(lColumn, lRow)
@@ -1690,13 +1663,12 @@ public Function ErrLogGetCellInfo(rplColumn As Long, rplRow As Long) As Void
 	rplColumn = goErrRangeAddress.StartColumn
 	rplRow = goErrRangeAddress.StartRow
 	
-end Function		&apos;// end ErrLogGetCellnfo
+end function		&apos;// end ErrLogGetCellnfo	4/20/25.
 &apos;/**/
-
 &apos;// ErrLogGetCellName.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogGetCellName - Get cell name from error log globals.
-&apos;//		wmk. 5/26/20.
+&apos;//		wmk. 4/20/25.
 &apos;//---------------------------------------------------------------
 
 public Function ErrLogGetCellName() As String
@@ -1711,6 +1683,7 @@ public Function ErrLogGetCellName() As String
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
+&apos;// 4/20/25.	wmk.	end Function &gt; end function.
 &apos;//	5/26/20		wmk.	original code; stub
 &apos;//
 &apos;//	Notes. Complemented by ErrLogGetModule()
@@ -1723,9 +1696,8 @@ dim sRetStr As String		&apos;// returned cell string
 	sRetStr = &quot;&quot;
 	ErrLogGetCellName = sRetStr	&apos;// return current name
 	
-end Function		&apos;// end ErrLogGetCellName
+end function		&apos;// end ErrLogGetCellName	4/20/25.
 &apos;/**/
-
 &apos;// ErrLogGetDisplay.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogGetDisplay - Get msgBox error messaging on/off status.
@@ -1753,11 +1725,10 @@ public function ErrLogGetDisplay() As Boolean
 
 end function 	&apos;// end ErrLogGetDisplay
 &apos;/**/
-
 &apos;// ErrLogGetModule.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogGetModule - Get module name in error log globals.
-&apos;//		wmk. 5/26/20.
+&apos;//		wmk. 4/20/25.
 &apos;//---------------------------------------------------------------
 
 public Function ErrLogGetModule() As String
@@ -1770,7 +1741,8 @@ public Function ErrLogGetModule() As String
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	5/26/20		wmk.	original code
+&apos;// 4/20/25.	wmk.	end Function &gt; end function.
+&apos;//	5/26/20		wmk.	original code.
 &apos;//
 &apos;//	Notes. Complemented by ErrLogGetModule()
 &apos;//
@@ -1780,9 +1752,8 @@ public Function ErrLogGetModule() As String
 	&apos;// code.
 	ErrLogGetModule = gsErrModule		&apos;// return current name
 	
-end Function		&apos;// end ErrLogGetModule
+end function		&apos;// end ErrLogGetModule		4/20/25.
 &apos;/**/
-
 &apos;// ErrLogGetRecording.bas
 &apos;//-----------------------------------------------------------------------
 &apos;// ErrLogGetRecording - Get error recording status from error log globals
@@ -1816,11 +1787,10 @@ dim bRetValue	as Boolean
 
 end function 	&apos;// end ErrLogGetRecording
 &apos;/**/
-
 &apos;// ErrLogGetSheet.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogGetSheet - Get sheet index from error log globals.
-&apos;//		wmk. 5/26/20.
+&apos;//		wmk. 4/20/25.
 &apos;//---------------------------------------------------------------
 
 public Function ErrLogGetSheet() As Integer
@@ -1835,7 +1805,8 @@ public Function ErrLogGetSheet() As Integer
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	5/26/20		wmk.	original code
+&apos;// 4/20/25.	wmk.	end Function &gt; end function.
+&apos;//	5/26/20		wmk.	original code.
 &apos;//
 &apos;//	Notes. Complemented by ErrLogSetSheet(iSheet)
 &apos;//
@@ -1846,13 +1817,12 @@ public Function ErrLogGetSheet() As Integer
 	
 	ErrLogGetSheet = goErrRangeAddress.Sheet	&apos;// return global sheet index
 	
-end Function		&apos;// end ErrLogGetSheet
+end function		&apos;// end ErrLogGetSheet		4/20/25.
 &apos;/**/
-
 &apos;// ErrLogMakeEntry.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogMakeEntry - record entry in ERRLOGSHEET spreadsheet.
-&apos;//		wmk. 6/6/20. 09:45
+&apos;//		wmk. 12/16/25. 23:22
 &apos;//---------------------------------------------------------------
 
 public function ErrLogMakeEntry() As Integer
@@ -1870,6 +1840,7 @@ public function ErrLogMakeEntry() As Integer
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
+&apos;// 12/16/25.	wmk.	use TIMEFORMATID to format time stamp.
 &apos;//	5/26/20.	wmk.	original code
 &apos;//	5/28/20.	wmk.	time stamp column added
 &apos;//	6/3/20.		wmk.	add date/time stamp to error log sheet heading.
@@ -1941,6 +1912,7 @@ dim oErrSheet As Object		&apos;// sheet error occurred in
 						com.sun.star.sheet.CellInsertMode.ROWS)
 	
 	&apos;// set values in new row fields from global error variables
+const iTimeFormatID = 577
 iBrkPt=1
 	oCellTime = oLogSheet.getCellByPosition(COLTIME, ERRINSROW)		&apos;// Time stamp cell
 	oCellSheet = oLogSheet.getCellByPosition(COLSHEET, ERRINSROW)	&apos;// Sheet cell
@@ -1952,7 +1924,8 @@ iBrkPt=1
 	oErrSheet = oSheets.getByIndex(goErrRangeAddress.Sheet)
 
 	oCellTime.setValue(Now())					&apos;// time stamp
-	oCellTime.NumberFormat = FMTDATETIME		&apos;// set number format
+&apos;	oCellTime.NumberFormat = FMTDATETIME		&apos;// set number format
+	oCellTime.FormatID = TIMEFORMATID			&apos;// set date/time format
 	oCellSheet.String = oErrSheet.CodeName		&apos;// set sheet name
 	oCellColumn.String = Str(goErrRangeAddress.StartColumn)
 	oCellRow.String = Str(goErrRangeAddress.StartRow)
@@ -1961,7 +1934,7 @@ iBrkPt=1
 	oCellErrMsg.String = gsErrMsg
 	
 	&apos;// set sheet modification date in log sheet header
-	iStatus = SetSheetDate(oRangeAdd, FMTDATETIME)
+	iStatus = SetSheetDate(oRangeAdd, iTimeFormatID)
 	
 	&apos;// set iRetValue = 0 for success
 
@@ -1975,13 +1948,12 @@ BailOut:
 	
 	ErrLogMakeEntry = iRetValue
 
-end function 	&apos;// end ErrLogMakeEntry	6/3/20
+end function 	&apos;// end ErrLogMakeEntry	12/16/25.
 &apos;/**/
-
 &apos;// ErrLogSetCellInfo.bas
 &apos;//-----------------------------------------------------------------
 &apos;// ErrLogSetCellInfo - Set cell information in error log globals.
-&apos;//		wmk. 5/26/20.	16:00
+&apos;//		4/20/25.	wmk.
 &apos;//-----------------------------------------------------------------
 
 public Function ErrLogSetCellInfo(plColumn As Long, plRow As Long) As Void
@@ -1997,7 +1969,8 @@ public Function ErrLogSetCellInfo(plColumn As Long, plRow As Long) As Void
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	5/26/20		wmk.	original code
+&apos;// 4/20/25.	wmk.	end Function &gt; end function.
+&apos;//	5/26/20		wmk.	original code.
 &apos;//
 &apos;//	Notes. Complemented by ErrLogGetInfo(lColumn, lRow)
 &apos;//
@@ -2008,13 +1981,12 @@ public Function ErrLogSetCellInfo(plColumn As Long, plRow As Long) As Void
 	goErrRangeAddress.StartColumn = plColumn
 	goErrRangeAddress.StartRow = plRow
 	
-end Function		&apos;// end ErrLogSetCellnfo
+end function		&apos;// end ErrLogSetCellnfo	4/20/25.
 &apos;/**/
-
 &apos;// ErrLogSetDisplay.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogSetDisplay - Set msgBox error messaging on/off.
-&apos;//		wmk. 5/26/20.
+&apos;//		4/20/25.	wmk.
 &apos;//---------------------------------------------------------------
 
 public function ErrLogSetDisplay(pbDisplayOn As Boolean) As Void
@@ -2030,7 +2002,8 @@ public function ErrLogSetDisplay(pbDisplayOn As Boolean) As Void
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	5/26/20.	wmk.	original code
+&apos;// 4/20/25.	wmk.	end Function &gt; end function.
+&apos;//	5/26/20.	wmk.	original code.
 &apos;//
 &apos;// Notes. gbErrDisplay flag is used by LogError to determine if
 &apos;//	error messages are displayed in a msgBox onscreen
@@ -2038,13 +2011,12 @@ public function ErrLogSetDisplay(pbDisplayOn As Boolean) As Void
 	&apos;// code.
 	gbErrDisplay = pbDisplayOn
 
-end function 	&apos;// end ErrLogSetDisplay
+end function 	&apos;// end ErrLogSetDisplay	4/20/25.
 &apos;/**/
-
 &apos;// ErrLogSetModule.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogSetModule - Set module name in error log globals.
-&apos;//		wmk. 5/26/20.
+&apos;//		4/20/25.	wmk.
 &apos;//---------------------------------------------------------------
 
 public Function ErrLogSetModule(psName as String) As Void
@@ -2061,7 +2033,8 @@ public Function ErrLogSetModule(psName as String) As Void
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	5/26/20		wmk.	original code
+&apos;// 4/20/25.	wmk.	end Function &gt; end function.
+&apos;//	5/26/20		wmk.	original code.
 &apos;//
 &apos;//	Notes. Complemented by ErrLogGetModule()
 &apos;//
@@ -2071,13 +2044,12 @@ public Function ErrLogSetModule(psName as String) As Void
 	&apos;// code.
 	gsErrModule = psName	&apos;// reset global module name
 	
-end Function		&apos;// end ErrLogSetModule
+end function		&apos;// end ErrLogSetModule		4/20/25.
 &apos;/**/
-
 &apos;// ErrLogSetRecording.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogSetRecording - Set error recording status in error log globals
-&apos;//		wmk. 5/26/20.
+&apos;//		4/20/25.	wmk.
 &apos;//---------------------------------------------------------------
 
 public function ErrLogSetRecording(pbRecordingOn as Boolean) As Void
@@ -2095,7 +2067,8 @@ public function ErrLogSetRecording(pbRecordingOn as Boolean) As Void
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	5/26/20		wmk.	original code
+&apos;// 4/20/25.	wmk.	end Function &gt; end function.
+&apos;//	5/26/20		wmk.	original code.
 &apos;//
 &apos;//	Notes. LogError uses the gbErrRecording flag to determine if Error Log
 &apos;// sheet (ERRLOGSHEET) entries are to be made.
@@ -2105,13 +2078,12 @@ public function ErrLogSetRecording(pbRecordingOn as Boolean) As Void
 	&apos;// code.
 	gbErrRecording = pbRecordingOn
 
-end function 	&apos;// end ErrLogSetRecording
+end function 	&apos;// end ErrLogSetRecording	4/20/25.
 &apos;/**/
-
 &apos;// ErrLogSetSheet.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogSetSheet - Set sheet index in error log globals.
-&apos;//		wmk. 5/26/20.
+&apos;//		4/20/25.	wmk.
 &apos;//---------------------------------------------------------------
 
 public Function ErrLogSetSheet(piSheet as Integer) As Void
@@ -2128,7 +2100,8 @@ public Function ErrLogSetSheet(piSheet as Integer) As Void
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	5/26/20		wmk.	original code
+&apos;// 4/20/25.	wmk.	end Function &gt; end function.
+&apos;//	5/26/20		wmk.	original code.
 &apos;//
 &apos;//	Notes. Complemented by ErrLogGetSheet()
 &apos;//
@@ -2138,9 +2111,8 @@ public Function ErrLogSetSheet(piSheet as Integer) As Void
 	&apos;// code.
 	goErrRangeAddress.Sheet = piSheet	&apos;// reset global sheet index
 	
-end Function		&apos;// end ErrLogSetSheet
+end function		&apos;// end ErrLogSetSheet		4/20/25.
 &apos;/**/
-
 &apos;// ErrLogSetup.bas
 &apos;//---------------------------------------------------------------
 &apos;// ErrLogSetup - set up error logging to ERRLOGSHEET.
@@ -2231,7 +2203,6 @@ Bailout:
 
 end sub		&apos;// end ErrLogSetup
 &apos;/**/
-
 &apos;// GetInsRow.bas
 &apos;//------------------------------------------------------------------
 &apos;// GetInsRow - Get insertion row given sheet, COA account, month.
@@ -2391,7 +2362,6 @@ iBrkpt = 1
 
 end function 	&apos;// end GetInsRow	6/8/20
 &apos;/**/
-
 &apos;// GetMonthName.bas
 &apos;//---------------------------------------------------------------
 &apos;// GetMonthName - return month name given date number.
@@ -2464,7 +2434,6 @@ dim sName as String		&apos;// returned name of month
 	
 end function 	&apos;// end GetMonthName 
 &apos;/**/
-
 &apos;// GetTransSheetName.bas
 &apos;//---------------------------------------------------------------
 &apos;// GetTransSheetName - Get sheet name where transaction belongs.
@@ -2534,7 +2503,6 @@ dim sDigit 	as String	&apos;// extracted 1st digit
 
 end function 	&apos;// end GetTransSheetName
 &apos;/**/
-
 &apos;// LogError.bas
 &apos;//---------------------------------------------------------------
 &apos;// LogError - Make error log entry to ERRLOGSHEET.
@@ -2603,11 +2571,10 @@ dim iStatus As Integer		&apos;// recording status
 			
 end sub		&apos;// end LogError	6/2/20
 &apos;/**/
-
 &apos;// PlaceSplitTotal.bas
 &apos;//------------------------------------------------------------------
 &apos;// PlaceSplitTotal - Itemize split transaction in total COA account.
-&apos;//		7/8/20.	wmk.	15:00
+&apos;//		4/20/25.	wmk.
 &apos;//------------------------------------------------------------------
 
 public function PlaceSplitTotal(poGLRange As Object, psAcct As String) As Integer
@@ -2631,10 +2598,10 @@ public function PlaceSplitTotal(poGLRange As Object, psAcct As String) As Intege
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	6/4/20.		wmk.	original code
-&apos;//	6/6/20.		wmk.
-&apos;//	6/27/20.	wmk.	superfluous &quot;if&quot; removed
+&apos;// 4/20/25.	wmk.	end Function &gt; end function for CheckBasEnds utility.
 &apos;//	7/8/20.		wmk.	code to remove extra row in source COA transaction	
+&apos;//	6/27/20.	wmk.	superfluous &quot;if&quot; removed
+&apos;//	6/4/20.		wmk.	original code
 &apos;//
 &apos;//	Notes.
 &apos;// This function adds lines to the splitting account category
@@ -2944,9 +2911,8 @@ NormalExit:
 
 	PlaceSplitTotal = iRetValue
 
-end Function		&apos;// end PlaceSplitTotal		7/8/20
+end function		&apos;// end PlaceSplitTotal		4/20/25.
 &apos;/**/
-
 &apos;// PlaceSplitTrans.bas
 &apos;//------------------------------------------------------------------
 &apos;// PlaceSplitTrans - Place split transaction into multiple accounts.
@@ -3273,7 +3239,6 @@ iBrkPt = 1
 	
 end function		&apos;// end PlaceSplitTrans	7/8/20
 &apos;/**/
-
 &apos;// PlaceTransM.bas
 &apos;//-------------------------------------------------------------------
 &apos;// PlaceTransM - place multiple transactions into appropriate sheets.
@@ -3699,7 +3664,6 @@ DontCheck:
 
 end sub		&apos;// end PlaceTransM		6/12/20
 &apos;/**/
-
 &apos;// ReverseDETrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// ReverseDETrans - Reverse double-entry transaction.
@@ -3844,7 +3808,6 @@ ErrorHandler:
 	
 end function 	&apos;// end ReverseDETrans	11/14/22
 &apos;/**/
-
 &apos;// ReverseSplitTrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// ReverseSplitTrans - Reverse split transaction.
@@ -4005,11 +3968,10 @@ ErrorHandler:
 
 end function 	&apos;// end ReverseSplitTrans 7/9/20
 &apos;/**/
-
 &apos;// ReverseTrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// ReverseTrans - Reverse transaction.
-&apos;//		6/12/20.	wmk.	17:45
+&apos;//		4/20/25.	wmk.
 &apos;//---------------------------------------------------------------
 
 public sub ReverseTrans()
@@ -4028,8 +3990,9 @@ public sub ReverseTrans()
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	6/11/20.		wmk.	original code
-&apos;//	6/12/20.		wmk.	add call to SetSheetDate
+&apos;// 4/20/25.	wmk.	superfluous function definition removed from beginning.
+&apos;//	6/12/20.	wmk.	add call to SetSheetDate.
+&apos;//	6/11/20.	wmk.	original code.
 &apos;//
 &apos;//	Notes. Method: For double-entry transaction,insert 2 lines at first
 &apos;// row position with &quot;ROWS&quot; option; copy original transaction to 2 new
@@ -4139,9 +4102,8 @@ NormalExit:
 ErrorHandler:
 
 
-end sub		&apos;// end ReverseTrans	6/12/20
+end sub		&apos;// end ReverseTrans	4/20/25.
 &apos;/**/
-
 &apos;// SetProcessed.bas
 &apos;//---------------------------------------------------------------
 &apos;// SetProcessed - Set double-entry transaction processed.
@@ -4180,11 +4142,10 @@ dim iRetValue As Integer
 
 end function 	&apos;// end SetProcessed  6/1/20
 &apos;/**/
-
 &apos;// SetSheetDate.bas
 &apos;//---------------------------------------------------------------
 &apos;// SetSheetDate - Set date/time stamp in common sheet date field.
-&apos;//		6/8/20.	wmk.
+&apos;//		12/16/25.	wmk.	23:31
 &apos;//---------------------------------------------------------------
 
 public function SetSheetDate(poRange As Object, piFmt As Integer) As Integer
@@ -4206,10 +4167,10 @@ public function SetSheetDate(poRange As Object, piFmt As Integer) As Integer
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	6/3/20.		wmk.	original code
-&apos;//	6/6/20.		wmk.	date/time format parameter added	
+&apos;// 12/16/25.	wmk.	use TIMEFORMATID for formatting sheet date.
 &apos;//	6/8/20.		wmk.	add LTGRN background color to new date
-&apos;//	Notes.
+&apos;//	6/6/20.		wmk.	date/time format parameter added	
+&apos;//	6/3/20.		wmk.	original code.
 
 
 &apos;//	constants.
@@ -4250,7 +4211,8 @@ dim iDateFormat As Integer	&apos;// date/time format to set
 		
 	End Select
 	
-	oCellTime.NumberFormat = iDateFormat		&apos;// set number format
+&apos;	oCellTime.NumberFormat = iDateFormat		&apos;// set number format
+	oCellTime.FormatID = TIMEFORMATID			&apos;// date/time format
 	oCellTime.CellBackColor = LTGREEN			&apos;// set changed color
 	GoTo NormalExit
 	
@@ -4260,9 +4222,8 @@ Abnormal:
 NormalExit:
 	SetSheetDate = iRetValue
 
-end function 	&apos;// end SetSheetDate	6/8/20
+end function 	&apos;// end SetSheetDate	12/16/25.
 &apos;/**/
-
 &apos;// SetSumFormula.bas
 &apos;//---------------------------------------------------------------
 &apos;// SetSumFormula - Create SUM formula for last split account cell.
@@ -4402,7 +4363,6 @@ NormalExit:
 	
 end function 	&apos;// end SetSumFormula
 &apos;/**/
-
 &apos;// SplitOutCOAs.bas
 &apos;//-----------------------------------------------------------------
 &apos;// SplitOutCOAs - Split out COA transaction lines from split entry.
@@ -4705,7 +4665,6 @@ NormalExit:
 
 end function 	&apos;// end SplitOutCOAs	8/22/22.
 &apos;/**/
-
 &apos;// StoreTrans.bas
 &apos;//---------------------------------------------------------------
 &apos;// StoreTrans - Store double-entry transaction.
@@ -5013,5 +4972,4 @@ iBrkpt=1
 
 end function 	&apos;// end StoreTrans	6/11/20
 &apos;/**/
-
 </script:module>
