@@ -133,4 +133,46 @@ BadAss library contain an "ON ERROR GOTO" statement along with two labels
 <p><strong>ON ERROR GOTO Handling.</strong><br></p>
 
 <p><strong>Error Log Usage.</strong><br>
+The following support subs are provided for Module error logging:</p>
+
+<pre><code>
+ErrLogDisable.bas - Disable error logging.
+ErrLogGetCellInfo.bas - Get cell information for error log entry.
+ErrLogGetCellName.bas - Get cell name for error log entry.
+ErrLogGetDisplay.bas - Get msgBox error messaging on/off status.
+ErrLogGetRecording.bas - Get error recording status from error log globals
+ErrLogGetSheet.bas - Get sheet index from error log globals.
+ErrLogMakeEntry.bas - Make entry into error log sheet.
+ErrLogSetCellInfo.bas - Set cell information for error log entry.
+ErrLogSetDisplay.bas - Set msgBox error messaging on/off.
+ErrLogSetModule.bas - Set module name for error log entry.
+ErrLogSetRecording.bas - Set error log recording status.
+ErrLogSetSheet.bas - Set sheet index in error log globals..
+ErrLogSetup.bas - Set up error logging to ERRLOGSHEET..
+</code></pre>
+
+<p>Within the BadAss module header, ERRLOGSHEET is a constant set to the string
+"ErrorLog". This is the sheet to which error log messages will be written. The
+messages appear in reverse chronological order, with the latest messages
+occurring first.</p>
+
+<p>Following is the minimum sequence of calls for issuing an error message to the
+message log:</p>
+
+<pre><code>
+    dim Doc     As Object
+    dim oSel    As Object
+    dim oRange  As Object
+    Doc = ThisComponent
+    oSel = Doc.getCurrentSelection()    'apos;// get current cell selection(s) info
+    oRange = oSel.RangeAddress          'apos;// extract range information  
+    Call ErrLogSetup(oRange, "< macro name >")
+    Call LogError("TESTERROR", "Test sub E - error.")
+    Call ErrLogDisable
+</code></pre>
+
+<p>Explanation: var oRange is set to the current cell selection, which contains the
+sheet index and selected cells information. "TESTERROR" is the error type name.
+The second parameters within quotes are the sub/function name, and the error
+message text to be issued to the ErrLog sheet.
 <br><a href="#IX">Index</a></p>

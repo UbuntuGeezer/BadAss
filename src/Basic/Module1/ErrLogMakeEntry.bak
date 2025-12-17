@@ -1,7 +1,7 @@
 '// ErrLogMakeEntry.bas
 '//---------------------------------------------------------------
 '// ErrLogMakeEntry - record entry in ERRLOGSHEET spreadsheet.
-'//		wmk. 12/16/25. 23:22
+'//		wmk. 6/6/20. 09:45
 '//---------------------------------------------------------------
 
 public function ErrLogMakeEntry() As Integer
@@ -19,13 +19,12 @@ public function ErrLogMakeEntry() As Integer
 '//
 '//	Modification history.
 '//	---------------------
-'// 12/16/25.	wmk.	use TIMEFORMATID to format time stamp.
-'// 6/6/20.		wmk.	update SetSheetDate call with format spec.
+'//	5/26/20.	wmk.	original code
+'//	5/28/20.	wmk.	time stamp column added
 '//	6/3/20.		wmk.	add date/time stamp to error log sheet heading.
-'//	5/28/20.	wmk.	time stamp column added.
-'//	5/26/20.	wmk.	original code.
+'// 6/6/20.		wmk.	update SetSheetDate call with format spec
 '//
-'//	Notes. Error Log fields:
+'//	Notes. <Insert notes here>
 '//	Sheet	Column	Row	Module	ERRCODE	Message
 
 '//	constants.
@@ -91,7 +90,6 @@ dim oErrSheet As Object		'// sheet error occurred in
 						com.sun.star.sheet.CellInsertMode.ROWS)
 	
 	'// set values in new row fields from global error variables
-const iTimeFormatID = 577
 iBrkPt=1
 	oCellTime = oLogSheet.getCellByPosition(COLTIME, ERRINSROW)		'// Time stamp cell
 	oCellSheet = oLogSheet.getCellByPosition(COLSHEET, ERRINSROW)	'// Sheet cell
@@ -103,8 +101,7 @@ iBrkPt=1
 	oErrSheet = oSheets.getByIndex(goErrRangeAddress.Sheet)
 
 	oCellTime.setValue(Now())					'// time stamp
-'	oCellTime.NumberFormat = FMTDATETIME		'// set number format
-	oCellTime.FormatID = TIMEFORMATID			'// set date/time format
+	oCellTime.NumberFormat = FMTDATETIME		'// set number format
 	oCellSheet.String = oErrSheet.CodeName		'// set sheet name
 	oCellColumn.String = Str(goErrRangeAddress.StartColumn)
 	oCellRow.String = Str(goErrRangeAddress.StartRow)
@@ -113,7 +110,7 @@ iBrkPt=1
 	oCellErrMsg.String = gsErrMsg
 	
 	'// set sheet modification date in log sheet header
-	iStatus = SetSheetDate(oRangeAdd, iTimeFormatID)
+	iStatus = SetSheetDate(oRangeAdd, FMTDATETIME)
 	
 	'// set iRetValue = 0 for success
 
@@ -127,5 +124,5 @@ BailOut:
 	
 	ErrLogMakeEntry = iRetValue
 
-end function 	'// end ErrLogMakeEntry	12/16/25.
+end function 	'// end ErrLogMakeEntry	6/3/20
 '/**/

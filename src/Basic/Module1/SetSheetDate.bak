@@ -1,7 +1,7 @@
 '// SetSheetDate.bas
 '//---------------------------------------------------------------
 '// SetSheetDate - Set date/time stamp in common sheet date field.
-'//		12/16/25.	wmk.	23:31
+'//		6/8/20.	wmk.
 '//---------------------------------------------------------------
 
 public function SetSheetDate(poRange As Object, piFmt As Integer) As Integer
@@ -23,10 +23,10 @@ public function SetSheetDate(poRange As Object, piFmt As Integer) As Integer
 '//
 '//	Modification history.
 '//	---------------------
-'// 12/16/25.	wmk.	use TIMEFORMATID for formatting sheet date.
-'//	6/8/20.		wmk.	add LTGRN background color to new date
+'//	6/3/20.		wmk.	original code
 '//	6/6/20.		wmk.	date/time format parameter added	
-'//	6/3/20.		wmk.	original code.
+'//	6/8/20.		wmk.	add LTGRN background color to new date
+'//	Notes.
 
 
 '//	constants.
@@ -67,8 +67,7 @@ dim iDateFormat As Integer	'// date/time format to set
 		
 	End Select
 	
-'	oCellTime.NumberFormat = iDateFormat		'// set number format
-	oCellTime.FormatID = TIMEFORMATID			'// date/time format
+	oCellTime.NumberFormat = iDateFormat		'// set number format
 	oCellTime.CellBackColor = LTGREEN			'// set changed color
 	GoTo NormalExit
 	
@@ -78,5 +77,5 @@ Abnormal:
 NormalExit:
 	SetSheetDate = iRetValue
 
-end function 	'// end SetSheetDate	12/16/25.
+end function 	'// end SetSheetDate	6/8/20
 '/**/
