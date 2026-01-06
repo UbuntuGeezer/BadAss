@@ -4,9 +4,14 @@
 &apos;// Module1Hdr.bas
 REM  *****  BASIC  *****
 &apos;// Module1Hdr - BadAss Library Module1 header.
-&apos;// Module1 (Beta Release) - Local macros for Chase Activity Download Spreadsheet and
-&apos;//	transaction processing in Production Alpha Clean Accounting spreadsheet.
-&apos;// 12/17/25.	wmk.	&apos;/**/ and // &lt;module-name&gt;bas bracketing lines added; application
+&apos;// Module1 - Local macros for Chase Activity Download Spreadsheet and
+&apos;//	transaction processing in any Accounting spreadsheet.
+&apos;//
+&apos;// Modification History.
+&apos;// ---------------------
+&apos;// 1/6/26.		wmk.	Modification History added to header; MoveToSheet sub
+&apos;//	1/6/26.		 and ToDo function added to module.
+&apos;// 12/17/25.	wmk.	macro block bracketing lines added.
 &apos;// end hdr		&apos;// end Module1Hdr.bas
 &apos;/**/
 &apos;// errhandling.bas
@@ -2572,6 +2577,90 @@ dim iStatus As Integer		&apos;// recording status
 			
 end sub		&apos;// end LogError	6/2/20
 &apos;/**/
+&apos;// MoveToSheet.bas
+&apos;//---------------------------------------------------------------
+&apos;// MoveToSheet - Jump over to different sheet by sheet name.
+&apos;//		4/17/25.	wmk.
+&apos;//---------------------------------------------------------------
+
+public sub MoveToSheet(psSheetName As String)
+
+&apos;//	Usage.	macro call or
+&apos;//			call MoveToSheet( sSheetName )
+&apos;//
+&apos;//		sSheetName = name of sheet to move to
+&apos;//
+&apos;// Entry.	user focused on some sheet in workbook
+&apos;//
+&apos;//	Exit.	user focus moved to sSheetName in workbook, if exists
+&apos;//
+&apos;// Calls.	uno Dispatcher.
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;// 4/17/25.	wmk.	header correction.
+&apos;//	3/16/21.	wmk.	original code; cloned from macro recording
+&apos;//
+
+&apos;//	constants.
+
+&apos;// local variables.
+
+dim oDoc		As Object		&apos;// ThisComponent
+dim oSheets		As Object		&apos;// Sheets() array
+dim iSheetIx	As Integer		&apos;// desired sheet index
+dim iUnoSheet	As Integer		&apos;// uno sheet number
+dim bSheetExists	As Boolean	&apos;// sheet exists flag
+dim oSheet		As Object		&apos;// this sheet
+
+	&apos;// code.
+	ON ERROR GOTO ErrorHandler
+	oDoc = ThisComponent
+	oSheets = oDoc.Sheets()
+	bSheetExists = oSheets.hasByName(psSheetName)
+&apos;XRay oSheets
+	if bSheetExists then
+		oSheet = oSheets.getByName(psSheetName)
+		iSheetIx = oSheet.RangeAddress.Sheet
+
+if not true then
+	msgbox(&quot;Index of target sheet is &quot; + iSheetIx)
+	goto NormalExit
+endif
+		iUnoSheet = iSheetIx + 1	&apos;// add 1 for uno indexing
+
+	else		&apos;// sheet not found
+		msgbox(&quot;In MoveToSheet: &quot; + psSheetName + &quot; - sheet not found!&quot;)
+		goto ErrorHandler
+	endif
+
+	&apos;// use uno - macro-generated code to jump to desired sheet.
+
+rem ----------------------------------------------------------------------
+rem define variables
+dim document   as object
+dim dispatcher as object
+rem ----------------------------------------------------------------------
+rem get access to the document
+document   = ThisComponent.CurrentController.Frame
+dispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+
+rem ----------------------------------------------------------------------
+dim args1(0) as new com.sun.star.beans.PropertyValue
+args1(0).Name = &quot;Nr&quot;
+&apos;//args1(0).Value = 4			&apos;// PubTerr sheet index
+args1(0).Value = iUnoSheet		&apos;// jump to desired sheet
+dispatcher.executeDispatch(document, &quot;.uno:JumpToTable&quot;, &quot;&quot;, 0, args1())
+
+NormalExit:
+	exit sub
+
+ErrorHandler:
+	msgbox(&quot;In MoveToSheet - unprocessed error.&quot;)
+	GOTO NormalExit
+
+end sub		&apos;// MoveToSheet		4/17/25.
+&apos;/**/
 &apos;// PlaceSplitTotal.bas
 &apos;//------------------------------------------------------------------
 &apos;// PlaceSplitTotal - Itemize split transaction in total COA account.
@@ -4972,5 +5061,35 @@ iBrkpt=1
 	StoreTrans = iRetValue
 
 end function 	&apos;// end StoreTrans	6/11/20
+&apos;/**/
+&apos;// ToDo.bas
+&apos;//---------------------------------------------------------------
+&apos;// ToDo - move user into ToDo sheet, if exists.
+&apos;//		16/26.	wmk.
+&apos;//---------------------------------------------------------------
+
+public function ToDo() As String
+
+&apos;// Usage.	svar = ToDo()
+&apos;//
+&apos;// Calls. MoveToSheet.
+&apos;//
+&apos;// Exit. user placed in ToDo sheet if exists.
+&apos;//		svar = &apos;=ToDo()
+&apos;//
+&apos;// Notes. This function places the user in the ToDo sheet and returns the
+&apos;// string &quot;-=ToDo()&quot;. If called from a sheet cell, this changes the cell to
+&apos;// a comment (thus avoiding recursion if AutoCalc is on).
+&apos;//
+
+&apos;// code.
+	ON ERROR GOTO ErrHandler
+	MoveToSheet(&quot;ToDo&quot;)
+
+NormalReturn:
+	ToDo = &quot;&apos;=ToDo()&quot;
+	exit function
+	
+end function		&apos;// end ToDo	1/6/26.
 &apos;/**/
 </script:module>

@@ -7,8 +7,8 @@ baslist =   Module1Hdr.bas  errhandling.bas  publics.bas\
   ErrLogMakeEntry.bas  ErrLogSetCellInfo.bas  ErrLogSetDisplay.bas\
   ErrLogSetModule.bas  ErrLogSetRecording.bas  ErrLogSetSheet.bas\
   ErrLogSetup.bas  GetInsRow.bas  GetMonthName.bas\
-  GetTransSheetName.bas  LogError.bas  PlaceSplitTotal.bas\
-  PlaceSplitTrans.bas  PlaceTransM.bas  ReverseDETrans.bas\
-  ReverseSplitTrans.bas  ReverseTrans.bas  SetProcessed.bas\
-  SetSheetDate.bas  SetSumFormula.bas  SplitOutCOAs.bas\
-  StoreTrans.bas
+  GetTransSheetName.bas  LogError.bas  MoveToSheet.bas\
+  PlaceSplitTotal.bas  PlaceSplitTrans.bas  PlaceTransM.bas\
+  ReverseDETrans.bas  ReverseSplitTrans.bas  ReverseTrans.bas\
+  SetProcessed.bas  SetSheetDate.bas  SetSumFormula.bas\
+  SplitOutCOAs.bas  StoreTrans.bas  ToDo.bas
