@@ -1,0 +1,2 @@
+1aecho " ** <shellname>.sh out-of-date **";exit 1
+

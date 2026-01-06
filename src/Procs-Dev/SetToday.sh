@@ -1,4 +1,5 @@
 #!/bin/bash
+echo " ** SetToday.sh.sh out-of-date **";exit 1
 # SetToday.sh - set *TODAY and *TODAY1 environment vars.
 #	1/14/24.	wmk.
 #

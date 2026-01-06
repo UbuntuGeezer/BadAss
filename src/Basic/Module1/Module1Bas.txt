@@ -27,6 +27,7 @@ GetInsRow
 GetMonthName
 GetTransSheetName
 LogError
+MoveToSheet
 PlaceSplitTotal
 PlaceSplitTrans
 PlaceTransM

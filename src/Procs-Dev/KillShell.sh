@@ -1,7 +1,6 @@
 #!/bin/bash
-# 2024-01-13.	wmk.	(automated) Version 3.0.6 paths eliminated (HPPavilion).
 # KillShell.sh - Kill shell by inserting illegal command at start.
-#	1/13/24.	wmk.
+#	1/6/26.	wmk.
 #
 # Usage. bash  KillShell.sh <shell-name> [<path>]
 #
@@ -15,16 +14,15 @@
 #
 # Modification History.
 # ---------------------
-# 01/13/24.	wmk.	(automated) echo,s to printf,s throughout.
-# 01/13/24.	wmk.	(automated) Version 3.0.6 Make old paths removed.
-# 11/8/23.	wmk.	*folderbase, *pathbase, *codebase assumed on entry.
-# 11/12/23.	wmk.	(automated) Version 3.0.6 Make old paths removed.
-# 11/15/23.	wmk.	verified for Lenovo system.
-# Legacy mods.
-# 9/1/23.	wmk.	original code.
-# 9/2/23.	wmk.	error message texts corrected.
-# 9/6/23.	wmk.	code checked for FLsara86777.
-# 9/9/23.	wmk.	bug fix determining path separator.
+# 1/6/26.	wmk.	(automated) Modification History sorted.
+# 1/13/24.	wmk.	(automated) echo,s to printf,s throughout. 
+# 11/15/23.	wmk.	verified for Lenovo system. 
+# 11/12/23.	wmk.	(automated) Version 3.0.6 Make old paths removed. 
+# 11/8/23.	wmk.	*folderbase, *pathbase, *codebase assumed on entry. 
+# 9/9/23.	wmk.	bug fix determining path separator. 
+# 9/6/23.	wmk.	code checked for FLsara86777. 
+# 9/2/23.	wmk.	error message texts corrected. 
+# 9/1/23.	wmk.	original code. 
 #
 # Notes. This shell is an alternative way of preventing a shell from executing
 # when it has gone out-of-date (usually because of referenced paths changing).
@@ -32,6 +30,7 @@
 # since even *sudo cannot use *chmod to change the 'x' flag (executable).
 #
 # P1=<shell-name>, [P2=<path>]
+#
 P1=$1
 P2=$2
 if [ -z "$P1" ];then
@@ -57,6 +56,7 @@ if ! test -s $P1;then
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 0
 fi
+sed "s?<shellname>?$P1?g" sedkillsh.txt > $TEMP_PATH/sedkillsh.txt
 sed -i -f $TEMP_PATH/sedkillsh.txt $P1
 if [ $? -eq 0 ];then
  printf "%s\n" "KillShell $P1 $P2 successful."
