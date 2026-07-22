@@ -1,8 +1,9 @@
-# folders.sh - function definitions for Accounting/BadAss folders. 1/12/24. wmk.
-#	4/20/25.	wmk.
+# folders.sh - function definitions for (Windows) Accounting/BadAss folders. 1/12/24. wmk.
+#	7/22/26.	wmk.
 #
 # Modification History.
 # ---------------------
+# 7/22/26.  wmk.    modified for Windows 11; paths changed for Windows.
 # 4/20/25.	wmk.	cdv added to change to version control folder.
 # 10/23/23.	wmk.	paths for Lenovo/Accounting folders.
 # 1/4/24.	wmk.	cdb added to change to Basic folders.
@@ -16,35 +17,35 @@
 # 9/21/23.	wmk.	ver 2.0.2 merge with HPPavilion2 changes.
 function cda(){
  P1=$1
- cd $folderbase/Accounting/BadAss/$P1
+ cd C:/Users/vncwm/linux/BadAss/$P1
 }
 function cdab(){
- cd $folderbase/Accounting/Projects-Geany/ArchivingBackups
+ cd C:/Users/vncwm/linux/BadAss/src/Projects-Geany/ArchivingBackups
 }
 function cdb(){
  P1=$1
- cd $folderbase/Accounting/BadAss/src/Basic/$P1
+ cd C:/Users/vncwm/linux/BadAss/src/Basic/$P1
 }
 function cdc(){
  P1=$1
- cd $folderbase/Accounting/$P1
+ cd C:/Users/vncwm/linux/BadAss/$P1
 }
 function cdd(){
  echo "cdd stubbed."
 }
 function cdg(){
  P1=$1
- cd $folderbase/GitHub/$P1
+ cd C:/Users/vncwm/linux/$P1
 }
 function cdj(){
  P1=$1
- cd $folderbase/Accounting/BadAss/src/Projects-Geany/$P1
+ cd C:/Users/vncwm/linux/BadAss/src/Projects-Geany/$P1
 }
 function cdp(){
- cd $folderbase/Accounting/BadAss/src/Procs-Dev
+ cd C:/Users/vncwm/linux/BadAss/src/Procs-Dev
 }
 function cdr(){
- cd $folderbase/Accounting/BadAss/src/Release
+ cd C:/Users/vncwm/linux/BadAss/src/Release
 }
 function cdt(){
  echo "cdt stubbed."
@@ -62,15 +63,15 @@ function cdss(){
  echo "cdss stubbed."
 }
 function huh(){
- echo "Accounting/BadAss folders.sh functions:"
- echo "cda - change to Accounting/ folder."
- echo "cdab - change to Accounting/../ArchivingBackups project folder."
- echo "cdb - change to Accounting/$acct_yr/Basic folder."
- echo "cdc - change to Accounting/*P1"
+ echo "/BadAss folders.sh functions:"
+ echo "cda - change to BadAss/ folder."
+ echo "cdab - change to BadAss/../ArchivingBackups project folder."
+ echo "cdb - change to BadAss/Basic folder."
+ echo "cdc - change to BadAss/*P1"
  echo "cdd - stubbed"
- echo "cdg - change to *HOME/GitHub."
- echo "cdj - change to Accounting/../Projects-Geany/*P1 project folder."
- echo "cdp - change to Accounting/../Procs-Dev."
+ echo "cdg - change to ~/linux."
+ echo "cdj - change to BadAss/../Projects-Geany/*P1 project folder."
+ echo "cdp - change to BadAss/../Procs-Dev."
  echo "cdt - stubbed."
  echo "cdts - stubbed."
  echo "cds - stubbed."
