@@ -62,7 +62,7 @@ NormalExit:
 	exit sub
 	
 ErrorHandler:
-    msgbox("ETRecdDoneListener - unprocessed error.")
+    msgbox("ETRecdDoneListener - (line " + iLineNo + " unprocessed error.")
 	GoTo NormalExit
 	
 end sub		'// end ETRecdDoneListener	7/23/26.

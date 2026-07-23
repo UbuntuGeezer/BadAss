@@ -1616,7 +1616,7 @@ end sub		&apos;// end ETRecdContListener	1/11/24.
 &apos;// ETRecdDoneListener.bas
 &apos;//---------------------------------------------------------------------
 &apos;// ETRecdDoneListener - Event handler &lt;Record &amp;&apos; Continue&gt; from Enter Transaction.
-&apos;//		7/23/26.	wmk.	13:20
+&apos;//		9/7/22.	wmk.	11:39
 &apos;//---------------------------------------------------------------------
 
 public sub ETRecdDoneListener()
@@ -1635,12 +1635,10 @@ public sub ETRecdDoneListener()
 &apos;// Calls.	ETDialogRecord, ETPubVarsReset
 &apos;//
 &apos;//	Modification history.
-&apos;//	--------------------
-&apos;// 7/23/26.    wmk.    ilineNo var added for error tracking.
-&apos;// 7/23/26.	wmk.	(automated) Modification History sorted.
-&apos;// 9/7/22.     wmk.	msgbox added to error handling. 
-&apos;// 6/17/20.	wmk.	completed; waiting on ETDialogRecord functional 
-&apos;// 6/16/20.	wmk.	original code; stub 
+&apos;//	---------------------
+&apos;//	6/16/20.	wmk.	original code; stub
+&apos;//	6/17/20.	wmk.	completed; waiting on ETDialogRecord functional
+&apos;//	9/7/22.		wmk.	msgbox added to error handling.
 &apos;//
 &apos;//	Notes. This sub is the linked macro to the changed status event linked
 &apos;// to the &lt;Record &amp;&apos; Continue&gt; cmd button in the Enter Transaction dialog.
@@ -1651,28 +1649,24 @@ public sub ETRecdDoneListener()
 dim oETRecordBtn	As Object		&apos;// Record &amp;&apos; Finish button
 dim oETRecordCont	As Object		&apos;// Record &amp;&apos; Continue button
 dim iStatus 		As Integer		&apos;// general status
-dim ilineNo         As Integer      &apos;// error tracking line number
 
 	&apos;// code.
 	iStatus = -1		&apos;// set error return
 	ON ERROR GoTo ErrorHandler
 
 	&apos;// record transaction
-    ilineNo = 46
-    iStatus = ETDialogRecord()
+	iStatus = ETDialogRecord()
 	if iStatus &lt; 0 then
 		GoToErrorHandler
 	endif
 	
 	&apos;// clear all fields entered and associated flags
-    ilineNo = 53
 	iStatus = ETPubVarsReset(1)	&apos;// reset everything
 	if iStatus &lt; 0 then
 		GoTo ErrorHandler
 	endif
 
 NormalExit:
-    ilineNo = 60
 	puoETDialog.endDialog(2)			&apos;// end dialog
 	exit sub
 	
@@ -1680,7 +1674,7 @@ ErrorHandler:
     msgbox(&quot;ETRecdDoneListener - unprocessed error.&quot;)
 	GoTo NormalExit
 	
-end sub		&apos;// end ETRecdDoneListener	7/23/26.
+end sub		&apos;// end ETRecdDoneListener	6/17/20
 &apos;/**/
 &apos;// ETRefHelpListener.bas
 &apos;//---------------------------------------------------------------------
