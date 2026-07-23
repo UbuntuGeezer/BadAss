@@ -1,6 +1,6 @@
 #!/bin/bash
 # CheckBasEnds.sh - Check that all Module1.xba macros have terminating '/**/.
-#	4/20/25.	wmk.
+#	7/23/26.	wmk.
 #
 # Usage. bash  CheckBasEnds.sh [-h|<xbamodule>]
 #
@@ -14,6 +14,8 @@
 #
 # Modification History.
 # ---------------------
+# 7/23/26.	wmk.	modified for Windows; mawk > gawk; *sp used for sysprocs path.
+# 7/23/26.	wmk.	(automated) UnKillShell to reinstate shell.
 # 4/20/25.	wmk.	add *projpath for base folder allowing run from other folders.
 # 4/18/25.	wmk.	-h option support.
 # 4/18/25.	wmk.	(automated) build level 4.0.14.
@@ -47,8 +49,8 @@ if [ -z "$P1" ];then
 fi
 #procbodyhere
 projpath=$libbase/src/Release
-mawk -f $projpath/awkListBasEnds.txt $P1.xba
+gawk -f $projpath/awkListBasEnds.txt $P1.xba
 #endprocbody
 printf "%s\n" "  CheckBasEnds complete."
-~/sysprocs/LOGMSG "  CheckBasEnds complete."
+$sp/LOGMSG "  CheckBasEnds $P1 complete."
 # end CheckBasEnds.sh

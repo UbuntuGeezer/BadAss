@@ -1,7 +1,7 @@
 '// ETRecdDoneListener.bas
 '//---------------------------------------------------------------------
 '// ETRecdDoneListener - Event handler <Record &' Continue> from Enter Transaction.
-'//		7/23/26.	wmk.	13:20
+'//		7/23/26.	wmk.	15:45
 '//---------------------------------------------------------------------
 
 public sub ETRecdDoneListener()
@@ -62,7 +62,7 @@ NormalExit:
 	exit sub
 	
 ErrorHandler:
-    msgbox("ETRecdDoneListener - (line " + iLineNo + " unprocessed error.")
+    msgbox("ETRecdDoneListener - (line " + ilineNo + " unprocessed error.")
 	GoTo NormalExit
 	
 end sub		'// end ETRecdDoneListener	7/23/26.
