@@ -1,6 +1,6 @@
 #!/bin/bash
 # ReplaceXBA.sh - replace .bas into .xba file.
-#	4/20/25.
+#	7/22/26.
 #
 # Usage. ReplaceXBA.sh -h|<modulename> <xbafile>
 #
@@ -12,6 +12,8 @@
 #
 # Modification History.
 # ---------------------
+# 7/22/26.	wmk.	modified for Windows 11.
+# 7/22/26.	wmk.	(automated) UnKillShell to reinstate shell.
 # 4/20/25.	wmk.	-h option support.
 # 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath introduced (HPPavilion).
 # 3/8/22.	wmk.	original.
@@ -47,5 +49,5 @@ if [ -z "$P1" ] || [ -z "$P2" ];then
 fi
 cp $1.bas $TEMP_PATH/scratch.bas
 sed -i "/\/\ $P1.bas/d;/\/\*\*\//d" $TEMP_PATH/scratch.bas
-mawk "/\/\/ $P1.bas/{f=1;print;while(getline < \"$TEMP_PATH/scratch.bas\"){print}}/\/\*\*\//{f=0}!f" $2 > new$P2.xba
+gawk "/\/\/ $P1.bas/{f=1;print;while(getline < \"$TEMP_PATH/scratch.bas\"){print}}/\/\*\*\//{f=0}!f" $2 > new$P2.xba
 sed -i "s?\'?\&apos\;?g;s?\"?\&quot\;?g" new$P2.xba

@@ -1,6 +1,6 @@
 #!/bin/bash
 # ExtractBas.sh - Extract BadAss .bas block from .xba module.
-#	4/20/25.	wmk.
+#	7/22/26.	wmk.
 #
 # Usage. bash  ExtractBas.sh -h|<xbamodule> <basblock>
 #
@@ -12,6 +12,8 @@
 #
 # Modification History.
 # ---------------------
+# 7/22/26.	wmk.	updated for Windows 11.
+# 7/22/26.	wmk.	(automated) UnKillShell to reinstate shell.
 # 4/19/25.	wmk.	-h option support.
 # 11/13/23.	wmk.	(automated) UnKillShell to reinstate shell.
 # 11/13/23.	wmk.	(automated) Version 3.0.9 *libpath introduced.
@@ -42,16 +44,16 @@ if [ "${P1:0:1}" == "-" ];then
  fi		# have -h
 fi	# have -
 if [ -z "$P1" ] || [ -z "$P2" ];then
- echo "ExtractBas -h|<xbamodule> <basblock> missing parameter(s) - abandoned."
+ printf "%s\n" "ExtractBas -h|<xbamodule> <basblock> missing parameter(s) - abandoned."
  exit 1
 fi
 #procbodyhere
-projpath=$libbase/src/Projects-Geany/EditBas
+projpath=C:/Users/vncwm/linux/BadAss/src/Projects-Geany/EditBas
 cd $projpath
 $projpath/DoSed.sh   $P2 $P1
 make --silent -f $projpath/MakeExtractBas
 #make -f $projpath/MakeExtractBas
 #endprocbody
-echo "  ExtractBas $P1 $P2 complete."
-~/sysprocs/LOGMSG "  ExtractBas $P1 $P2 complete."
+printf "%s\n" "  ExtractBas $P1 $P2 complete."
+$sp/LOGMSG "  ExtractBas (BadAss) $P1 $P2 complete."
 # end ExtractBas.sh

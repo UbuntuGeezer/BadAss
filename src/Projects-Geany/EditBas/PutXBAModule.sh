@@ -1,6 +1,6 @@
 #!/bin/bash
 # PutXBAModule - Copy src/Basic/<xbamodule>/<xbamodule>.xba module to Release folder.
-#	4/19/25.	wmk.
+#	7/22/26.	wmk.
 #
 # Usage. bash  PutXBAModule  <xbamodule>
 #
@@ -11,6 +11,8 @@
 #
 # Modification History.
 # ---------------------
+# 7/22/26.	wmk.	modified for Windows 11.
+# 7/22/26.	wmk.	(automated) UnKillShell to reinstate shell.
 # 4/19/25.	wmk.	(automated) Modification History sorted.
 # 4/19/25.	wmk.	updated. 
 # 4/19/25.	wmk.	-h option support. 
@@ -22,7 +24,7 @@
 #
 # P1=<xbamodule>
 #
-projbase=$libbase/src/Projects-Geany/EditBas
+projbase=C:/Users/vncwm/linux/BadAss/src/Projects-Geany/EditBas
 gitbase=$libbase
 P1=$1
 # -h option code
@@ -45,29 +47,29 @@ if [ "${P1:0:1}" == "-" ];then
  fi		# have -h
 fi	# have -
 if [ -z "$P1" ];then
- echo "PutXBAModule -h|<xbamodule> missing parameter(s) - PutXBAModule abandoned.**"
+ printf "%s\n" "PutXBAModule -h|<xbamodule> missing parameter(s) - PutXBAModule abandoned.**"
  exit 1
 fi
 cd $gitbase
 if ! test -f $libbase/src/Basic/$P1/$P1.xba;then
- echo "** file Basic/$P1.xba not found for copy - PutXBAModule abandoned.**"
+ printf "%s\n" "** file Basic/$P1.xba not found for copy - PutXBAModule abandoned.**"
  exit 1
 fi
-echo "** WARNING: Ensure that any NEW .bas files have been added into"
-echo " <xbafile>Bas.txt (MakeAddBas) before continuing..."
+printf "%s\n" "** WARNING: Ensure that any NEW .bas files have been added into"
+printf "%s\n" " <xbafile>Bas.txt (MakeAddBas) before continuing..."
 read -p "  OK to continue (y/n)? "
 yn=${REPLY^^}
 if [ "$yn" != "Y" ];then
- echo "PutXBAModule abandoned at user request."
+ printf "%s\n" "PutXBAModule abandoned at user request."
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 0
 fi
 if [ $libbase/src/Release/$P1.xba -nt $gitbase/Basic/$P1/$P1.xba ];then
- echo "**$P1.xba copy skipped - Basic/$P1.xba is not newer.**"
- ~/sysprocs/LOGMSG "**$ PutXBAModule $P1.xba copy skipped - Basic/$P1.xba is newer.**"
+ printf "%s\n" "**$P1.xba copy skipped - Basic/$P1.xba is not newer.**"
+ $sp/LOGMSG "**$ PutXBAModule (BadAss) $P1.xba copy skipped - Basic/$P1.xba is newer.**"
 else
  cp -u $libbase/src/Basic/$P1/$P1.xba $P1.xba 
- echo "Basic/$P1.xba copied to GitHub project folder."
- ~/sysprocs/LOGMSG "  PutXBAModule Basic/$P1.xba copied to GitHub project folder."
+ printf "%s\n" "Basic/$P1.xba copied to GitHub project folder."
+ $sp/LOGMSG "  PutXBAModule (BadAss) Basic/$P1.xba copied to GitHub project folder."
 fi
 # end PutXBAModule.sh.

@@ -1,6 +1,6 @@
 #!/bin/bash
 # DoSedBuild.sh - Run sed to fix BadAss../<xbafile>/MakeBuildLib.tmp > MakeBuildLib.
-#	4/20/25.	wmk.
+#	7/22/26.	wmk.
 #
 # Usage. bash DoSedBuild.sh -h|<xbafile>
 #
@@ -15,6 +15,8 @@
 #
 # Modification History.
 # ----------------------
+# 7/22/26.	wmk.	modified for Windows 11; LOGMSG added at end.
+# 7/22/26.	wmk.	(automated) UnKillShell to reinstate shell.
 # 4/20/25.	wmk.	CAUTION messages added.
 # 4/19/25.	wmk.	(automated) Modification History sorted.
 # 4/19/25.	wmk.	-h option support. 
@@ -74,13 +76,13 @@ printf "%s\n" " <xbafile>Bas.txt (MakeAddBas) before continuing..."
 read -p "  OK to continue (y/n)? "
 yn=${REPLY^^}
 if [ "$yn" != "Y" ];then
- echo "DoSedBuild abandoned at user request."
+ printf "%s\n" "DoSedBuild abandoned at user request."
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 0
 fi
 #
-projpath=$libbase/src/Projects-Geany/EditBas
-targpath=$libbase/src/Basic/$P1
+projpath=C:/Users/vncwm/linux/BadAss/src/Projects-Geany/EditBas
+targpath=C:/Users/vncwm/linux/BadAss/src/Basic/$P1
 fsuffx=Bas
 #mawk -f $projpath/awkbaslist.txt $targpath/$P1$fsuffx.txt > baslistvar.txt
 gawk -f $projpath/awkbaslist.txt $targpath/$P1$fsuffx.txt > $TEMP_PATH/baslistvar.txt
@@ -96,7 +98,8 @@ sed '/insertbaslist/r baslistvar.txt' $projpath/MakeBuildLib.tmp > $targpath/Mak
 sed -i "s?<xbafile>?$P1?g" $targpath/MakeBuildLib
 #mawk -f $projpath/awkbaslist.txt $projpath/MakeBuildLib.tmp \
 #  > $targpath/MakeBuildLib 
-#echo "s?<xbafile>?$P1?g" > $projpath/sedatives.txt
+#printf "%s\n" "s?<xbafile>?$P1?g" > $projpath/sedatives.txt
 #sed -i -f $projpath/sedatives.txt  $targpath/MakeBuildLib
-echo "DoSedBuild $P1 complete."
+printf "%s\n" "DoSedBuild $P1 complete."
+$sp/LOGMSG "DoSedBuild (BadAss) $P1 complete."
 # end DoSedBuild.sh

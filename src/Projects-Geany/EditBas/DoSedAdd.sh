@@ -1,6 +1,6 @@
 #!/bin/bash
 # DoSedAdd.sh - Run sed to fix MakeAddLib.tmp > MakeAddLib.
-#	4/19/25.	wmk.
+#	7/22/26.	wmk.
 #
 # Usage. bash DoSedAdd.sh -h|<xbafile> <basname> [<beforebas>]
 #
@@ -16,6 +16,8 @@
 #
 # Modification History.
 # ----------------------
+# 7/22/26.	wmk.	modified for Windows 11; LOGMSG added at end.
+# 7/22/26.	wmk.	(automated) UnKillShell to reinstate shell.
 # 4/19/25.	wmk.	(automated) Modification History sorted.
 # 4/19/25.	wmk.	-h option support. 
 # 11/12/23.	wmk.	(automated) Version 3.0.9 *libpath introduced. 
@@ -64,30 +66,31 @@ targpath=$libbase/src/Basic/$P1
 fsuffx=Bas
 sed -n "/^$P2\$/p" $targpath/$P1$fsuffx.txt > $TEMP_PATH/CurrBasList.txt
 if test -s $TEMP_PATH/CurrBasList.txt;then
- echo "** block with same name '$P2' already in $P1$suffx - skipping.. "
+ printf "%s\n" "** block with same name '$P2' already in $P1$suffx - skipping.. "
   read -p "Enter ctrl-c to remain in Terminal: "
   exit 0
 fi
 grep -e "$P2" $targpath/$P1$fsuffx.txt > $TEMP_PATH/CurrBasList.txt
 if test -s $TEMP_PATH/CurrBasList.txt;then
- echo "** blocks with similar name(s) to '$P2' already in $P1$suffx.. "
+ printf "%s\n" "** blocks with similar name(s) to '$P2' already in $P1$suffx.. "
  cat $TEMP_PATH/CurrBasList.txt
  read -p "Do you wish to continue (y/n)? "
  yn=${REPLY^^}
  if [ "$yn" != "Y" ];then
-  echo "DoSedAdd.sh abandoned at user request."
+  printf "%s\n" "DoSedAdd.sh abandoned at user request."
   read -p "Enter ctrl-c to remain in Terminal: "
   exit 0
  fi
 fi
-#echo "early termination for testing..."
+#printf "%s\n" "early termination for testing..."
 #read -p "Enter ctrl-c to remain in Terminal: "
 #exit 0
 #
 sed  "s?<xbafile>?$P1?g;s?<basname>?$P2?g;s?<where>?$P3?g" $projpath/MakeAddBas.tmp > $projpath/MakeAddBas
 #mawk -f $projpath/awkbaslist.txt $projpath/MakeAddLib.tmp \
 #  > $targpath/MakeAddLib 
-#echo "s?<xbafile>?$P1?g" > $projpath/sedatives.txt
+#printf "%s\n" "s?<xbafile>?$P1?g" > $projpath/sedatives.txt
 #sed -i -f $projpath/sedatives.txt  $targpath/MakeAddLib
-echo "DoSedAdd complete."
+printf "%s\n" "DoSedAdd complete."
+$sp/LOGMSG "DoSedAdd (BadAss) $P1 $P2 $P3 complete."
 # end DoSedAdd.sh

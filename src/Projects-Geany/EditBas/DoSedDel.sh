@@ -1,6 +1,6 @@
 #!/bin/bash
 # DoSedDel.sh - Run sed to fix MakeDelBas.tmp > MakeDelBas.
-#	4/19/25.	wmk.
+#	7/22/26.	wmk.
 #
 # Usage. bash DoSedDel.sh -h|<xbafile> <basname>]
 #
@@ -15,6 +15,8 @@
 #
 # Modification History.
 # ----------------------
+# 7/22/26.	wmk.	modified for Windows 11; LOGMSG added at end.
+# 7/22/26.	wmk.	(automated) UnKillShell to reinstate shell.
 # 4/19/25.	wmk.	(automated) Modification History sorted.
 # 4/17/25.	wmk.	-h option support. 
 # 11/12/23.	wmk.	(automated) Version 3.0.9 *libpath introduced. 
@@ -52,13 +54,14 @@ if [ "${P1:0:1}" == "-" ];then
  fi		# have -h
 fi	# have -
 if [ -z "$P1" ] || [ -z "$P2" ];then
- echo "EditBas/DoSedDel -h|<xbafile> <basname> missing parameter(s) - abandoned."
+ printf "%s\n" "EditBas/DoSedDel -h|<xbafile> <basname> missing parameter(s) - abandoned."
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 1
 fi
 #
-projpath=$libbase/src/Projects-Geany/EditBas
-targpath=$libbase/src/Basic/$P1
+projpath=C:/Users/vncwm/linux/BadAss/src/Projects-Geany/EditBas
+targpath=C:/Users/vncwm/linux/BadAss/src/Basic/$P1
 sed  "s?<xbafile>?$P1?g;s?<basname>?$P2?g" $projpath/MakeDelBas.tmp > $projpath/MakeDelBas
-echo "DoSedDel $P1 $P2 complete."
+printf "%s\n" "DoSedDel $P1 $P2 complete."
+$sp/LOGMSG "DoSedDel (BadAss) $P1 $P2 complete."
 # end DoSedDel.sh

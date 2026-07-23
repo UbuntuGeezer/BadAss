@@ -1,6 +1,6 @@
 #!/bin/bash
 # ExtractAllBas.sh - Extract all BadAss .bas blocks from .xba module.
-#	4/19/25.	wmk.
+#	7/22/26.	wmk.
 #
 # Usage. bash  ExtractAllBas.sh -h|<xbamodule>
 #
@@ -14,6 +14,8 @@
 #
 # Modification History.
 # ---------------------
+# 7/22/26.	wmk.	modified for Windows 11.
+# 7/22/26.	wmk.	(automated) UnKillShell to reinstate shell.
 # 4/19/25.	wmk.	(automated) Modification History sorted.
 # 4/19/25.	wmk.	-h option support. 
 # 4/19/25.	wmk.	(automated) Modification History sorted. 
@@ -49,13 +51,13 @@ if [ "${P1:0:1}" == "-" ];then
  fi		# have -h
 fi	# have -
 if [ -z "$P1" ];then
- echo "ExtractAllBas -h|<xbamodule> missing parameter(s) - abandoned."
+ printf "%s\n" "ExtractAllBas -h|<xbamodule> missing parameter(s) - abandoned."
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 1
 fi
 #procbodyhere
-projpath=$libbase/src/Projects-Geany/EditBas
-shellpath=$libbase/src/Procs-Dev
+projpath=C:/Users/vncwm/linux/BadAss/src/Projects-Geany/EditBas
+shellpath=C:/Users/vncwm/linux/BadAss/src/Procs-Dev
 listsuffx=Bas.txt
 # loop on ExtractBas.sh (DoSed, make -f MakeExtractBas) with
 # list from Basic/$P1Bas.txt file
@@ -63,22 +65,22 @@ listsuffx=Bas.txt
 # $pathbase/Basic/$P1$listsuffx
 pushd ./ > /dev/null
 #
-echo "  LoopAnyShell beginning processing."
+printf "%s\n" "  LoopAnyShell beginning processing."
 error_counter=0		# set error counter to 0
 IFS="&"			# set & as the word delimiter for read.
-file=$libbase/src/Basic/$P1/$P1$listsuffx
+file=C:/Users/vncwm/linux/BadAss/src/Basic/$P1/$P1$listsuffx
 i=0
 while read -e; do
   #reading each line
-  echo -e " processing $REPLY " >> $TEMP_PATH/scratchfile
+  printf "%s\n" -e " processing $REPLY " >> $TEMP_PATH/scratchfile
   len=${#REPLY}
   len1=$((len-1))
   firstchar=${REPLY:0:1}
   next_one=$REPLY
-#  echo -e "  $firstchar\n is first char of line." >> $HOME/temp/scratchfile
+#  printf "%s\n" -e "  $firstchar\n is first char of line." >> $HOME/temp/scratchfile
   #expr index $string $substring
   if [ "$firstchar" == "#" ]; then			# skip comment
-   echo $REPLY >> $TEMP_PATH/scratchfile
+   printf "%s\n" $REPLY >> $TEMP_PATH/scratchfile
   elif [ "$firstchar" == "\$" ];then
    break
   else
@@ -86,9 +88,9 @@ while read -e; do
   fi
   i=$((i+1))
 done < $file
-echo " $i $P2 lines processed."
+printf "%s\n" " $i $P2 lines processed."
 popd > /dev/null
 #endprocbody
-echo "  ExtractAllBas $P1 complete."
-~/sysprocs/LOGMSG "  ExtractAllBas $P1 complete."
+printf "%s\n" "  ExtractAllBas $P1 complete."
+$sp/LOGMSG "  ExtractAllBas (BadAss) $P1 complete."
 # end ExtractAllBas.sh

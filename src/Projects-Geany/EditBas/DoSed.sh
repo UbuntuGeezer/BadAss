@@ -1,6 +1,6 @@
 #!/bin/bash
 # DoSed.sh - Run *sed to fix Make..Bas.tmp > Make..Bas.
-#	4/19/25.	wmk.
+#	7/22/26.	wmk.
 #
 # Usage. bash DoSed.sh -h|<basmodule> <xbafile>
 #
@@ -16,6 +16,8 @@
 #
 # Modification History.
 # ----------------------
+# 7/22/26.	wmk.	modified for Windows 11.
+# 7/22/26.	wmk.	(automated) UnKillShell to reinstate shell.
 # 4/17/25.	wmk.	-h option support.
 # 4/19/25.	wmk.	(automated) Modification History sorted.
 # 4/19/25.	wmk.	updated. 
@@ -63,16 +65,16 @@ if [ -z "$P1" ] || [ -z "$P2" ];then
  read -p "Enter ctrl-c to remain in Terminal: "
 fi
 #
-projpath=$libbase/src/Projects-Geany/EditBas
-echo $PWD
+projpath=C:/Users/vncwm/linux/BadAss/src/Projects-Geany/EditBas
+printf "%s\n" $PWD
 printf "%s\n" "s?<basmodule>?$P1?g" > $projpath/sedatives.txt 
 printf "%s\n" "s?<xbafile>?$P2?g" >> $projpath/sedatives.txt
-#echo "s?<basmodule>?$P1?g" > $projpath/sedatives.txt
-#echo "s?<xbafile>?$P2?g" >> $projpath/sedatives.txt
+#printf "%s\n" "s?<basmodule>?$P1?g" > $projpath/sedatives.txt
+#printf "%s\n" "s?<xbafile>?$P2?g" >> $projpath/sedatives.txt
 sed -f $projpath/sedatives.txt  $projpath/sedextbas.tmp > sedextbas.txt
 sed -f $projpath/sedatives.txt  $projpath/awkxba2xba1.tmp > awkxba2xba1.txt
 sed -f $projpath/sedatives.txt  $projpath/MakeExtractBas.tmp >  $projpath/MakeExtractBas
 sed -f $projpath/sedatives.txt  $projpath/MakeDeleteXBAbas.tmp >  $projpath/MakeDeleteXBAbas
 sed -f $projpath/sedatives.txt  $projpath/MakeReplaceBas.tmp >  $projpath/MakeReplaceBas
-echo "DoSed (EditBas) $P1 $P2 complete."
+printf "%s\n" "DoSed (EditBas) $P1 $P2 complete."
 # end DoSed.sh

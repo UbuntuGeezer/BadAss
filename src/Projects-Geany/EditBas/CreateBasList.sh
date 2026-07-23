@@ -1,6 +1,6 @@
 #!/bin/bash
 # CreateBasList.sh - Create <module-name>Bas.txt list in Basic/<module-name> folder.
-#	4/15/25.	wmk.
+#	7/22/26.	wmk.
 #
 # Usage. bash  CreateBasList.sh -h|<module-name>
 #
@@ -15,6 +15,8 @@
 #
 # Modification History.
 # ---------------------
+# 7/22/26.	wmk.	modified for Windows 11.
+# 7/22/26.	wmk.	(automated) UnKillShell to reinstate shell.
 # 4/15/25.	wmk.	-h option added.
 # 4/15/25.	wmk.	(automated) build level 4.0.14.
 # 6/5/24.	wmk.	(automated) printf "%s\n",s to printf,s throughout.
@@ -54,15 +56,15 @@ if [ -z "$P1" ];then
  printf "%s\n" "CreateBasList -h|<module-name> missing parameter(s) - abandoned."
  exit 1
 fi
-~/sysprocs/LOGMSG "  CreateBasList - initiated from Terminal"
+$sp/LOGMSG "  CreateBasList - initiated from Terminal"
 printf "%s\n" "  CreateBasList - initiated from Terminal"
 # procbodyhere
-cd $libbase/src/Basic/$P1
+cd C:/Users/vmcwm/linux/BadAss/src/Basic/$P1
 ls \
  *.bas | mawk -F "/" '{print substr($NF,1,length($NF)-4)}' > ${P1}Bas.txt
 #endprocbody
 printf "%s\n" " ** Reminder: edit ${P1}Bas.txt moving ${P1}Hdr, publicsMM, ${P1}Common, "
 printf "%s\n" "    and Main to the top of the list, after removing Module1 from the list."
 printf "%s\n" "  CreateBasList complete."
-~/sysprocs/LOGMSG "  CreateBasList complete."
+$sp/LOGMSG "  CreateBasList complete."
 # end CreateBasList.sh

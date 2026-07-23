@@ -1,6 +1,6 @@
 #!/bin/bash
 # CopyXBAoverBAS - Copy BadAss Import module .xba code over to Basic folder.
-#	4/19/25.	wmk.
+#	7/22/26.	wmk.
 #
 # Usage.	bash CopyXBAoverBAS.sh -h|<basmodule>
 #
@@ -11,6 +11,8 @@
 #
 # Modification History.
 # ---------------------
+# 7/22/26.	wmk.	modified for Windows 11.
+# 7/22/26.	wmk.	(automated) UnKillShell to reinstate shell.
 # 4/19/25.	wmk.	(automated) Modification History sorted.
 # 4/19/25.	wmk.	-h option support. 
 # 1/12/24.	wmk.	code checked for Accounting/BadAss compatibility. 
@@ -31,8 +33,8 @@
 # P1=-h|<xbamodule>
 #
 P1=$1
-srcpath=$libbase/src/Import
-targpath=$libbase/src/Basic/$P1
+srcpath=C:/Users/vncwm/linux/BadAss/src/Import
+targpath=C:/Users/vncwm/linux/BadAss/src/Basic/$P1
 # -h option code
 if [ "${P1:0:1}" == "-" ];then
  option=${P1,,}
@@ -53,22 +55,22 @@ if [ "${P1:0:1}" == "-" ];then
  fi		# have -h
 fi	# have -
 if [ -z "$P1" ];then
- echo "CopyXBAoverBAS <xbamodule> missing parameter(s) - abandoned."
+ printf "%s\n" "CopyXBAoverBAS <xbamodule> missing parameter(s) - abandoned."
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 1
 fi
 cd $srcpath
 if ! test -f $P1.xba;then
- echo "CopyXBAoverBAS $srcpath/$P1.xba not found for copy - abandoned."
+ printf "%s\n" "CopyXBAoverBAS $srcpath/$P1.xba not found for copy - abandoned."
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 1
 fi
 if [ $srcpath/$P1.xba -nt $targpath/$P1.xba ];then
  cp -u $srcpath/$P1.xba $targpath/$P1.xba
- echo "$P1.xba updated in /Basic folder."
- ~/sysprocs/LOGMSG "  CopyXBAoverBAS - $P1.xba been updated in /Basic folder from Import."
+ printf "%s\n" "$P1.xba updated in /Basic folder."
+ $sp/LOGMSG "  CopyXBAoverBAS - $P1.xba been updated in /Basic folder from Import."
 else
- echo "$srdpath/$P1.xba copy skipped - /Basic file is not older.**"
- ~/sysprocs/LOGMSG "**$ CopyXBAoverBAS $srcpath/$P1.xba copy skipped - /Basic file is not older.**"
+ printf "%s\n" "$srdpath/$P1.xba copy skipped - /Basic file is not older.**"
+ $sp/LOGMSG "**$ CopyXBAoverBAS $srcpath/$P1.xba copy skipped - /Basic file is not older.**"
 fi
 # end CopyXBAoverBAS.
