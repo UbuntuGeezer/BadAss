@@ -18,10 +18,10 @@ projpath = $(codebase)/src/Projects-Geany/EditBas
 # <filepath>/<filebase>.sql
 #=======================================================
 Always : JustDoIt
-	sed -i '/\/\/ fSTAmtLostFocus.bas/,/\/\*\*\//d' \
+	sed -i '/\/\/ fVSDialogPreset.bas/,/\/\*\*\//d' \
 	 $(codebase)/src/Basic/Module2/Module2.xba
-	echo "fSTAmtLostFocus deleted from Module2.xba"
-	~\sysprocs/LOGMSG "  fSTAmtLostFocus deleted from Module2."
+	echo "fVSDialogPreset deleted from Module2.xba"
+	~\sysprocs/LOGMSG "  fVSDialogPreset deleted from Module2."
 
 #=======================================================
 JustDoIt: ;

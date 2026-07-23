@@ -1,0 +1,59 @@
+&apos;// ETCOA1ListListener.bas
+&apos;//--------------------------------------------------------------------
+&apos;// ETCOA1ListListener - Process user click on &lt;...&gt; with COA1 account.
+&apos;//		6/17/20.	wmk.	07:45
+&apos;//--------------------------------------------------------------------
+
+public sub ETCOA1ListListener()
+
+&apos;//	Usage.	macro call or
+&apos;//			call ETCOA1ListListener()
+&apos;//
+&apos;// Entry.	User clicked on &lt;...&gt; next to COA1 field
+&apos;//			&lt;DebitField&gt; in ET dialog is text field for result
+&apos;//
+&apos;//	Exit.	If user selected a COA from the COADialog then
+&apos;//			gsETAcct1 = the COA # selected
+&apos;//			DebitField.Text = the COA # selected
+&apos;//			otherwise the above remain unchanged
+&apos;//
+&apos;// Calls.
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/16/20.	wmk.	original code
+&apos;//	6/17/20.	wmk.	bug fix setting selection in text box
+&apos;//
+&apos;//	Notes. If the user does not select a new COA from GetCOA, the
+&apos;//	current COA for the Debit field (gsETAcct1) will remain unchanged.
+&apos;//
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim oETCOA1Text	As Object			&apos;// account text field
+dim sAcct1		As String			&apos;// returned account from GetCOA
+
+	&apos;// code.
+	sAcct1 = &quot;&quot;
+	ON ERROR GOTO ErrorHandler
+	
+	pbETDebitList=true
+	pbETCreditList=false	
+	sAcct1 = GetCOA(1)			&apos;// get COA from dialog
+	if Len(sAcct1)&gt;0 then
+	    puoETDialog.Model.DebitField.Text = sAcct1
+&apos;		oETCOA1Text = puoETDialog.getControl(&quot;DebitField&quot;)
+&apos;		oETCOA1Text.Text = sAcct1
+		gsETAcct1 = sAcct1
+	endif
+	
+NormalExit:
+	exit sub
+	
+ErrorHandler:
+	gsETAcct1 = sAcct1
+	GoTo NormalExit
+	
+end sub		&apos;// end ETCOA1ListListener	6/17/20
+&apos;/**/

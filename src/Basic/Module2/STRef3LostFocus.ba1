@@ -1,0 +1,47 @@
+&apos;// STRef3LostFocus.bas
+&apos;//---------------------------------------------------------------
+&apos;// STRef3LostFocus - Handle AcctFldn LostFocus event.
+&apos;//		6/24/20.	wmk.	10:30
+&apos;//---------------------------------------------------------------
+
+public sub STRef3LostFocus()
+
+&apos;//	Usage.	macro call or
+&apos;//			call STRef3LostFocus()
+&apos;//
+&apos;// Entry.	RefFld1..RefFld10 lost focus
+&apos;//			gsSTObjFocus = control name with focus (e.g. &quot;RefFld1&quot;)
+&apos;//
+&apos;//	Exit.	gsRefs(0) = text from AcctFld1..10
+&apos;//
+&apos;// Calls.	STRefLostFocus
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/24/20.	wmk.	original code; adapted from STRef1LostFocus
+&apos;//
+&apos;//	Notes.
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim iStatus			As Integer			&apos;// general status
+
+	&apos;// code.
+	ON ERROR GOTO ErrorHandler
+	&apos;// use generic handler
+	gsSTObjFocus = &quot;RefFld3&quot;					&apos;// clear object focus tracker
+	iStatus = STRefLostFocus(gsSTObjFocus)
+	if iStatus &lt; 0 then
+		GoTo ErrorHandler
+	endif
+
+NormalExit:
+	exit sub
+	
+ErrorHandler:
+	msgBox(&quot;In STRef3LostFocus - unprocessed error&quot;)
+	GoTo NormalExit
+	
+end sub		&apos;// end STRef3LostFocus	6/24/20
+&apos;/**/

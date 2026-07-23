@@ -1,0 +1,45 @@
+&apos;// COACancelListener.bas
+&apos;//--------------------------------------------------------------------
+&apos;// COACancelListener - Event handler when &lt;Cancel&gt; from COA selection.
+&apos;//		9/7/22.	wmk.	17:26
+&apos;//--------------------------------------------------------------------
+
+public sub COACancelListener()
+
+&apos;//	Usage.	macro call or
+&apos;//			call COACancelListener()
+&apos;//
+&apos;// Entry.	normal entry from event handler for dialogue where
+&apos;//			user clicked &lt;Cancel&gt; in COA dialog
+&apos;//			puoCOADialog = COA dialog box object
+&apos;//
+&apos;//	Exit.	pusCOASelected = &quot;&quot;
+&apos;//
+&apos;// Calls.
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;// 9/7/22.		wmk.	this control behaves like &quot;Cancel&quot;; the
+&apos;//				 dialog has been dropped and disposed.
+&apos;// Legacy mods.
+&apos;//	6/13/20.	wmk.	original code
+&apos;//	6/15/20.	wmk.	code modified to emulate Cancel type button
+&apos;//
+&apos;//	Notes. This sub is the linked macro to the Execute() event linked
+&apos;// to the &lt;Cancel&gt; button in the COA selection dialog. If the &lt;Cancel&gt;
+&apos;// button is also defined as type = 2, CANCEL it will drop the dialog
+&apos;// from the screen with returned value 0. If not, this event handler
+&apos;// be called and will emulate that process.
+
+&apos;//	constants.
+
+&apos;//	local variables.
+
+	&apos;// code.
+	pusCOASelected = &quot;&quot;		&apos;// clear COA selection string
+&apos;	msgBox(&quot;In Module2/COACancelListener&quot; + CHR(13)+CHR(10) _
+&apos;        + &quot;&apos;&quot;+pusCOASelected+&quot;&apos;&quot; + &quot; selected&quot;)
+&apos;	puoCOADialog.endDialog(0)	&apos;// end dialog as though cancelled	
+
+end sub		&apos;// end COACancelListener	6/13/20
+&apos;/**/

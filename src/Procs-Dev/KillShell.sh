@@ -1,6 +1,6 @@
 #!/bin/bash
 # KillShell.sh - Kill shell by inserting illegal command at start.
-#	1/6/26.	wmk.
+#	7/22/26.	wmk.
 #
 # Usage. bash  KillShell.sh <shell-name> [<path>]
 #
@@ -14,6 +14,8 @@
 #
 # Modification History.
 # ---------------------
+# 7/22/26.  wmk.    modified for Windows 11; *projpath definition added; LOGMSG
+# 7/22/26.  wmk.     added at end.
 # 1/6/26.	wmk.	(automated) Modification History sorted.
 # 1/13/24.	wmk.	(automated) echo,s to printf,s throughout. 
 # 11/15/23.	wmk.	verified for Lenovo system. 
@@ -50,18 +52,21 @@ else
 fi
 printf "%s\n" $killpath$ksep$P1
 pushd ./ > /dev/null
+projpath=C:/Users/vncwm/linux/BadAss/src/Procs-Dev
 cd $killpath
 if ! test -s $P1;then
  printf "%s\n" " KillShell - $P1 is empty or non-existent."
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 0
 fi
-sed "s?<shellname>?$P1?g" sedkillsh.txt > $TEMP_PATH/sedkillsh.txt
+sed "s?<shellname>?$P1?g" $projpath/sedkillsh.txt > $TEMP_PATH/sedkillsh.txt
 sed -i -f $TEMP_PATH/sedkillsh.txt $P1
 if [ $? -eq 0 ];then
  printf "%s\n" "KillShell $P1 $P2 successful."
+ $sp/LOGMSG "KillShell $P1 $P2 successful."
 else
  printf "%s\n" "KillShell $P1 $P2 failed."
+ $sp/LOGMSG "KillShell $P1 $P2 failed."
 fi
 popd > /dev/null
 # end KillShell.sh

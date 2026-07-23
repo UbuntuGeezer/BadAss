@@ -1,0 +1,54 @@
+&apos;// ETCOA1Listener.bas
+&apos;//---------------------------------------------------------------------
+&apos;// ETCOA1Listener - Event handler &lt;COA1 account&gt; from Enter Transaction.
+&apos;//		6/17/20.	wmk.	14:30
+&apos;//---------------------------------------------------------------------
+
+public sub ETCOA1Listener()
+
+&apos;//	Usage.	macro call or
+&apos;//			call ETCOA1Listener()
+&apos;//
+&apos;// Entry.	normal entry from event handler for dialogue where
+&apos;//			user changed the &lt;COA1 account&gt; field in Enter Transaction
+&apos;//			puoETDialog = Enter Transaction dialog object
+&apos;//
+&apos;//	Exit.	gsETAcct1 = entered amount
+&apos;//			gbETCOA1Entered = true if nonempty string
+&apos;//			pbETDebitList = true
+&apos;//			pbETCreditList = false
+&apos;//
+&apos;// Calls.	ETCheckComplete
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/15/20.	wmk.	original code.
+&apos;//	6/17/20.	wmk.	bug fix enabling [Record..] buttons
+&apos;//
+&apos;//	Notes. This sub is the linked macro to the changed status event linked
+&apos;// to the &lt;debit&gt; text field in the Enter Transaction dialog.
+
+&apos;//	constants.
+dim bFormComplete	As Boolean		&apos;// all fields complete flag
+dim oETCOA1Text	As Object			&apos;// account text field
+dim oETRecordBtn	As Object		&apos;// Record &amp;&apos; Finish button
+dim oETRecordCont	As Object		&apos;// Record &amp;&apos; Continue button
+
+&apos;//	local variables.
+
+	&apos;// code.
+	pbETDebitList = true
+	pbETCreditList = false
+	oETCOA1Text = puoETDialog.getControl(&quot;DebitField&quot;)
+	gsETAcct1 = oETCOA1Text.Text
+	gbETCOA1Entered = (Len(gsETAcct1)&gt;0)
+	bFormComplete = ETCheckComplete()
+	if bFormComplete then
+		oETRecordBtn = puoETDialog.getControl(&quot;RecordBtn&quot;)
+		oETRecordBtn.Model.Enabled = true
+		oETRecordCont = puoETDialog.getControl(&quot;RecordContBtn&quot;)
+		oETRecordCont.Model.Enabled = true
+	endif	
+
+end sub		&apos;// end ETCOA1Listener	6/17/20
+&apos;/**/

@@ -1,0 +1,122 @@
+&apos;// STUpdateAccumTot.bas
+&apos;//---------------------------------------------------------------
+&apos;// STUpdateAccumTot - Update accumulated split total.
+&apos;//		7/7/20.	wmk.	12:00
+&apos;//---------------------------------------------------------------
+
+public function STUpdateAccumTot(psAmtFldName As String) As Integer
+
+&apos;//	Usage.	iVar = STUpdateAccumTot( sAmtFldName )
+&apos;//
+&apos;// Parameters.	sAmtFldName dialog amount field name (e.g. &quot;AmtFld1&quot;)
+&apos;//
+&apos;// Entry.	This routine should be called on the &quot;LostFocus&quot; event
+&apos;//			on any AmtFld in the dialog, with the fieldname passed
+&apos;//			as the parameter.	
+&apos;//			puoSTDialog = Split Transaction dialog object
+&apos;//
+&apos;//	Exit.	iVar = 0 - totals updated; limit not reached
+&apos;//				   1 - totals updated; limit reached
+&apos;//				 &lt; 0 - error updating totals
+&apos;//			gdStAmts(i) = matching index i updated with new value from dialog
+&apos;//			gdSTAccumTot = updated with any old value from array
+&apos;//					subtracted and new value from dialog added
+&apos;//			puoSTDialog.UnsplitTot.Value = updated with any old value
+&apos;//					from array added and new value from dialog subtracted
+&apos;//
+&apos;// Calls.
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/19/20.	wmk.	original code
+&apos;//	6/21/20.	wmk.	change to check split total met and return 1
+&apos;//	7/7/20.		wmk.	change to string comparison to allow for values
+&apos;//						equal except fractional cents; properly update
+&apos;//						totals without exception; fix bug where storing string
+&apos;//						into gdSTAmts array instead of value
+&apos;//
+&apos;//	Notes. The Accumulated total field is initialized to 0 at dialog
+&apos;//	startup, then is updated whenever the user adds a split amount to
+&apos;// any of the AmtFld1..AmtFld10 fields. STUpdateAccumTot should be
+&apos;// called whenever an AmtFldn object changes; The dialog UnsplitTot
+&apos;// field is also updated to hold the tracking
+&apos;//iAmtFldIx = index of ST dialog AmtFld to add to
+&apos;//			accumulator. If the amount field in the dialog has
+&apos;//			been cleared, any current value in the psSTAmts array
+&apos;//			will be subtracted from the accumulated total, the
+&apos;//			new value from the dialog box will be both stored in 
+&apos;//			the gsSTAmts array and added to the accumulated total.
+&apos;//			Then the Accumulated Splits Total box will be updated
+&apos;//			in the dialog objects.
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim iRetValue 	As Integer		&apos;// returned value
+dim iAmtFldIx	As Integer		&apos;// amounts array index
+dim sAmtFld		As String		&apos;// amount field local name
+dim oAmtFld		As Object		&apos;// amount field from dialog
+dim oAccumTot	As Object		&apos;// accumulated total field
+dim dUnsplit	As Double		&apos;// unsplit current amount
+
+	&apos;// code.
+
+	iRetValue = -1
+	ON ERROR GOTO ErrorHandler
+	sAmtFld = psAmtFldName		&apos;// get local copy of name
+	
+	&apos;// convert name to array index
+	iAmtFldIx = STFld6ToIndex(sAmtFld)
+	if iAmtFldIx &lt; 0 then
+		GoTo ErrorHandler
+	endif
+	
+	&apos;//	adjust both accumulators by old value
+	gdSTAccumTot = gdSTAccumTot - gdSTAmts(iAmtFldIx)
+	oAccumTot = puoSTDialog.getControl(&quot;UnsplitTot&quot;)
+	dUnsplit = oAccumTot.Value
+	oAccumTot.Value = dUnsplit + gdSTAmts(iAmtFldIx)
+	
+	
+	&apos;// get new value from split transaction dialog and add
+	&apos;// into accumulator
+	oAmtFld = puoSTDialog.getControl(sAmtFld)
+	gdSTAccumTot = gdSTAccumTot + oAmtFld.Value
+	
+	if gdSTAccumTot &gt; gdSTTotalAmt then
+		if StrComp(Str(gdSTAccumTot),Str(gdSTTotalAmt))= 0 then
+			gdSTAccumTot = gdSTTotalAmt
+		else
+			msgBox(&quot;Splits with new amount exceeds Total to split&quot;)
+			iRetValue = 0
+			GoTo NormalExit		&apos;// bail out without updating array or control
+		endif
+	endif
+	
+	&apos;// store new value in gdSTAmts array for this index
+	gdStAmts(iAmtFldIx) = oAmtFld.Value
+	
+	&apos;// update transaction dialog Accumulated Splits and Unsplit field
+	oAccumTot = puoSTDialog.getControl(&quot;AccumTot&quot;)
+	oAccumTot.Value = gdSTAccumTot
+	oAccumTot = puoSTDialog.getControl(&quot;UnsplitTot&quot;)
+	dUnsplit = oAccumTot.Value
+	oAccumTot.Value = dUnsplit - oAmtFld.Value
+		
+&apos;	if gdSTAccumTot = gdSTTotalAmt then
+	if StrComp(Str(gdSTAccumTot),Str(gdSTTotalAmt))=0 then
+		iRetValue = 1
+	else
+		iRetValue = 0
+	endif	&apos;// end split total met conditional
+	
+NormalExit:
+	STUpdateAccumTot = iRetValue
+	exit function
+	
+ErrorHandler:
+	msgBox(&quot;STUpdateAccumTot - unprocessed error.&quot;)
+	GoTo NormalExit
+	
+end function		&apos;// end STUpdateAccumTot	7/7/20
+&apos;/**/

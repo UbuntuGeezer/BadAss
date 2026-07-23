@@ -1,0 +1,56 @@
+&apos;// ETCOA2Listener.bas
+&apos;//---------------------------------------------------------------------
+&apos;// ETCOA2Listener - Event handler &lt;COA1 account&gt; from Enter Transaction.
+&apos;//		9/8/22.	wmk.	15:07
+&apos;//---------------------------------------------------------------------
+
+public sub ETCOA2Listener()
+
+&apos;//	Usage.	macro call or
+&apos;//			call ETCOA2Listener()
+&apos;//
+&apos;// Entry.	normal entry from event handler for dialogue where
+&apos;//			user changed the &lt;COA2 account&gt; field in Enter Transaction
+&apos;//			puoETDialog = Enter Transaction dialog object
+&apos;//
+&apos;//	Exit.	gsETAcct2 = entered account
+&apos;//			gbETCOA2Entered = true if nonempty string
+&apos;//			pbETCreditList = true
+&apos;//			pbETDebitList = false
+&apos;//
+&apos;// Calls.	ETCheckComplete
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;// 9/8/22.		wmk.	text modified; eliminate all other code except
+&apos;//				 to check if form complete.
+&apos;// Legacy mods.
+&apos;//	6/16/20.	wmk.	original code
+&apos;//	6/17/20.	wmk.	bug fix enabling Select buttons
+&apos;//	Notes. This sub is the linked macro to the changed status event linked
+&apos;// to the &lt;Credit account&gt; text field in the Enter Transaction dialog.
+
+&apos;//	constants.
+dim bFormComplete	As Boolean		&apos;// all fields complete flag
+dim oETCOA2Text	As Object			&apos;// account text field
+dim oETRecordBtn	As Object		&apos;// Record &amp;&apos; Finish button
+dim oETRecordCont	As Object		&apos;// Record &amp;&apos; Continue button
+
+&apos;//	local variables.
+
+	&apos;// code.
+	pbETCreditList = true
+	pbETDebitList = false
+	oETCOA2Text = puoETDialog.getControl(&quot;CreditField&quot;)
+	gsETAcct2 = oETCOA2Text.Text
+	gbETCOA2Entered = (Len(gsETAcct2)&gt;0)
+	bFormComplete = ETCheckComplete()
+	if bFormComplete then
+		oETRecordBtn = puoETDialog.getControl(&quot;RecordBtn&quot;)
+		oETRecordBtn.Model.Enabled = true
+		oETRecordCont = puoETDialog.getControl(&quot;RecordContBtn&quot;)
+		oETRecordCont.Model.Enabled = true
+	endif	
+
+end sub		&apos;// end ETCOA2Listener	9/8/22
+&apos;/**/

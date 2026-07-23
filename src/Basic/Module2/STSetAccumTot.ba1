@@ -1,0 +1,52 @@
+&apos;// STSetAccumTot.bas
+&apos;//---------------------------------------------------------------
+&apos;// STSetAccumTot - Get accumulated splits total.
+&apos;//		6/18/20.	wmk.	18:00
+&apos;//---------------------------------------------------------------
+
+public function STSetAccumTot(pdTotal As Double) As Integer
+
+&apos;//	Usage.	iVar = STSetAccumTot(dTotal)
+&apos;//
+&apos;//	Paramters.	dTotal = new total to set in AccumTot field
+&apos;//
+&apos;//	Entry.	gdAccumTot = allocated for accumulated split total
+&apos;//			puoSTDialog	= loaded ST dialog object
+&apos;//
+&apos;//	Exit.	iVar = 0 - normal return
+&apos;//				   -1 - error setting accumulated total
+&apos;//
+&apos;// Calls.
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/18/20.		wmk.	original code
+&apos;//
+&apos;//	Notes. gdAccumTot is initialized to 0, then updated as user enters
+&apos;//	split entries
+&apos;//
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim iRetValue	As Integer		&apos;// returned value
+dim oSTAccumTotFld	As Object	&apos;// accumulated total text field
+
+	&apos;// code.
+	ON ERROR GOTO ErrorHandler
+	iStatus = 0					&apos;// normal return
+	gdAccumTot = pdTotal	
+
+	&apos;// update the AccumTot text box in the ST dialog
+	oSTAccumTotFld = puoSTDialog.getControl(&quot;AccumTot&quot;)
+	oSTAccumTotFld.Value = pdAccumTotal
+	
+NormalExit:
+	STSetAccumTot = iStatus
+	exit function
+	
+ErrorHandler:	
+	iRetValue = -1
+	GoTo NormalExit
+end function		&apos;// end STSetAccumTot		6/18/20
+&apos;/**/

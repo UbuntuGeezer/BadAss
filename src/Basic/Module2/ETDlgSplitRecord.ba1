@@ -1,0 +1,319 @@
+&apos;// ETDlgSplitRecord.bas
+&apos;//---------------------------------------------------------------
+&apos;// ETDlgSplitRecord - Record split transaction from ET Dialog.
+&apos;//		7/7/20.	wmk.	12:00	
+&apos;//---------------------------------------------------------------
+
+public function ETDlgSplitRecord() As Integer
+
+&apos;//	Usage.	iVar = ETDlgSplitRecord()
+&apos;//
+&apos;// Entry.	ET Dialog public vars have entered values
+&apos;//			gbETDebitIsTotal = true if credits are split
+&apos;//							   false if debits are split
+&apos;//
+&apos;//	Exit.	Double entry split transaction recorded in GL sheet at
+&apos;//			user selected position
+&apos;//
+&apos;// Calls.	SetSumFormula
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/24/20.	wmk.	original code; adapted from ETDialogRecord
+&apos;//	6/26/20.	wmk.	bug fix where both debit and credit splits being
+&apos;//						recorded in Credit column
+&apos;//	6/27/20.	wmk.	bug fix where transaction rows being set to
+&apos;//						color of row above where split inserted; need
+&apos;//						to be set to NOFILL
+&apos;// 7/7/10.		wmk.	bug fix where total line background color not being
+&apos;//						set to NOFILL; bug fix where description centered if
+&apos;//						line above was centered
+&apos;//
+&apos;//	Notes. When the ET dialog completes, either the DebitField or CreditField
+&apos;// may have been set to &quot;split&quot;. If that is the case, ETDlgSplitRecord will
+&apos;// be called to record the split transaction.
+&apos;//
+
+&apos;//	constants.
+
+&apos;//----------------constants borrowed from header-------------------
+const LTGREEN=10092390		&apos;// decimal value of LTGREEN color
+
+&apos;// column index values and string lengths for column data			
+&apos;public const	INSBIAS=3		&apos;// insert line count bias
+&apos;public const	COALEN=4		&apos;// length of COA field strings
+const COLDATE=0		&apos;// Date - column A
+const COLTRANS=1	&apos;// Transaction - column B
+const COLDEBIT=2	&apos;// Debit - column C
+const COLCREDIT=3	&apos;// Credit - column D
+const COLACCT=4		&apos;// COA Account - column E
+const COLREF=5		&apos;// Reference - column F
+
+&apos;// cell formatting constants.
+const DEC2=123		&apos;// number format for (x,xxx.yy)			&apos;// mod052020
+const MMDDYY=37		&apos;// date format mm/dd/y						&apos;// mod052020
+const FMTDATETIME=50	&apos;// date/time format mm/dd/yyy hh:mm:ss 	&apos;// mod060620
+const LJUST=1		&apos;// left-justify HoriJustify				&apos;// mod052020
+const CJUST=2		&apos;// center HoriJustify						&apos;// mod052020
+const RJUST=3		&apos;// right-justify HoriJustify				&apos;// mod052320
+const MAXTRANSL=50	&apos;// maximum transaction text length			&apos;// mod052020
+
+&apos;//----------------end constants borrowed from publics--------------
+
+&apos;//	local variables
+dim iRetValue As Integer
+dim i		As Integer
+dim iStatus	As Integer			&apos;// general status
+dim sSumFormula	As String		&apos;// split sum formula
+
+&apos;// GL Sheet access variables for inserting transaction
+dim oDoc		As Object		&apos;// ThisComponent
+dim oSel		As Object		&apos;// current user selection
+dim oRange		As Object		&apos;// cell range selection info
+dim iSheetIx	As Integer		&apos;// sheet index
+dim oGLSheet	As Object		&apos;// GL sheet object
+dim lGLRow		As Long			&apos;// GL 1st line row
+dim lGLCurrRow	As Long			&apos;// current new transaction row
+dim lGLBottomRow	As Long		&apos;// bottom row of split transaction
+dim iInsertCnt	As Integer		&apos;// insertion row count
+dim iSplitLim	As Integer		&apos;// splits limit 0-based
+
+&apos;// GL Transaction field cells
+dim	oCellDate 	As Object		&apos;// Date field
+dim	oCellTrans 	As Object		&apos;// Description field
+dim	oCellDebit 	As Object		&apos;// Debit field
+dim	oCellCredit	As Object		&apos;// Credit field
+dim	oCellAcct	As Object		&apos;// COA field
+dim	oCellRef	As Object		&apos;// Reference field
+dim oDate		As Object		&apos;// oCellDate.Text
+
+	&apos;// code.
+	
+	iRetValue = 0
+	ON ERROR GOTO ErrorHandler
+
+	&apos;// set up access to GL on user selection
+	oDoc = ThisComponent				&apos;// set up for sheet access within document
+	oSel = oDoc.getCurrentSelection()	&apos;// get current cell selection(s) info
+	oRange = oSel.RangeAddress			&apos;// extract range information
+	iSheetIx = oRange.Sheet	&apos;// get sheet index value
+	oGLSheet = oDoc.Sheets.getByIndex(iSheetIx)	&apos;// get GL sheet
+	lGLRow = oRange.StartRow			&apos;// set row pointer to 1st row
+	lGLCurrRow = lGLRow
+	
+	&apos;// rows to insert = upper bound of amounts + 1, +2 for upper and
+	&apos;// lower &quot;split&quot; divider rows +1 for total row
+	iSplitLim = uBound(gdSTAmts)
+	iInsertCnt = iSplitLim + 4
+	lGLBottomRow = lGLCurrRow + iInsertCnt - 1	
+	&apos;// set up and insert iInsertCnt rows at first row pointed to by user
+	oGLSheet.Rows.insertByIndex(lGLRow, iInsertCnt)	&apos;// insert transaction rows
+	oRange.EndRow = lGLBottomRow			&apos;// set for SetSumFormula call
+		
+	&apos;// update sheet date modified
+	iStatus = SetSheetDate(oRange, MMDDYY)
+	if iStatus &lt; 0 then
+		GoTo ErrorHandler
+	endif	&apos;// end abnormal return from SetSheetDate
+
+&apos;/*--------------------------------------------------------------------------
+	&apos;// create top row &quot;split&quot; divider
+	&apos;// extract key ledger fields for setting in new entries
+	oCellDate = oGLSheet.getCellByPosition(COLDATE, lGLCurrRow)
+	oCellTrans = oGLSheet.getCellByPosition(COLTRANS, lGLCurrRow)
+	oCellDebit = oGLSheet.getCellByPosition(COLDEBIT, lGLCurrRow)
+	oCellCredit = oGLSheet.getCellByPosition(COLCREDIT, lGLCurrRow)
+	oCellAcct = oGLSheet.getCellByPosition(COLACCT, lGLCurrRow)
+	oCellRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow)
+		
+	&apos;// set Date field in transaction line		
+	oCellDate.setValue(DateValue(gsETDate))		&apos;// set date field to value
+	oCellDate.NumberFormat = MMDDYY				&apos;// set mm/dd/yy format
+	oCellDate.HoriJustify = RJUST				&apos;// right-justify date
+	oCellDate.CellBackColor = LTGREEN			&apos;// set light green background
+
+	&apos;// set description field to ET description
+	&apos;// gsETDescription = entered description
+	oCellTrans.String = gsETDescription
+	oCellTrans.CellBackColor = LTGREEN			&apos;// color entire 1st row
+	oCellTrans.HoriJustify = LJUST
+	
+	&apos;//	set debit and credit amount fields to &quot;&quot;
+	oCellDebit.String = &quot;&quot;
+	oCellDebit.CellBackColor = LTGREEN
+	oCellCredit.String = &quot;&quot;
+	oCellCredit.CellBackColor = LTGREEN
+	
+	&apos;// set account and ref fields to &quot;-&quot; and &quot;split&quot;
+	oCellAcct.String = &quot;-&quot;
+	oCellAcct.HoriJustify = CJUST
+	oCellAcct.CellBackColor = LTGREEN
+	oCellRef.String = &quot;split&quot;
+	oCellRef.HoriJustify = CJUST
+	oCellRef.CellBackColor = LTGREEN
+&apos;*/----------------------------------------------------------------------------
+
+	lGLCurrRow = lGLCurrRow + 1		&apos;// advance to total row
+&apos;/*------------------enter total row-------------------------------------------
+	&apos;// extract key ledger fields for setting in new entries
+	oCellDate = oGLSheet.getCellByPosition(COLDATE, lGLCurrRow)
+	oCellTrans = oGLSheet.getCellByPosition(COLTRANS, lGLCurrRow)
+	oCellDebit = oGLSheet.getCellByPosition(COLDEBIT, lGLCurrRow)
+	oCellCredit = oGLSheet.getCellByPosition(COLCREDIT, lGLCurrRow)
+	oCellAcct = oGLSheet.getCellByPosition(COLACCT, lGLCurrRow)
+	oCellRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow)
+		
+	&apos;// set Date field in transaction line		
+	oCellDate.setValue(DateValue(gsETDate))		&apos;// set date field to value
+	oCellDate.NumberFormat = MMDDYY				&apos;// set mm/dd/yy format
+	oCellDate.HoriJustify = RJUST				&apos;// right-justify date
+	oCellDate.CellBackColor = LTGREEN			&apos;// set light green background
+
+	&apos;// set description field to ET description
+	&apos;// gsETDescription = entered description
+	oCellTrans.String = gsETDescription
+	oCellTrans.CellBackColor = NOFILL
+	oCellTrans.HoriJustify = LJUST
+
+	&apos;// set Total in debit or credit and appropriate COA
+	if gbETDebitIsTotal then		&apos;// credits split
+		oCellDebit.Value = gdETAmount
+		oCellDebit.NumberFormat = DEC2
+		oCellCredit.String = &quot;&quot;
+		oCellAcct.String = gsETAcct1
+	else		&apos;// debits split
+		oCellCredit.Value = gdETAmount
+		oCellCredit.NumberFormat = DEC2
+		oCellDebit.String = &quot;&quot;
+		oCellAcct.String = gsETAcct2
+	endif		&apos;// end debit is total conditional
+	oCellDebit.HoriJustify = RJUST
+	oCellDebit.CellBackColor = NOFILL
+	oCellCredit.HoriJustify = RJUST
+	oCellCredit.CellBackColor = NOFILL
+	oCellAcct.HoriJustify = CJUST
+	oCellAcct.CellBackColor = NOFILL
+		
+	&apos;// set ref field
+	oCellRef.String = gsETRef
+	oCellRef.HoriJustify = CJUST
+	oCellRef.CellBackColor = NOFILL
+&apos;*/---------end Total row------------------------------------------------------
+ if false then
+ GoTo JumpAhead
+ endif
+ 
+&apos;/*----------------------------------------------------------------------------
+	&apos;// for each row, copy transaction information, placing debit amt
+	&apos;// in Debit column of 1st row, credit amt in Credit column of
+	&apos;// 2nd row, all other columns in same position
+	lGLCurrRow = lGLCurrRow + 1		&apos;// advance past total row
+	for i = 0 to iSplitLim
+		&apos;// extract key ledger fields for setting in new entries
+		oCellDate = oGLSheet.getCellByPosition(COLDATE, lGLCurrRow)
+		oCellTrans = oGLSheet.getCellByPosition(COLTRANS, lGLCurrRow)
+		oCellDebit = oGLSheet.getCellByPosition(COLDEBIT, lGLCurrRow)
+		oCellCredit = oGLSheet.getCellByPosition(COLCREDIT, lGLCurrRow)
+		oCellAcct = oGLSheet.getCellByPosition(COLACCT, lGLCurrRow)
+		oCellRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow)
+		
+		&apos;// set Date field in transaction line		
+		oCellDate.setValue(DateValue(gsETDate))		&apos;// set date field to value
+		oCellDate.NumberFormat = MMDDYY				&apos;// set mm/dd/yy format
+		oCellDate.HoriJustify = RJUST				&apos;// right-justify date
+		oCellDate.CellBackColor = LTGREEN			&apos;// set light green background
+		
+		&apos;// set Description field
+		oCellTrans.String = gsSTDescs(i)
+		oCellTrans.HoriJustify = LJUST
+		oCellTrans.CellBackColor = NOFILL
+		
+		&apos;// set amount in proper column
+		if gbETDebitIsTotal then		&apos;// credits split
+			oCellDebit.String = &quot;&quot;
+			oCellCredit.String = Str(gdSTAmts(i))
+			oCellCredit.setValue(gdSTAmts(i))					
+			oCellCredit.NumberFormat = DEC2
+			oCellAcct.String = gsSTCOAs(i)
+		else		&apos;// debits split
+			oCellDebit.String = Str(gdSTAmts(i))
+			oCellCredit.String = &quot;&quot;
+			oCellDebit.setValue(gdSTAmts(i))					
+			oCellDebit.NumberFormat = DEC2
+			oCellAcct.String = gsSTCOAs(i)
+		endif		&apos;// end debit is total conditional
+	
+		oCellDebit.HoriJustify = RJUST
+		oCellDebit.CellBackColor = NOFILL
+		oCellCredit.HoriJustify = RJUST
+		oCellCredit.CellBackColor = NOFILL
+		oCellAcct.HoriJustify = CJUST
+		OCellAcct.CellBackColor = NOFILL
+		
+		oCellRef.String = gsSTRefs(i) 
+		oCellRef.HoriJustify = CJUST
+		oCellRef.CellBackColor = NOFILL
+		
+		lGLCurrRow = lGLCurrRow + 1	&apos;// advance to next transaction row
+		
+	next i		&apos;// advance split transaction row
+&apos;*/-----------------------------------------------------------------------------
+ if false then
+ GoTo JumpAhead
+ endif
+
+&apos;/*--------------------------------------------------------------------------
+	&apos;// create bottom row &quot;split&quot; divider with total
+	&apos;// extract key ledger fields for setting in new entries
+	oCellDate = oGLSheet.getCellByPosition(COLDATE, lGLCurrRow)
+	oCellTrans = oGLSheet.getCellByPosition(COLTRANS, lGLCurrRow)
+	oCellDebit = oGLSheet.getCellByPosition(COLDEBIT, lGLCurrRow)
+	oCellCredit = oGLSheet.getCellByPosition(COLCREDIT, lGLCurrRow)
+	oCellAcct = oGLSheet.getCellByPosition(COLACCT, lGLCurrRow)
+	oCellRef = oGLSheet.getCellByPosition(COLREF, lGLCurrRow)
+		
+	&apos;// set Date field in transaction line		
+	oCellDate.setValue(DateValue(gsETDate))		&apos;// set date field to value
+	oCellDate.NumberFormat = MMDDYY				&apos;// set mm/dd/yy format
+	oCellDate.HoriJustify = RJUST				&apos;// right-justify date
+	oCellDate.CellBackColor = LTGREEN			&apos;// set light green background
+
+	&apos;// set description field to ET description
+	&apos;// gsETDescription = entered description
+	oCellTrans.String = gsETDescription
+	oCellTrans.CellBackColor = LTGREEN			&apos;// color entire last row
+	oCellTrans.HoriJustify = LJUST
+	
+	&apos;//	set debit and credit amount fields to &quot;&quot;
+	oCellDebit.String = &quot;&quot;
+	oCellDebit.CellBackColor = LTGREEN
+	oCellCredit.String = &quot;&quot;
+	oCellCredit.CellBackColor = LTGREEN
+	
+	&apos;// set account field to appropriate SUM formula
+	sSumFormula = SetSumFormula(oRange, gbETDebitIsTotal)
+	oCellAcct.String = sSumFormula
+	oCellAcct.SetFormula(sSumFormula)
+	oCellAcct.NumberFormat = DEC2
+	oCellAcct.HoriJustify = CJUST
+	oCellAcct.CellBackColor = LTGREEN
+	
+	&apos;// set ref field to &quot;split&quot;
+	oCellRef.String = &quot;split&quot;
+	oCellRef.HoriJustify = CJUST
+	oCellRef.CellBackColor = LTGREEN
+&apos;*/----------------------------------------------------------------------------
+JumpAhead:
+	iRetValue = 0
+	
+NormalExit:
+	ETDlgSplitRecord = iRetValue
+	exit function
+	
+ErrorHandler:
+	iRetValue = -1
+	GoTo NormalExit
+	
+
+end function 	&apos;// end ETDlgSplitRecord	7/7/20
+&apos;/**/

@@ -1,0 +1,89 @@
+&apos;// ET.bas
+&apos;//---------------------------------------------------------------
+&apos;// ET - Enter Transaction Dialog run procedure.
+&apos;//		9/8/22.	wmk.	13:47	
+&apos;//----------------------------------------------------------------
+
+public sub ET()
+
+&apos;//	Usage.	macro call or
+&apos;//			call ET()
+&apos;//
+&apos;//		Run ET dialog
+&apos;//
+&apos;// Entry.	Button click in dialog box		
+&apos;//			puoETDialog = declared object for COA dialog
+&apos;//			pbETActive = flag to indicate ET dialog is active
+&apos;//			pbETDebitList = ET in COA debit list flag
+&apos;//			pbETCreditList = ET in COA credit list flag
+&apos;//
+&apos;//	Exit.	msgBox message displayed
+&apos;//
+&apos;// Calls.	ETPubVarsReset
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;// 9/7/22.		wmk.	ETRecdDoneListener called when &quot;Record&quot; (OK) clicked.
+&apos;// 9/8/22.		wmk.	pbETActive, pbETDebitList, pbETCreditList flags
+&apos;//				 supported for COADialog results.
+&apos;// Legacy mods.
+&apos;//	7/6/20.		wmk.	original code; adapted from G in BadAss Module2
+&apos;//	7/7/20.		wmk.	ensure dialog library loaded
+&apos;//
+&apos;//	Notes.	pbInETDialog is a flag set for the COADialog to indicate it is being
+&apos;// invoked by the ET dialog, as opposed to the GA macro. The COADialog then
+&apos;// knows to set the COADialog.DebitField or COADialog.CreditField as opposed
+&apos;// to the selected cell in the sheet it has been invoked on by the GA
+&apos;// macro (ctl-4 hotkey).
+&apos;//
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim iStatus As Integer
+dim oDocument	As Object
+dim oSel		As Object
+dim oRange		As Object
+dim iSheet		As Integer
+
+&apos;// code.
+	GlobalScope.BasicLibraries.LoadLibrary(&quot;BadAss&quot;)
+	GlobalScope.DialogLibraries.LoadLibrary(&quot;BadAss&quot;)
+	oDocument = ThisComponent
+	oSel = oDocument.getCurrentSelection()
+	oRange = oSel.RangeAddress
+	iSheet = oRange.Sheet
+		
+&apos;// Initialize ET dialog.
+	puoETDialog = CreateUnoDialog(GlobalScope.DialogLibraries.BadAss.TransEntry)
+if( 1 = 0 ) then
+Xray puoETDialog
+endif
+	pbETActive=true
+	pbETDebitList = false
+	pbETCreditList = false
+	Select Case puoETDialog.Execute()
+	Case 1		&apos;// Record &amp;&apos; Finish clicked
+		ETRecdDoneListener()
+&apos;		msgBox(&quot;Record &amp;&apos; Finish clicked in Enter Transaction&quot;)
+		&apos;// iStatus = ETDialogRecord... called by [Record &amp;&apos; Finish]
+	Case 0		&apos;// Cancel
+&apos;		pusCOASelected = &quot;&quot;		&apos;// since cancel, Execute() event skipped
+		iStatus = ETPubVarsReset(1)	&apos;// reset everything
+&apos;		msgBox(&quot;Cancel or FormClose clicked&quot;)
+	Case else
+&apos;		iStatus = ETPubVarsReset(1)	&apos;// reset everything
+&apos;		msgBox(&quot;ET - unevaluated dialog return&quot;)
+	End Select
+
+&apos;msgbox(&quot;Date entered: &quot; + gsETDate)
+&apos;msgbox(&quot;Decription: &quot; + gsETDescription)
+&apos;msgBox(&quot;Amount: &quot; + gdETAmount)
+&apos;msgBox(&quot;Debit Account: &quot; + gsETAcct1)
+&apos;msgBox(&quot;Credit Account: &quot; + gsETAcct2)
+&apos;msgBox(&quot;Reference: &quot; + gsETRef)
+&apos;puoETDialog.endDialog(2)
+&apos;puoETDialog.dispose()
+	
+end sub		&apos;// end ET	9/8/22
+&apos;/**/

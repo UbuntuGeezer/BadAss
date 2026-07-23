@@ -1,0 +1,58 @@
+&apos;// STGetObjFocus.bas
+&apos;//---------------------------------------------------------------
+&apos;// STGetObjFocus - Get control name with focus from dialog.
+&apos;//		6/22/20.	wmk.	11:00
+&apos;//---------------------------------------------------------------
+
+public function STGetObjFocus() As String
+
+&apos;//	Usage.	sVar = STGetObjFocus()
+&apos;//
+&apos;// Entry.	puoSTDialog = ST dialog object
+&apos;//			puoSTDialog.&lt;HasFocusObject&gt;.Text = available
+&apos;//
+&apos;//	Exit.	sVar = control name from &quot;HasFocus&quot;.Text in dialog
+&apos;//				 = &quot;&quot; if error, or not previously set
+&apos;//
+&apos;// Calls.
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6//20.		wmk.	original code
+&apos;//
+&apos;//	Notes. STSetObjFocus should be called by any &lt;control&gt;Listener
+&apos;//	event when the &lt;control&gt; gets focus. This will provide an easy
+&apos;// way for a control to get its own name during processing. The
+&apos;// STClrObjFocus function should be called when the &lt;control&gt; loses
+&apos;// focus so other controls may reuse the dialog field &quot;HasFocus&quot;.
+&apos;// A third method STGetObjFocus will retrieve the current &quot;HasFocus&quot;
+&apos;// .Text field for use during the control processing.
+&apos;//
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim sRetValue As String
+dim oDlgControl		As Object		&apos;// dialog control
+dim sFocusName		As String		&apos;// HasFocus text control field name
+
+	&apos;// code.
+	
+	iRetValue = -1
+	ON ERROR GOTO ErrorHandler
+	oDlgControl = puoSTDialog.getControl(&quot;HasFocusFld&quot;)
+	sFocusName = oDlgControl.Text
+msgBox(&quot;In STGetObjFocus sFocusName = &apos;&quot; + sFocusName + &quot;&apos;&quot;)
+	sRetValue = sFocusName
+	
+NormalExit:	
+	STGetObjFocus = sRetValue
+	exit function
+
+ErrorHandler:
+	sRetValue = &quot;&quot;		&apos;// abnormal return value
+	msgBox(&quot;In STGetObjFocus - unprocessed error&quot;)
+	GoTo NormalExit
+	
+end function 	&apos;// end STGetObjFocus	6/22/20
+&apos;/**/

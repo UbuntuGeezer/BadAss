@@ -1,7 +1,7 @@
 '// fSTAmtLostFocus.bas
 '//---------------------------------------------------------------
 '// fSTAmtLostFocus - Handle all AmtFld LostFocus events.
-'//		4/20/25.	wmk.
+'//		6/22/20.	wmk.	08:00
 '//---------------------------------------------------------------
 
 public function fSTAmtLostFocus(psFldName As String) As Integer
@@ -24,14 +24,13 @@ public function fSTAmtLostFocus(psFldName As String) As Integer
 '//
 '//	Modification history.
 '//	---------------------
-'// 4/20/25.	wmk.	(automated) Modification History sorted.
-'// 6/22/20.	wmk.	change name to begin with "f" so can be distinguished 
-'// 6/22/20.	 by sub with same name for testing. 
-'// 6/21/20.	wmk.	check for total reached before activating next row 
-'// 6/21/20.	wmk.	change to accept psFldName parameter; to be called by 
-'// 6/21/20.	 all STAmt.LostFocus events; changed totals check and 
-'// 6/21/20.	 activate <Done> conditional. 
-'// 6/20/20.	wmk.	original code; cloned from STAmtLostFocus. 
+'//	6/20/20.	wmk.	original code; cloned from STAmtLostFocus
+'//	6/21/20.	wmk.	check for total reached before activating next row
+'// 6/21/20.	wmk.	change to accept psFldName parameter; to be called by
+'//						all STAmt.LostFocus events; changed totals check and
+'//						activate <Done> conditional
+'//	6/22/20.	wmk.	change name to begin with "f" so can be distinguished
+'//						by sub with same name for testing
 
 '//	constants.
 
@@ -108,5 +107,5 @@ ErrorHandler:
 	iRetValue = iStatus
 	GoTo NormalExit
 	
-end function		'// end fSTAmtLostFocus		4/20/25.
+end function		'// end fSTAmtLostFocus	6/22/20
 '/**/

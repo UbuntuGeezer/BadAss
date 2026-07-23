@@ -1,0 +1,55 @@
+&apos;// STAcct1LostFocus.bas
+&apos;//---------------------------------------------------------------
+&apos;// STAcct1LostFocus - Handle AcctFldn LostFocus event.
+&apos;//		6/24/20.	wmk.	10:30
+&apos;//---------------------------------------------------------------
+
+public sub STAcct1LostFocus()
+
+&apos;//	Usage.	macro call or
+&apos;//			call STAcct1LostFocus()
+&apos;//
+&apos;// Entry.	AcctFld1..AcctFld10 lost focus
+&apos;//			gsSTObjFocus = control name with focus (e.g. &quot;AcctFld1&quot;)
+&apos;//
+&apos;//	Exit.	gsCOAs(0) = text from AcctFld1..10
+&apos;//
+&apos;// Calls.	STAcctLostFocus
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/18/20.	wmk.	original code
+&apos;// 6/19/20.	wmk.	code modified to handle either focus event
+&apos;//	6/20/20.	wmk.	bug fix storing COA; add code to check/enable
+&apos;//						next row if this row complete
+&apos;//	6/24/20.	wmk.	common code moved to STAcctLostFocus; generic
+&apos;//						call set up to use common code function
+&apos;//
+&apos;//	Notes. gsSTAcctFocus will be used by the [...] button Execute
+&apos;//	event to determine which Acct array string to store the selected
+&apos;// COA into.
+
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim iStatus			As Integer			&apos;// general status
+
+	&apos;// code.
+	ON ERROR GOTO ErrorHandler
+	&apos;// attempt to use generic handler
+	gsSTObjFocus = &quot;AcctFld1&quot;					&apos;// clear object focus tracker
+	iStatus = STAcctLostFocus(gsSTObjFocus)
+	if iStatus &lt; 0 then
+		GoTo ErrorHandler
+	endif
+
+NormalExit:
+	exit sub
+	
+ErrorHandler:
+	msgBox(&quot;In STAcct1LostFocus - unprocessed error&quot;)
+	GoTo NormalExit
+	
+end sub		&apos;// end STAcct1LostFocus	6/24/20
+&apos;/**/

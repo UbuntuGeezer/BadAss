@@ -1,0 +1,47 @@
+&apos;// VSDoneBtnRun.bas
+&apos;//---------------------------------------------------------------------
+&apos;// VSDoneBtnRun - Event handler &lt;Done&gt; from View Split.
+&apos;//		6/27/20.	wmk.	17:00
+&apos;//---------------------------------------------------------------------
+
+public sub VSDoneBtnRun()
+
+&apos;//	Usage.	macro call or
+&apos;//			call VSDoneBtnRun()
+&apos;//
+&apos;// Entry.	normal entry from event handler for dialogue where
+&apos;//			user clicked the [Record &amp;&apos; Finish] button in ET dialog
+&apos;//			puoETDialog = Enter Transaction dialog object
+&apos;//
+&apos;//	Exit.	Transaction data recorded in GL sheet at user selection
+&apos;//			Transaction data in public vars cleared
+&apos;//			ET dialog ended with flag = 2 (user closed)
+&apos;//
+&apos;// Calls.	ETDialogRecord, ETPubVarsReset
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/27/20.	wmk.	original code
+&apos;//
+&apos;//	Notes. This sub is the linked macro to the changed status event linked
+&apos;// to the &lt;Done&gt; cmd button in the View Split  dialog.
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim oVSDoneBtn	As Object		&apos;// Record &amp;&apos; Finish button
+dim iStatus 		As Integer		&apos;// general status
+
+	&apos;// code.
+	ON ERROR GoTo ErrorHandler
+
+NormalExit:
+	puoVSDialog.endDialog(0)		&apos;// end dialog; same as Cancel
+	exit sub
+	
+ErrorHandler:
+	msgBox(&quot;VSDoneBtnRun - unprocessed error.&quot;)
+	GoTo NormalExit
+	
+end sub		&apos;// end VSDoneBtnRun	6/17/20
+&apos;/**/

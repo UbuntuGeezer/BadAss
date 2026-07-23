@@ -1,0 +1,66 @@
+&apos;// STUpdateDescArray.bas
+&apos;//---------------------------------------------------------------
+&apos;// STUpdateDescArray - Update public Descriptors array.
+&apos;//		6/24/20.	wmk.	07:15
+&apos;//---------------------------------------------------------------
+
+public function STUpdateDescArray(psFldName As String) As Integer
+
+&apos;//	Usage.	iVar = STUpdateDescArray( sFldName )
+&apos;//
+&apos;// 		sFldName dialog amount field name (e.g. &quot;DescFld1&quot;)
+&apos;//
+&apos;// Entry.	This routine should be called on the &quot;LostFocus&quot; event
+&apos;//			on any DescFldn in the dialog, with the fieldname passed
+&apos;//			as the parameter.	
+&apos;//			puoSTDialog = Split Transaction dialog object
+&apos;//
+&apos;//	Exit.	iVar = 0 - Desc array updated ok
+&apos;//				 &lt; 0 - error updating Desc array
+&apos;//			gdSTDescs(i) = matching index i updated with new string
+&apos;//					 from dialog
+&apos;//
+&apos;// Calls.	STFld7ToIndex
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/24/20.	wmk.	original code; adapted from STUpdateAccumTot
+&apos;//
+&apos;//	Notes.
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim iRetValue 	As Integer		&apos;// returned value
+dim iDlgFldIx	As Integer		&apos;// amounts array index
+dim sDlgFld		As String		&apos;// amount field local name
+dim oDlgFld		As Object		&apos;// amount field from dialog
+
+	&apos;// code.
+
+	iRetValue = -1
+	ON ERROR GOTO ErrorHandler
+	sDlgFld = psFldName		&apos;// get local copy of name
+	
+	&apos;// convert name to array index
+	iDlgFldIx = STFld7ToIndex(sDlgFld)
+	if iDlgFldIx &lt; 0 then
+		GoTo ErrorHandler
+	endif
+	
+	&apos;// get new field dialog and store in array
+	oDlgFld = puoSTDialog.getControl(sDlgFld)
+	gdSTDescs(iDlgFldIx) = oDlgFld.Text
+	
+	iRetValue = 0			&apos;// normal return
+	
+NormalExit:
+	STUpdateDescArrray = iRetValue
+	exit function
+	
+ErrorHandler:
+	msgBox(&quot;STUpdateDescArray - unprocessed error.&quot;)
+	GoTo NormalExit
+	
+end function		&apos;// end STUpdateDescArray	6/24/20
+&apos;/**/

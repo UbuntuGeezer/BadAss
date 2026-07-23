@@ -1,0 +1,59 @@
+&apos;// STCheckComplete.bas
+&apos;//---------------------------------------------------------------
+&apos;// STCheckComplete - Check if dialog has minimum information.
+&apos;//		7/7/20.	wmk.	12:40
+&apos;//---------------------------------------------------------------
+
+public function STCheckComplete() As Boolean
+
+&apos;//	Usage.	bVal = STCheckComplete()
+&apos;//
+&apos;// Entry.	giSTLastIx = index of last stored row from dialog
+&apos;//			gdSTAmts(0..giSTLastIx0 = stored amounts from dialog
+&apos;//			gsSTCOAs(0..giSTLastIx) = stored account #s from dialog
+&apos;//
+&apos;//	Exit.	bVal = true if ALL of the following:
+&apos;//					gdSTAmts(0..STLastIx) = non-empty values
+&apos;//					gsSTCOAs(0..STLastIx) = each exactly 4 chars
+&apos;//					gdSTTotalAmt = gdSTAccumTot
+&apos;//				   false otherwise
+&apos;//
+&apos;// Calls.	&lt;other subs/functions called&gt;
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/19/20.	wmk.	original code
+&apos;//	6/21/20.	wmk.	modified to check dialog UnsplitTot = 0.
+&apos;//	7/7/20.		wmk.	bug fix where fractional cents making
+&apos;//						UnsplitTot &lt;&gt; 0; changed to string comparison
+
+&apos;//
+&apos;//	Notes.
+&apos;//
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim bRetValue As Boolean		&apos;// returned flag
+dim bComplete	As Boolean	&apos;// interim tests flag.
+dim i			As Integer		&apos;// loop index
+dim oUnsplit	As Object		&apos;// unsplit field from dialot
+
+	&apos;// code.
+	bComplete = true
+	for i = 0 to giSTLastIx
+		bComplete = bComplete AND (Len(gsSTCOAs(i)) = 4)
+		bComplete = bComplete AND (gdSTAmts(i) &gt;= 0)
+		if NOT bComplete then
+			exit for
+		endif	&apos;// end failed conditional	
+	next i		&apos;// loop for all entered rows
+
+	oUnSplit = puoSTDialog.getControl(&quot;UnsplitTot&quot;)	
+	bComplete = bComplete AND _
+			(StrComp(Str(gdSTTotalAmt),Str(gdSTAccumTot))=0)
+&apos;	bComplete = bComplete AND (oUnSplit.Value = 0.)
+	STCheckComplete = bComplete
+
+end function 	&apos;// end STCheckComplete	7/7/20
+&apos;/**/

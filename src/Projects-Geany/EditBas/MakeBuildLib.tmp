@@ -1,5 +1,5 @@
 # MakeBuildLib.tmp - Makefile (template) for BadAss MakeBuildLib.
-#	4/19/25.	wmk.
+#	7/23/26.	wmk.
 #
 # MakeBuildLib takes the list of .bas blocks and
 # creates a <module>.xba from those blocks. 
@@ -13,6 +13,9 @@
 #
 # Modification History.
 # ---------------------
+# 7/23/26.	wmk.	modified for Windows 11; *libbase added internally
+# 7/23/26.	 to compensate for Windows.
+# 7/23/26.	wmk.	(automated) UnKill to reinstate makefile.
 # 4/19/25.	wmk.	(automated) Modification History sorted.
 # 1/13/24.	wmk.	(automated) UnKill to reinstate makefile. 
 # 11/13/23.	wmk.	(automated) Version 3.0.9 *libbase support added. 
@@ -41,12 +44,13 @@
 # 3/7/22.	wmk.	original makefile; adapted from MakeAnySHtoSQL. 
 
 ifndef AWK
- AWK = mawk
+ AWK = gawk
 endif
 
 .PHONY : Always JustDoIt
 .ONESHELL : ;
 
+libbase = C:/Users/vncwm/linux/BadAss
  projpath = $(libbase)/src/Projects-Geany/EditBas
  srcpath = $(libbase)/src/Basic/<xbafile>
  targpath = $(libbase)/src/Release

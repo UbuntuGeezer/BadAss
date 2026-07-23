@@ -1,0 +1,54 @@
+&apos;// STAmt7LostFocus.bas
+&apos;//---------------------------------------------------------------
+&apos;// STAmt7LostFocus - Handle AmtFld3 LostFocus event.
+&apos;//		6/23/20.	wmk.	10:30
+&apos;//---------------------------------------------------------------
+
+public sub STAmt7LostFocus()
+
+&apos;//	Usage.	macro call or
+&apos;//			call STAmt7LostFocus()
+&apos;//
+&apos;// Entry.	AmtFld1..AmtFld10 lost focus
+&apos;//
+&apos;//	Exit.	gdSTAccumTot = updated with enterd value if within split bounds
+&apos;//
+&apos;// Calls.	fSTAmtLostFocus
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/19/20.	wmk.	original code
+&apos;// 6/20/20.	wmk.	activate/deactivate &lt;Done&gt; control code fixed
+&apos;//	6/21/20.	wmk.	MY_NAME const added
+&apos;//	6/22/20.	wmk.	eliminate MY_NAME const; use STGetObjFocus to retrieve
+&apos;//						this control name in dialog
+&apos;//	6/23/20.	wmk.	rewritten; uses fSTAmtLostFocus
+&apos;//
+&apos;//	Notes.
+
+&apos;//	constants.
+&apos;const MY_NAME=&quot;AmtFld7&quot;
+&apos;//	local variables.
+dim iStatus		As Integer		&apos;// general status
+dim sFldName	As String		&apos;// name of this field
+
+dim bTotalMet		As Boolean		&apos;// accum = split flag
+	&apos;// code.
+	iStatus = -1
+	ON ERROR GOTO ErrorHandler
+	sFldName = &quot;AmtFld7&quot;
+	
+	iStatus = fSTAmtLostFocus(sFldName)
+	if iStatus &lt; 0 then
+		GoTo ErrorHandler
+	endif
+		
+NormalExit:
+	exit sub
+	
+ErrorHandler:
+	msgBox(&quot;In STAmt7LostFocus - unprocessed error&quot;)
+	GoTo NormalExit
+	
+end sub		&apos;// end STAmt7LostFocus	6/23/20
+&apos;/**/

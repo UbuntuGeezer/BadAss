@@ -1,0 +1,161 @@
+&apos;// STDlgCtrlsReset.bas
+&apos;//---------------------------------------------------------------
+&apos;// STDlgCtrlsReset - Reset Split Dialog controls.
+&apos;//		6/27/20.	wmk.	15:00
+&apos;//---------------------------------------------------------------
+
+public function STDlgCtrlsReset() As Integer
+
+&apos;//	Usage.	iVar = STDlgCtrlsReset()
+&apos;//
+&apos;// Entry.	puoSTDialog = Split Transaction dialog object
+&apos;//			gbETDebitIsTotal = Debit is total flag from ET dialot
+&apos;//			gsETAcct1 = Debit account COA
+&apos;//			gsETAcct2 = Credit account COA
+&apos;//			gbSTEditMode = true if &lt;Edit Split&gt;  being started
+&apos;//							false otherwise		
+&apos;//
+&apos;//	&quot;SplitDialog&quot; object fields as follows:
+&apos;// DebitTotRB - Debit is total radio button
+&apos;// CreditTotRB - Credit is total radio button
+&apos;// TotalAmt - total transaction amount text box (numeric, read-only)
+&apos;//	TotalAcctFld - account COA transaction being split from
+&apos;// DescFld1 - description field 1
+&apos;// ...
+&apos;// DescFld10 - description field 10
+&apos;//	AmtFld1 - split amount field 1	(numeric)
+&apos;// ...
+&apos;// AmtFld10 - split amount field 10 (numeric)
+&apos;// AcctFld1 - COA account field 1
+&apos;//	...
+&apos;// AcctFld10 - COA account field 10
+&apos;// COAListBtn - COA list [...] button
+&apos;// AccumTot - splits accumulated total	(numeric, read-only)
+&apos;// UnsplitTot - unsplit remaining amount (numeric, read-only)
+&apos;// DoneBtn - [Done] button
+&apos;// ResetBtn - [Reset Form] button
+&apos;//	CancelBtn - [Cancel] button
+&apos;//
+&apos;//	Exit.	iVar = 0 - normal return
+&apos;//				&lt;&gt; 0 - error return
+&apos;//			if gbSTEditMode = true on entry; iVar will be the returned
+&apos;//			status from STDlgCtrlsRestore
+&apos;//
+&apos;// Calls.	STDlgCtrlsRestore
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/18/20.	wmk.	original code; stub
+&apos;//	6/23/20.	wmk.	code fleshed out; loop added, but problematic
+&apos;//	6/25/20.	wmk.	bug fixes where loop calls were to .getObject
+&apos;//						instead of .getControl; new field &quot;TotalAcctFld&quot;
+&apos;//						set from ET gsETAcct1 or gsETAcct2 dependent
+&apos;//						on flag gbETDebitIsTotal; corrected loop to use
+&apos;//						oSTDlgCtrl instead of oDlgControl
+&apos;//	6/27/20.	wmk.	&lt;Edit Split&gt; support to restore previously
+&apos;//						entered values
+&apos;//
+&apos;//	Notes. When intializing some of the ST fields, the values are
+&apos;//	picked up from the ET dialog public vars.
+
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim iRetValue 	As Integer
+dim oSTDlgCtrl 	As Object
+dim i			As Integer		&apos;// loop index
+dim sFldNum		As String		&apos;// field number
+dim sCTrlName	As String		&apos;// control name
+
+	&apos;// code.
+	
+	iRetValue = -1		&apos;// set error return
+	ON ERROR GOTO ErrorHandler
+
+	&apos;// check for &lt;Edit Split&gt; and restore controls if so
+	if gbSTEditMode then
+		iRetValue = STDlgCtrlsRestore()
+		GoTo NormalExit
+	endif
+	
+	&apos;// set State of Debit/Credit radio buttons to Debit.State = true
+	oSTDlgCtrl = puoSTDialog.getControl(&quot;DebitTotRB&quot;)
+	oSTDlgCtrl.State = true
+	
+	&apos;// set Total field to gdSTTotalAmt
+	oSTDlgCtrl = puoSTDialog.getControl(&quot;TotalAmt&quot;)
+	oSTDlgCtrl.Value = gdSTTotalAmt
+
+if false then
+GoTo JumpAround
+endif
+	&apos;// set account split from field
+	oSTDlgCtrl = puoSTDialog.getControl(&quot;TotalAcctFld&quot;)
+	if gbSTSplitCredits then
+		oSTDlgCtrl.Text = gsETAcct1	&apos;// debit account
+	else
+		oSTDlgCtrl.Text = gsETAcct2	&apos;// credit account
+	endif
+	
+if false then
+GoTo JumpAround
+endif
+	
+	&apos;// clear all 10 Description, Amount, and COA fields
+	&apos;// and set .Enabled attribute to false for last 9 of each
+	for i = 0 to 9
+		sFldNum = Trim(Str(i+1))
+		sCtrlName = &quot;DescFld&quot; + sFldNum
+		oSTDlgCtrl = puoSTDialog.getControl(sCtrlName)
+		oSTDlgCtrl.Text = &quot;&quot;
+		if i &gt; 0 then
+			oSTDlgCtrl.Model.Enabled = false
+		endif
+		
+		sCtrlName = &quot;AmtFld&quot; + sFldNum
+		oSTDlgCtrl = puoSTDialog.getControl(sCtrlName)
+		oSTDlgCtrl.Text = &quot;&quot;
+		if i &gt; 0 then
+			oSTDlgCtrl.Model.Enabled = false
+		endif
+		
+		sCtrlName = &quot;AcctFld&quot; + sFldNum
+		oSTDlgCtrl = puoSTDialog.getControl(sCtrlName)
+		oSTDlgCtrl.Text = &quot;&quot;
+		if i &gt; 0 then
+			oSTDlgCtrl.Model.Enabled = false
+		endif
+		
+		sCtrlName = &quot;RefFld&quot; + sFldNum
+		oSTDlgCtrl = puoSTDialog.getControl(sCtrlName)
+		oSTDlgCtrl.Text = &quot;&quot;
+		if i &gt; 0 then
+			oSTDlgCtrl.Model.Enabled = false
+		endif
+		
+	next i	&apos;// advance to next control name for each field
+	
+JumpAround:
+	&apos;// clear Accumulated Total field to 0; set Unsplit field to gdSTTotalAmt
+	oSTDlgCtrl = puoSTDialog.getControl(&quot;AccumTot&quot;)
+	oSTDlgCtrl.Value = 0.
+	oSTDlgCtrl = puoSTDialog.getControl(&quot;UnsplitTot&quot;)
+	oSTDlgCtrl.Value = gdSTTotalAmt
+	
+	&apos;// set DoneBtn Enabled to false
+	oSTDlgCtrl = puoSTDialog.getControl(&quot;DoneBtn&quot;)
+	oSTDlgCtrl.Model.Enabled = false
+	
+	iRetValue = 0
+	
+NormalExit:	
+	STDlgCtrlsReset = iRetValue
+	exit function
+
+ErrorHandler:
+msgBox(&quot;STDlgCtrlsReset - i = &quot; + i + &quot;.. unprocessed error.&quot;)
+	GoTo NormalExit
+	
+end function 	&apos;// end STDlgCtrlsReset		6/27/20
+&apos;/**/

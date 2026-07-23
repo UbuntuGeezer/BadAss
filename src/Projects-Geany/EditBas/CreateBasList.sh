@@ -1,6 +1,6 @@
 #!/bin/bash
 # CreateBasList.sh - Create <module-name>Bas.txt list in Basic/<module-name> folder.
-#	7/22/26.	wmk.
+#	7/23/26.	wmk.
 #
 # Usage. bash  CreateBasList.sh -h|<module-name>
 #
@@ -8,15 +8,15 @@
 #	<module-name> = module name (e.g. Module1)
 #
 # Entry. ../src/Basic/<module-name> has .bas source files
-#	*libbase = FLsara86777lib base folder path
+#	in linux/BadAss/src/Basic/<module-name> base folder path
 #
 # Exit.	../src/Basic/<module-name>/<module-name>Bas.txt = list of .bas files
 #	without .bas suffixes.
 #
 # Modification History.
 # ---------------------
-# 7/22/26.	wmk.	modified for Windows 11.
-# 7/22/26.	wmk.	(automated) UnKillShell to reinstate shell.
+# 7/23/26.	wmk.	modified for Windows 11; mawk > gawk.
+# 7/23/26.	wmk.	(automated) UnKillShell to reinstate shell.
 # 4/15/25.	wmk.	-h option added.
 # 4/15/25.	wmk.	(automated) build level 4.0.14.
 # 6/5/24.	wmk.	(automated) printf "%s\n",s to printf,s throughout.
@@ -59,9 +59,9 @@ fi
 $sp/LOGMSG "  CreateBasList - initiated from Terminal"
 printf "%s\n" "  CreateBasList - initiated from Terminal"
 # procbodyhere
-cd C:/Users/vmcwm/linux/BadAss/src/Basic/$P1
+cd C:/Users/vncwm/linux/BadAss/src/Basic/$P1
 ls \
- *.bas | mawk -F "/" '{print substr($NF,1,length($NF)-4)}' > ${P1}Bas.txt
+ *.bas | gawk -F "/" '{print substr($NF,1,length($NF)-4)}' > ${P1}Bas.txt
 #endprocbody
 printf "%s\n" " ** Reminder: edit ${P1}Bas.txt moving ${P1}Hdr, publicsMM, ${P1}Common, "
 printf "%s\n" "    and Main to the top of the list, after removing Module1 from the list."

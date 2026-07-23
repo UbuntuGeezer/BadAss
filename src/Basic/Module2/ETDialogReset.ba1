@@ -1,0 +1,97 @@
+&apos;// ETDialogReset.bas
+&apos;//---------------------------------------------------------------
+&apos;// ETDialogReset - Reset all ET dialog fields and flags.
+&apos;//		6/17/20.	wmk.	12:00
+&apos;//---------------------------------------------------------------
+
+public function ETDialogReset(piOpt As Integer) As Integer
+
+&apos;//	Usage.	iVar = ETDialogReset( iOpt )
+&apos;//
+&apos;//		iOpt = 0 - reset all fields except Date
+&apos;//			 &lt;&gt; 0 - reset ALL fields
+&apos;//
+&apos;// Entry.	ET dialog public field values and flags defined
+&apos;//			puoETDialog = ET dialog object
+&apos;//			gbETDateEntered = date field entered flag
+&apos;//			gsETDate = Date field string
+&apos;/
+&apos;//	Exit.	iVar = 0 - normal return
+&apos;//				 &lt;&gt; 0 - error in resetting fields
+&apos;//
+&apos;// Calls.	ETPubVarsReset, ETDlgCtrlsReset
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/16/20.	wmk.	original code; stub
+&apos;// 6/17/20.	wmk.	move code to ETPubVarsReset and ETDlgCtrlsReset
+&apos;//
+&apos;//	Notes. Allows call to preserve date field for repetitive entries
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim iRetValue 	As Integer		&apos;// returned value
+dim iOption 	As Integer		&apos;// local copy of initialize option
+
+	&apos;// code.
+	
+	iRetValue = 0
+	iOption = piOpt
+	ON ERROR GOTO ErrorHandler
+	
+	&apos;// clear all stored values
+	iRetValue = ETPubVarsReset(iOption)	&apos;// clear field storage and flags
+	if iRetValue &lt;&gt; 0 then
+		GoTo ErrorHandler
+	endif
+
+if 1 = 0 then
+	&apos;// clear dialog object fields.
+	iRetValue = ETDlgCtrlsReset(iOption)	&apos;// clear dialog fields
+	if iRetValue &lt;&gt; 0 then
+		GoTo ErrorHandler
+	endif
+endif
+
+	&apos;// if reset all fields clear these; DateField1, DebitField, CreditField.
+	if iOption = 1 then
+dim oETDate			As Object
+		oETDate =  puoETDialog.getControl(&quot;DateField1&quot;)
+		oETDate.Text = &quot;&quot;
+	
+dim oETDebit		As Object
+		oETDebit =  puoETDialog.getControl(&quot;DebitField&quot;)
+		oETDebit.Text = &quot;&quot;
+
+dim oETCredit		As Object
+		oETCredit =  puoETDialog.getControl(&quot;CreditField&quot;)
+		oETCredit.Text = &quot;&quot;
+
+	endif
+
+	&apos;// Always clear description, amount, reference, splitoption.	
+dim oETDescText		As Object
+	oETDescText = puoETDialog.getControl(&quot;DescField&quot;)
+	oETDescText.Text = &quot;&quot;		&apos;// clear description
+dim oETAmount		As Object
+	oETAmount = puoETDialog.getControl(&quot;AmtField1&quot;)
+	oETAmount.Text = &quot;&quot;			&apos;// clear amount
+dim oETRefText		As Object
+	oETRefText = puoETDialog.getControl(&quot;RefField&quot;)
+	oETRefText.Text = &quot;&quot;
+dim oETSplit		As Object
+	oETSplit = puoETDialog.getControl(&quot;SplitOption&quot;)
+	oETSplit.Value = false
+	
+NormalExit:
+	ETDialogReset = iRetValue
+	exit function
+	
+ErrorHandler:
+	iRetValue = -1		&apos;// set error return
+	GoTo NormalExit
+	
+
+end function 	&apos;// end ETDialogReset	6/17/20
+&apos;/**/

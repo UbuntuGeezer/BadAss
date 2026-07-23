@@ -1,0 +1,181 @@
+&apos;// LoadCOAs.bas
+&apos;//---------------------------------------------------------------
+&apos;// LoadCOAs - Load COA account#s for list boxes.
+&apos;//		7/6/20.	wmk.	07:30
+&apos;//---------------------------------------------------------------
+
+public function LoadCOAs() as Integer
+
+&apos;//	Usage.	iVal = LoadCOAs()
+&apos;//
+&apos;// Entry.	pusCOA_Assets = array allocated for Asset COAs
+&apos;//			pusCOA_Liabilities = array for Liability COAs
+&apos;//			pusCOA_Income = array for Income COAs
+&apos;//			pusCOA_Expenses = array for Expense COAs
+&apos;//			pusCOAList = array for COA list for listbox
+&apos;//			COA_SHEET = sheet name of COA worksheet
+&apos;//			COA_COLSTART = starting column of COA loadable list
+&apos;//			COA_ROWSTART = starting row of COA loadable list
+&apos;//			sCOA_1STROWID = string to match verifying 1st row COA list
+&apos;//			sCOA_LASTROWID = string to match verifying last row COA list
+&apos;//			COA_NASSETS = Assets COA entry count
+&apos;//
+&apos;//	Exit.	iVal = 0 - no errors encountered
+&apos;//				  -1 - bad load
+&apos;//
+&apos;// Calls.	&lt;other subs/functions called&gt;
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/13/20.	wmk.	original code; stub
+&apos;//	6/14/20.	wmk.	code completed.
+&apos;//	6/30/20.	wmk.	comments updated.
+&apos;//	7/6/20.		wmk.	modified to get COA entry count from 2 columns to
+&apos;//						right of &quot;BEGIN COA&quot; (COA_COLROWS)
+&apos;//
+&apos;//	Notes. Initial version knows how many rows to expect by public constants
+&apos;//	set internally for each accounting category. Future version can be
+&apos;// generalized to load &quot;n&quot; rows where &quot;n&quot; is specified at the head of
+&apos;// the COA table in the Chart of Accounts.
+
+
+&apos;//	constants.
+const ERRNOTCOATBL=-2		&apos;// COA table not where expected
+
+&apos;//	local variables.
+dim iRetValue As Integer
+dim iAsset As Integer		&apos;// asset COA counter
+dim iLiability As Integer	&apos;// liability COA counter
+dim iIncome As Integer		&apos;// income COA counter
+dim iExpense As Integer		&apos;// expense COA counter
+dim oDoc As Object			&apos;// component
+dim oSheets As Object		&apos;// sheets array
+dim oCOASheet As Object		&apos;// COA sheet
+dim oCOACell As Object		&apos;// COA cell general object
+dim oCOACntCell	As Object	&apos;// cell with COA count
+dim bIsCOATable As Boolean	&apos;// is COA table flag
+dim sCOAList(0) As String	&apos;// COA list array
+
+dim iRowsExpected As Integer		&apos;// expected row count
+dim i	As Integer					&apos;// loop count
+dim oAcctCell As Object				&apos;// account name cell
+dim bTableEndFound As Boolean		&apos;// end of table found
+dim lCurrRow As Long				&apos;// current row index
+dim iBrkPt As Integer				&apos;// breakpoint finder
+
+
+&apos;//----------in sub/function error handling setup-------------------------------
+&apos;// Error Handling setup snippet.
+	const sMyName=&quot;LoadCOAs&quot;
+	dim lLogRow as long		&apos;// cell row working on
+	dim lLogCol as Long		&apos;// cell column working on
+	dim iLogSheetIx as Integer	&apos;// sheet index module working on
+	dim oLogRange as new com.sun.star.table.CellRangeAddress
+
+&apos;// LogError setup snippet.
+	const csERRUNKNOWN=&quot;ERRUNKNOWN&quot;
+&apos;// add additional error code strings here...
+	Dim sErrName as String		&apos;// error name for LogError
+	Dim sErrMsg As String		&apos;// error message for LogError
+
+	&apos;// code.
+	
+	iRetValue = -1
+	ON ERROR GOTO ErrorHandler
+	sErrName = &quot;ERRUNKNOWN&quot;
+	sErrMsg = &quot;In LoadCOAs - unprocessed error.&quot;
+
+	&apos;// set up access to COA sheet
+	oDoc = ThisComponent		&apos;// get into document
+	oSheets = oDoc.getSheets()
+	oCOASheet = oSheets.getByName(COA_SHEET)
+	
+&apos;//-----------in sub/function error handling initialization-------------
+&apos;//	dim oDoc as Object		&apos;// ThisComponent
+&apos;//	dim oSheets as Object	&apos;// oDoc.Sheets
+&apos;//	code to put sheet index into oLogRange.Sheet
+	oLogRange.Sheet = oCOASheet.RangeAddress.Sheet
+	lLogCol = COA_COLSTART
+	lLogRow = COA_ROWSTART
+	oLogRange.StartColumn = lLogCol
+	oLogRange.StartRow = lLogRow
+	oLogRange.EndRow = lLogRow
+	oLogRange.EndColumn = lLogCol
+	Call ErrLogSetup(oLogRange, sMyName)
+	ErrLogSetRecording(true)
+&apos;//-----------end in sub/function error handling initialization---------
+
+	
+	iAsset = 0			&apos;// clear counters
+	iLiability = 0
+	iIncome = 0
+	iExpense = 0
+	
+	&apos;// get COA table 1st row and verify
+	oCOACell = oCOASheet.getCellByPosition(COA_COLSTART, COA_ROWSTART)
+	bIsCOATable = (StrComp(Trim(oCOACell.String), sCOA_1STROWID)=0)
+	if NOT bIsCOATable then
+		iRetValue = ERRNOTCOATBL
+		sErrName = &quot;ERRNOTCOATBL&quot;
+		sErrMsg = &quot;LoadCOAs/Invalid COA table&quot;
+		GoTo ErrorHandler
+	endif
+
+	oCOACntCell = oCOASheet.getCellByPosition(COA_COLROWS, COA_ROWSTART)
+
+&apos;	iRowsExpected = COA_NASSETS + COA_NLIABILITIES + COA_NINCOME _
+&apos;					+ COA_NEXPENSES
+	iRowsExpected = oCOACntCell.Value
+	if iRowsExpected &lt; 1 then
+		sErrName = &quot;ERRCOACOUNT&quot;
+		sErrMsg = &quot;LoadCOAs/Invalid COA count in table&quot;
+		GOTO ErrorHandler
+	endif
+redim pusCOAList(iRowsExpected-1)		&apos;// minus 1, since 0-based
+
+	lCurrRow = COA_ROWSTART + 1
+	&apos;// loop on rows until termination string found &quot;****&quot;
+	for i = 0 to iRowsExpected
+		oAcctCell = oCOASheet.getCellByPosition(COA_COLSTART, lCurrRow)
+		bTableEndFound = (StrComp(oAcctCell.String, sCOA_LASTROWID)=0)
+		if bTableEndFound then
+			if i &lt;&gt; iRowsExpected then
+				iRetValue = ERRCOACOUNT
+				sErrName = &quot;ERRCOACOUNT&quot;
+				sErrMsg = &quot;LoadCOAs/Table entry count mismatch&quot;
+				GoTo ErrorHandler
+			else
+				exit for
+			endif	&apos;// end wrong row count conditional			
+		endif	&apos;// end table end found conditional
+	
+		&apos;// combine and store COA strings
+		oCOACell = oCOASheet.getCellByPosition(COA_COLSTART+1, lCurrRow)
+		pusCOAList(i) = oCOACell.String +&quot; &quot; + oAcctCell.String
+		lCurrRow = lCurrRow + 1
+	next i
+
+	&apos;// check for premature table end
+	if i &lt; iRowsExpected then
+		iRetValue = ERRCOACOUNT
+		sErrName = &quot;ERRCOACOUNT&quot;
+		sErrMsg = &quot;LoadCOAs/Table entry count mismatch&quot;
+		GoTo ErrorHandler
+	endif
+	
+iBrkPt = 1		&apos;// no errors		
+					
+	iRetValue = 0		&apos;// set normal return
+	
+NormalExit:
+	call ErrLogDisable()		&apos;// disable error logging
+	iRetValue = iRowsExpected	&apos;// return row count
+	LoadCOAs = iRetValue
+	exit function
+	
+ErrorHandler:
+	Call LogError(sErrName, sErrMsg)
+	GoTo NormalExit
+	
+end function 	&apos;// end LoadCOAs	7/6/20
+&apos;/**/

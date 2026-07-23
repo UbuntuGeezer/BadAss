@@ -1,5 +1,5 @@
 # MakeBuildLib.tmp - Makefile (template) for BadAss MakeBuildLib.
-#	4/19/25.	wmk.
+#	7/23/26.	wmk.
 #
 # MakeBuildLib takes the list of .bas blocks and
 # creates a <module>.xba from those blocks. 
@@ -13,6 +13,9 @@
 #
 # Modification History.
 # ---------------------
+# 7/23/26.	wmk.	modified for Windows 11; *libbase added internally
+# 7/23/26.	 to compensate for Windows.
+# 7/23/26.	wmk.	(automated) UnKill to reinstate makefile.
 # 4/19/25.	wmk.	(automated) Modification History sorted.
 # 1/13/24.	wmk.	(automated) UnKill to reinstate makefile. 
 # 11/13/23.	wmk.	(automated) Version 3.0.9 *libbase support added. 
@@ -41,28 +44,28 @@
 # 3/7/22.	wmk.	original makefile; adapted from MakeAnySHtoSQL. 
 
 ifndef AWK
- AWK = mawk
+ AWK = gawk
 endif
 
 .PHONY : Always JustDoIt
 .ONESHELL : ;
 
+libbase = C:/Users/vncwm/linux/BadAss
  projpath = $(libbase)/src/Projects-Geany/EditBas
  srcpath = $(libbase)/src/Basic/Module2
  targpath = $(libbase)/src/Release
 
 #insertbaslist
-baslist =   Module2.bas  Module2Hdr.bas  publics2.bas\
-  Main.bas  COACancelListener.bas  COAListBoxListener.bas\
-  COASelectListener.bas  ETAmountListener.bas  ET.bas\
-  ETCancelListener.bas  ETCheckComplete.bas  ETCOA1Listener.bas\
-  ETCOA1ListListener.bas  ETCOA2Listener.bas  ETCOA2ListListener.bas\
-  ETDateListener.bas  ETDescListener.bas  ETDialogRecord.bas\
-  ETDialogReset.bas  ETDlgSplitRecord.bas  ETPubVarsReset.bas\
-  ETRecdContListener.bas  ETRecdDoneListener.bas  ETRefHelpListener.bas\
-  ETRefListener.bas  ETSplitRun.bas  ETViewSplitRun.bas\
-  F.bas  fSTAmtLostFocus.bas  fVSDialogPreset.bas\
-  GA.bas  G.bas  GetCOA.bas\
+baslist =   Module2Hdr.bas  publics2.bas  Main.bas\
+  COACancelListener.bas  COAListBoxListener.bas  COASelectListener.bas\
+  ET.bas  ETAmountListener.bas  ETCOA1ListListener.bas\
+  ETCOA1Listener.bas  ETCOA2ListListener.bas  ETCOA2Listener.bas\
+  ETCancelListener.bas  ETCheckComplete.bas  ETDateListener.bas\
+  ETDescListener.bas  ETDialogRecord.bas  ETDialogReset.bas\
+  ETDlgSplitRecord.bas  ETPubVarsReset.bas  ETRecdContListener.bas\
+  ETRecdDoneListener.bas  ETRefHelpListener.bas  ETRefListener.bas\
+  ETSplitRun.bas  ETViewSplitRun.bas  F.bas\
+  G.bas  GA.bas  GetCOA.bas\
   H.bas  LoadBadAssLib.bas  LoadCOAs.bas\
   LoadStdLibrary.bas  PlaceSplitTotal.bas  PlaceSplitTrans.bas\
   RunCOADlg.bas  STAcct10FocusListener.bas  STAcct1FocusListener.bas\
@@ -76,8 +79,8 @@ baslist =   Module2.bas  Module2Hdr.bas  publics2.bas\
   STAmt5LostFocus.bas  STAmt6FocusListener.bas  STAmt6LostFocus.bas\
   STAmt7FocusListener.bas  STAmt7LostFocus.bas  STAmt8FocusListener.bas\
   STAmt8LostFocus.bas  STAmt9FocusListener.bas  STAmt9LostFocus.bas\
-  STAmtLostFocus.bas  STCancelBtnRun.bas  STCheckComplete.bas\
-  STClrObjFocus.bas  STCOAListBtnListener.bas  STCredRBListener.bas\
+  STAmtLostFocus.bas  STCOAListBtnListener.bas  STCancelBtnRun.bas\
+  STCheckComplete.bas  STClrObjFocus.bas  STCredRBListener.bas\
   STDebtRBListener.bas  STDesc10LostFocus.bas  STDesc1LostFocus.bas\
   STDesc2LostFocus.bas  STDesc3LostFocus.bas  STDesc4LostFocus.bas\
   STDesc5LostFocus.bas  STDesc6LostFocus.bas  STDesc7LostFocus.bas\
@@ -92,7 +95,7 @@ baslist =   Module2.bas  Module2Hdr.bas  publics2.bas\
   STRowComplete.bas  STSetAccumTot.bas  STSetObjFocus.bas\
   STTotalAcctLostFocus.bas  STUpdateAccumTot.bas  STUpdateCOAArray.bas\
   STUpdateDescArray.bas  STUpdateRefArray.bas  VSDoneBtnRun.bas\
-  VSEditSplitBtnRun.bas
+  VSEditSplitBtnRun.bas  fSTAmtLostFocus.bas  fVSDialogPreset.bas
 
 # <filepath>/<filebase>.sql
 #=======================================================

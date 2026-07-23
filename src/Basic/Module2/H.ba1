@@ -1,0 +1,82 @@
+&apos;// H.bas
+&apos;//---------------------------------------------------------------
+&apos;// H - Split Transaction Dialog test procedure.
+&apos;//		8/26/22.	wmk.	10:24
+&apos;//----------------------------------------------------------------
+
+public sub H()
+
+&apos;//	Usage.	macro call or
+&apos;//			call H()
+&apos;//
+&apos;// Entry.	Button click in dialog box		
+&apos;//			puoSTDialog = declared object for Split Transaction dialog
+&apos;//
+&apos;//	Exit.	gdSTTotalAmt = contrived total to split, say 150.00
+&apos;//			msgBox message displayed
+&apos;//
+&apos;// Calls.	STPubVarsReset
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/18/20.	wmk.	original code; adapted from G. bas.
+&apos;//	6/23/20.	wmk.	change to use fDialogReset.
+&apos;// 8/26/22.	wmk.	add intervening space to G. bas and H .bas in comments.
+&apos;//
+&apos;//	Notes.
+&apos;//
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim iStatus As Integer
+dim dDummy As Double
+dim sDummy As String
+
+	&apos;// code.
+&apos;	sDummy = Str(dDummy)
+&apos;	msgBox(&quot;string conversion of empty value is: &quot; +sDummy)
+&apos;	GoTo NormalExit
+	ON ERROR GOTO ErrorHandler	
+	DialogLibraries.LoadLibrary(&quot;Standard&quot;)
+
+&apos;// Initialize ST dialog.
+	puoSTDialog = CreateUnoDialog(DialogLibraries.Standard.SplitDialog)
+&apos;XRay puoSTDialog	
+	&apos;// emulate dialog being fired with Total to split initialized
+	&apos;// in public vars
+	gdSTTotalAmt = 150.00
+	iStatus = fSTDialogReset()		&apos;// attempt to reset/initialize dialog
+&apos;	if iStatus &lt; 0 then
+&apos;		GoTo ErrorHandler
+&apos;	endif
+	dim oFld As Object
+	oFld = puoSTDialog.getControl(&quot;HasFocusFld&quot;)
+	oFld.Text = &quot;Gotcha&quot;
+	Select Case puoSTDialog.Execute()
+	Case 2		&apos;// Record &amp;&apos; Finish clicked
+		msgBox(&quot;&lt;Done&gt;h clicked in Split Transaction&quot;)
+	Case 0		&apos;// Cancel
+		iStatus = STPubVarsReset()	&apos;// reset everything
+		msgBox(&quot;ST dialog Cancel or FormClose clicked&quot;)
+	Case else
+		msgBox(&quot;unevaluated dialog return&quot;)
+	End Select
+
+&apos;msgbox(&quot;Date entered: &quot; + gsETDate)
+&apos;msgbox(&quot;Decription: &quot; + gsETDescription)
+&apos;msgBox(&quot;Amount: &quot; + gsETAmount)
+&apos;msgBox(&quot;Debit Account: &quot; + gsETAcct1)
+&apos;msgBox(&quot;Credit Account: &quot; + gsETAcct2)
+&apos;msgBox(&quot;Reference: &quot; + gsETRef)
+
+puoSTDialog.dispose()
+NormalExit:
+	exit sub
+	
+ErrorHandler:
+	msgBox(&quot;in H - error initializing Split dialog.&quot;)
+	GoTo NormalExit
+	
+end sub		&apos;// end H	8/26/22
+&apos;/**/

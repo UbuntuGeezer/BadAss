@@ -1,0 +1,43 @@
+&apos;// ETCheckComplete.bas
+&apos;//---------------------------------------------------------------------
+&apos;// ETCheckComplete - Check all Enter Transaction dialog fields entered.
+&apos;//		6/15/20.	wmk.	17:30
+&apos;//---------------------------------------------------------------------
+
+public function ETCheckComplete() As Boolean
+
+&apos;//	Usage.	bVar = ETCheckComplete()
+&apos;//
+&apos;// Entry.
+&apos;//		gbETDateEntered = date field entered flag
+&apos;//		gbETDescEntered = description entered flag
+&apos;//		gbETAmtEntered As Boolean			&apos;// amount entered flag
+&apos;//		gbETCOA1Entered As Boolean			&apos;// Debit COA entered flag
+&apos;//		gbETCOA2Entered As Boolean			&apos;// Credit COA entered flag
+&apos;//
+&apos;//	Exit.	bVal = true if all entry flags are true
+&apos;//				   false otherwise
+&apos;//
+&apos;// Calls.
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/15/20.		wmk.	original code
+&apos;//
+&apos;//	Notes. &lt;Insert notes here&gt;
+&apos;//
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim bRetValue As Boolean
+
+	&apos;// code.
+	
+	bRetValue = gbETDateEntered AND gbETDescEntered AND gbETAmtEntered _
+				 AND gbETCOA1Entered AND gbETCOA2Entered
+	
+	ETCheckComplete = bRetValue
+
+end function 	&apos;// end ETCheckComplete		6/15/20
+&apos;/**/

@@ -1,5 +1,5 @@
 #!/bin/bash
-echo " ** KillShell.sh out-of-date **";exit 1
+echo " ** UpdateLoadSource.sh.sh out-of-date **";exit 1
 # UpdateLoadSource.sh is a leftover from the initial versions of EditBas and
 # its associated shells. This shell transferred the files back into the *git
 # project repository. Now all library code is maintained within its own
@@ -29,7 +29,7 @@ echo " ** KillShell.sh out-of-date **";exit 1
 #
 P1=$1
 if [ -z "$P1" ];then
- echo "UpdateLoadSource <libname> missing parameter(s) - abandoned."
+ printf "%s\n" "UpdateLoadSource <libname> missing parameter(s) - abandoned."
  read -p"Enter ctrl-c to remain in Terminal: "
  exit 1
 fi
@@ -40,11 +40,11 @@ if [ -z "$TODAY" ];then
 fi
 #procbodyhere
 pushd ./ > /dev/null
-echo " ** You are about to overwrite the running source for $P1..."
+printf "%s\n" " ** You are about to overwrite the running source for $P1..."
 read -p " Do you wish to continue (y/n)? "
 yn=${REPLY^^}
 if [ "$yn" != "Y" ];then
- echo "UpdateLoadSource terminated by user; $P1 unchanged."
+ printf "%s\n" "UpdateLoadSource terminated by user; $P1 unchanged."
  read -p "Enter ctrl-c to remain in Terminal: "
  exit 1
 fi
@@ -52,6 +52,6 @@ cd $pathbase/Release
 cp -uv * $pathbase
 popd > /dev/null
 #endprocbody
-echo "  UpdateLoadSource complete."
+printf "%s\n" "  UpdateLoadSource complete."
 ~/sysprocs/LOGMSG "  UpdateLoadSource complete."
 # end UpdateLoadSource.sh

@@ -1,0 +1,93 @@
+&apos;// STAmt1FocusListener.bas
+&apos;//---------------------------------------------------------------
+&apos;// STAmt1FocusListener - Handle AmtFldn GotFocus event.
+&apos;//		6/23/20.	wmk.	05:00
+&apos;//---------------------------------------------------------------
+
+public sub STAmt1FocusListener()
+
+&apos;//	Usage.	macro call or
+&apos;//			call STAmt1FocusListener()
+&apos;//
+&apos;// Entry.	AmtFld1..AmtFld10 got focus
+&apos;//
+&apos;//	Exit.	gsSTObjFocus = ST dialog AmtFld object name
+&apos;//		??	gsSTAcctFocus = ST dialog AcctFld object name
+&apos;//
+&apos;// Calls.
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/20/20.	wmk.	original code; adapted from STAcct3FocusListener
+&apos;// 6/22/20.	wmk.	call to STSetObjFocus to set this control name
+&apos;//						in dialog for later retrieval
+&apos;//	6/23/20.	wmk.	reverted code to near original; eliminated
+&apos;//						STSetObjFocus call, since throws dialog into
+&apos;//						infinite loop when setting the field in the
+&apos;//						dialog, the &quot;Got Focus&quot; event gets re-invoked
+&apos;//						when returning from the &quot;HasFocus&quot; control;
+&apos;//						this may be conquerable with a flag in the 
+&apos;//						publics that indicates recursive callback and
+&apos;//						just exits, or skips ahead to code following
+&apos;//						STSetObject call
+&apos;//
+&apos;//
+&apos;//	Notes. gsSTAcctFocus will be used by the [...] button Execute
+&apos;//	event to determine which Acct array string to store the selected
+&apos;// COA into. The gsSTObjFocus name will be cleared when the control
+&apos;// loses focus; but the gsSTAcctFocus will remain set until a different
+&apos;// acct object is accessed
+
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim iStatus		As Integer			&apos;// general status
+dim oDlgControl	As Object			&apos;// dialog control object
+
+	&apos;// code.
+	iStatus = -1
+	ON ERROR GOTO ErrorHandler
+
+&apos;	gsSTObjFocus = MY_NAME
+&apos;	gsSTAcctFocus = MY_NAME
+	gsSTObjFocus = &quot;AmtFld1&quot;
+	
+	if true then
+		GoTo NormalExit
+	endif
+&apos;//---------------------------------------------------------------------------------	
+	oDlgControl = puoSTDialog.getControl(&quot;HasFocusFld&quot;)
+msgBox(&quot;In STAmt1FocusListener back from .getControl on entry..&quot; + CHR(13)+CHR(10) _
++	&quot;stored name = &apos;&quot; + oDlgControl.Text + &quot;&apos;&quot;)
+&apos;	sFocusName = oDlgControl.Text
+
+&apos;	if Len(sFocusName) &gt; 0 then
+&apos;		iRetValue = -2		&apos;// set busy flag
+&apos;		GoTo ErrorHandler
+&apos;	endif		&apos;// end HasFocus in use conditional
+
+	oDlgControl.Text = &quot;AmtFld1&quot;		&apos;// set control name
+msgBox(&quot;In STAmt1FocusListener ready to exit..&quot; + CHR(13)+CHR(10) _
++	&quot;stored name = &apos;&quot; + oDlgControl.Text + &quot;&apos;&quot;)
+	GoTo NormalExit
+	
+&apos;//------------------------------------------------------------------------------
+	iStatus = STSetObjFocus(&quot;AmtFld1&quot;)
+msgBox(&quot;In STAmt1FocusListener, back from STSetObjectFocus...&quot; + CHR(13)+CHR(10) _
++	&quot;iStatus = &quot; + iStatus)
+	if iStatus &lt; 0 then
+		GoTo ErrorHandler
+	endif
+
+	iStatus = 0
+	GoTo NormalExit
+&apos;//--------------------------------------------------------------	
+ErrorHandler:
+	msgBox(&quot;In STAmt1FocusListener - unprocessed error&quot;)
+
+NormalExit:
+	exit sub		
+	
+end sub		&apos;// end STAmt1FocusListener	6/23/20
+&apos;/**/

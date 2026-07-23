@@ -1,6 +1,6 @@
 #!/bin/bash
 # DoSedBuild.sh - Run sed to fix BadAss../<xbafile>/MakeBuildLib.tmp > MakeBuildLib.
-#	7/22/26.	wmk.
+#	7/23/26.	wmk.
 #
 # Usage. bash DoSedBuild.sh -h|<xbafile>
 #
@@ -15,6 +15,7 @@
 #
 # Modification History.
 # ----------------------
+# 7/23/26.  wmk.    mawk > gawk.
 # 7/22/26.	wmk.	modified for Windows 11; LOGMSG added at end.
 # 7/22/26.	wmk.	(automated) UnKillShell to reinstate shell.
 # 4/20/25.	wmk.	CAUTION messages added.
@@ -28,7 +29,7 @@
 # 8/22/23.	wmk.	modified for FLsara86777 libary. 
 # 8/21/23.	wmk.	*codebase, *pathbase corrected and unconditional; 
 # 8/21/23.	 MNcrwg44586 added to comments. 
-# 6/27/23.	wmk.	*mawk changed to *gawk; awkbaslist1 added. 
+# 6/27/23.	wmk.	*gawk changed to *gawk; awkbaslist1 added. 
 # 6/25/23.	wmk.	original code; edited for FLsara86777 library; mod to 
 # 6/25/23.	 rebuild <xbafile>Bas.txt to account for new .bas files. 
 # 6/20/23.	wmk.	original code; adapted from DoSed for Territories. 
@@ -84,10 +85,10 @@ fi
 projpath=C:/Users/vncwm/linux/BadAss/src/Projects-Geany/EditBas
 targpath=C:/Users/vncwm/linux/BadAss/src/Basic/$P1
 fsuffx=Bas
-#mawk -f $projpath/awkbaslist.txt $targpath/$P1$fsuffx.txt > baslistvar.txt
+#gawk -f $projpath/awkbaslist.txt $targpath/$P1$fsuffx.txt > baslistvar.txt
 gawk -f $projpath/awkbaslist.txt $targpath/$P1$fsuffx.txt > $TEMP_PATH/baslistvar.txt
 printf '%s\n' "export last_line=\\" > scratch.sh
-wc -l $TEMP_PATH/baslistvar.txt | mawk '{print $1}' >> scratch.sh
+wc -l $TEMP_PATH/baslistvar.txt | gawk '{print $1}' >> scratch.sh
 #cat scratch.sh
 chmod +x scratch.sh
 . ./scratch.sh
@@ -96,7 +97,7 @@ gawk -v endline=$last_line -f $projpath/awkbaslist1.txt $TEMP_PATH/baslistvar.tx
 #read -p "Enter ctrl-c to exit DoSedBuild: "
 sed '/insertbaslist/r baslistvar.txt' $projpath/MakeBuildLib.tmp > $targpath/MakeBuildLib
 sed -i "s?<xbafile>?$P1?g" $targpath/MakeBuildLib
-#mawk -f $projpath/awkbaslist.txt $projpath/MakeBuildLib.tmp \
+#gawk -f $projpath/awkbaslist.txt $projpath/MakeBuildLib.tmp \
 #  > $targpath/MakeBuildLib 
 #printf "%s\n" "s?<xbafile>?$P1?g" > $projpath/sedatives.txt
 #sed -i -f $projpath/sedatives.txt  $targpath/MakeBuildLib

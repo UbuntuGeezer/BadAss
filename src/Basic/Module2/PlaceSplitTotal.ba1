@@ -1,0 +1,343 @@
+&apos;// PlaceSplitTotal.bas
+&apos;//------------------------------------------------------------------
+&apos;// PlaceSplitTotal - Itemize split transaction in total COA account.
+&apos;//		4/19/25.	wmk.
+&apos;//------------------------------------------------------------------
+
+public function PlaceSplitTotal(poGLRange As Object, psAcct As String) As Integer
+
+&apos;//	Usage.	iVal = PlaceSplitTotal(oGLRange, sAcct)
+&apos;//
+&apos;//		oGLRange = RangeAddress information for GL sheet
+&apos;//		sAcct = Total COA account from which items split
+&apos;//
+&apos;// Entry.	oGLRange.Sheet = index of ledger sheet
+&apos;//					.StartColumn = index of starting column
+&apos;//					.StartRow = index of first &quot;split&quot; row
+&apos;//					.EndColumn = index of ending column
+&apos;//					.EndRow = index of last &quot;split&quot; row
+&apos;//
+&apos;//	Exit.	iVal = 0 - normal return
+&apos;//				   ERRCONTINUE - nonfatal error; continue processing
+&apos;//				   ERRSTOP - fatal error; stop processing transactions
+&apos;//
+&apos;// Calls.	GetMonthName, GetTransSheetName, GetInsRow, SetSumFormula
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;// 4/19/25.	wmk.	Function &gt; function at end for block parsing.
+&apos;//	6/4/20.		wmk.	original code
+&apos;//	6/6/20.		wmk.
+&apos;//	6/27/20.	wmk.	superfluous &quot;if&quot; removed
+&apos;//	7/8/20.		wmk.	code to remove extra row in source COA transaction	
+&apos;//
+&apos;//	Notes.
+&apos;// This function adds lines to the splitting account category
+&apos;// then copies lines from the original &quot;split&quot; transaction
+&apos;// except for the Total transaction line; then moves the
+&apos;// nonempty Debit or Credit range into the opposing column
+&apos;// and ensures that the SUM formula in the last &quot;split&quot; row
+&apos;// is corrected to sum the moved data.
+&apos;//
+
+&apos;//	constants.
+const FORMULA=3		&apos;// FORMULA type on cell
+
+&apos;//	local variables.
+dim iRetValue As Integer		&apos;// returned value
+dim oDoc As Object				&apos;// ThisComponent
+dim oSheets As Object			&apos;// Doc.getSheets()
+dim iSheetIx As Integer			&apos;// sheet index of ledger
+dim oGLSheet As Object			&apos;// ledger sheet object
+dim sSplitAcct As String		&apos;// COA of account splitting from
+dim iBrkPt As Integer			&apos;// easy breakpoint
+
+&apos;//	GL transaction variables.
+dim oGLCellDate	As Object		&apos;// Date cell from GL
+dim sStyle	As String			&apos;// cell style
+dim sDate	As String			&apos;// date field string
+dim sMonth	As String			&apos;// month name of date (e.g. &quot;January&quot;)
+dim l1stRow	As Long				&apos;// first &quot;split&quot; row
+dim lLastRow As Long			&apos;// last &quot;split&quot; row
+dim lRowCount	As Long			&apos;// transaction row count between &quot;split&quot;s
+
+&apos;//	COA category sheet variables.
+dim sAcctCat2 As String			&apos;// COA account category total transaction
+dim oCat2Sheet As Object		&apos;// COA account sheet for total
+dim lCat2InsRow	As Long			&apos;// COA sheet insertion row
+dim oDebitCell as Object
+dim bMoveDebits as Boolean
+dim oFormulaCell As Object
+dim sFormula As String
+dim sFormStart as String
+dim lCat2CurrRow as Long	&apos;// insertion sheet current row
+dim li as Long				&apos;// long loop counter
+dim oDateCell as Object		&apos;// Date cell object
+
+	&apos;// code.
+	sSplitAcct = psAcct			&apos;// copy COA account string
+	
+	iRetValue = 0
+	
+	PlaceSplitTotal = iRetValue
+	
+&apos;	if true then
+&apos;		Exit Function
+&apos;	endif
+
+&apos;//---------------begin PlaceSplitTotal here------------------------
+&apos;//	poGLSheet is the ledger sheet with the whole transaction
+&apos;// sSplitAcct is the account that has the total COA
+		&apos;//==========================================================
+&apos;//-----------------error handling setup-----------------------------
+dim sErrCallerMod 	As String	&apos;// caller routine name
+dim iErrSheetIx		As Integer	&apos;// caller sheet index
+dim lErrColumn		As Long		&apos;// caller error focus column
+dim lErrRow			As Long		&apos;// caller error focus row
+dim sMyName			As String	&apos;// this routine name
+	&apos;//*-----------------preserve error handling for caller-----------
+	&apos;// preserve caller error settings.
+	sErrCallerMod = ErrLogGetModule()
+	iErrSheetIx = ErrLogGetSheet()
+	ErrLogGetCellInfo(lErrColumn, lErrRow)
+	&apos;// set up new error settings.
+	sMyName = &quot;PlaceSplitTotal&quot;
+	ErrLogSetModule(sMyName)
+	ErrLogSetSheet(poGLRange.Sheet)
+	ErrLogSetCellInfo(poGLRange.StartColumn, poGLRange.StartRow)
+&apos;//*----------end error handling setup-------------------------------
+
+		&apos;//	insertCells...
+&apos;// entry.	sSplitAcct is the COA from the total line entry
+&apos;//         oGLCellDate.Text.String is the Date field from the totals
+&apos;//			 line entry
+&apos;//			oSheets object is the Sheets[] array this component
+
+	oDoc = ThisComponent			&apos;// set component and access objects
+	oSheets = oDoc.getSheets()
+	iSheetIx = poGLRange.Sheet
+	oGLSheet = oSheets.getByIndex(iSheetIx)
+	
+	&apos;// extract date information from ledger entry
+	l1stRow = poGLRange.StartRow	&apos;// first row of &quot;split&quot;
+	lLastRow = poGLRange.EndRow		&apos;// last row of &quot;split&quot;
+	lRowCount = poGLRange.EndRow - l1stRow - 1			&apos;// transaction lines with COAs
+	oGLCellDate = oGLSheet.getCellByPosition(COLDATE, l1stRow)
+
+	&apos;// set up parameters for GetTransSheetName and GetInsRow
+	sStyle = oGLCellDate.Text.String
+	sDate = oGLCellDate.Text.String
+	sMonth = GetMonthName(sDate)		&apos;// get month search name
+	sAcctCat2 = GetTransSheetName(sSplitAcct)	&apos;// get sheet name matching COA
+
+	&apos;// access target COA sheet and set up insertion row
+	oCat2Sheet = oSheets.getByName(sAcctCat2)
+iBrkpt=1		&apos;// oCat2Sheet.RangeAddress.Sheet = sheet index
+ErrLogSetSheet(oCat2Sheet.RangeAddress.Sheet)	&apos;// set sheet for errors
+	lCat2InsRow = GetInsRow(oCat2Sheet, sSplitAcct, sMonth)
+
+	if lCat2InsRow &lt; 0 then
+		sErrName = &quot;ERRCOAINSERT&quot;
+		sErrMsg = &quot;Unable to insert Total rows in split account&quot;
+		GoTo ErrHandler
+	endif
+		
+	
+Dim oCOARange As New com.sun.star.table.CellRangeAddress
+
+	&apos;// set up oCOARange object
+	&apos;// copy entire transaction just like if doing it manually
+	&apos;// move filled values to other column (Debit &gt; Credit) or
+	&apos;//		(Credit to Debit)
+	&apos;// delete total row from transaction
+	&apos;// set sum formula in COA field of last &quot;split&quot; row
+	
+	&apos;// at this point l1stRow = 1st row with &quot;split&quot;
+	&apos;//               lLastRow = last row with &quot;split
+	&apos;//				  set lStartColumn = COLDATE
+	&apos;//				  set lEndColumn = COLREF
+	&apos;//				  set sheet number (integer) = index of GL sheet
+	&apos;//				  set target start row at lCat2InsRow
+	&apos;//				  set target start column to COLDATE
+	&apos;//				  set number of rows to lRowCount + 1
+	&apos;// Doc = ThisComponent
+	&apos;// Sheet = Doc.Sheets(0)
+	&apos;//	oSel = Doc.getCurrentSelection()
+	&apos;//	oRange = oSel.RangeAddress			&apos;// extract range information
+iBrkPt=1		
+	oCOARange.Sheet = oCat2Sheet.RangeAddress.Sheet
+	oCOARange.StartColumn = COLDATE
+	oCOARange.EndColumn = COLREF
+	oCOARange.StartRow = lCat2InsRow	&apos;// we are inserting into the 2nd sheet
+	oCOARange.EndRow = lCat2InsRow + lRowCount + 2	&apos;// start+transaction rowcount+1
+ErrLogSetCellInfo(COLDATE, lCat2InsRow)
+	oCat2Sheet.insertCells(oCOARange,_
+							com.sun.star.sheet.CellInsertMode.ROWS)
+dim lSplitEnd As Long		&apos;// save split end in target sheet
+	lSplitEnd = oCOARange.EndRow
+		
+	&apos;// now copy original transaction split range address to same range
+	&apos;// overwriting blank rows;
+dim oTargetCellAddress As new com.sun.star.table.CellAddress
+	oTargetCellAddress.Sheet = oCOARange.Sheet
+	oTargetCellAddress.Column = COLDATE
+	oTargetCellAddress.Row = lCat2InsRow
+		
+dim oGLCellRange As new com.sun.star.table.CellRangeAddress
+	oGLCellRange.Sheet = poGLRange.Sheet
+	oGLCellRange.StartColumn = COLDATE
+	oGLCellRange.EndColumn = COLREF
+	oGLCellRange.StartRow = l1stRow
+	oGLCellRange.EndRow = lLastRow
+
+&apos;// ErrLogGetSheet - Get sheet index from error log globals.
+ErrLogSetSheet(oTargetCellAddress.Sheet)
+ErrLogSetCellInfo(oTargetCellAddress.Column, oTargetCellAddress.Row)
+
+	&apos;// copy the entire split transaction to the COA sheet
+	&apos;// then delete the total row;
+	oGLSheet.copyRange(oTargetCellAddress, oGLCellRange)
+		
+	&apos;// use removeCells to remove Total row
+	&apos;// uses same parameters as insertCells; only change Row range
+	oCOARange.Sheet = oTargetCellAddress.Sheet	
+	oCOARange.StartRow = lCat2InsRow + 1	&apos;// total row
+	oCOARange.EndRow = oCOARange.StartRow
+	
+ErrLogSetSheet(oCat2Sheet.RangeAddress.Sheet)
+ErrLogSetCellInfo(COLDATE, oCOARange.EndRow)
+	
+	oCat2Sheet.removeRange(oCOARange,_
+						com.sun.star.sheet.CellDeleteMode.ROWS)
+	lSplitEnd = lSplitEnd - 1		&apos;// adjust split end for removed row
+		
+iBrkPt=1
+							
+	&apos;// then move the Debit/Credit values to the other column
+	&apos;// change background color of colored cells to LTGREEN
+	&apos;// test which column is .Type empty cells
+	&apos;// then move the Debit/Credit values to the empty column
+	oDebitCell = oCat2Sheet.getCellByPosition(COLDEBIT,_
+					oCOARange.StartRow)
+	oTargetCellAddress.Row = oDebitCell.CellAddress.Row
+	oCOARange.EndRow = lSplitEnd - 2	&apos;// 2 back; no Total row and not end &quot;split&quot;
+
+	bMoveDebits = (oDebitCell.Type &lt;&gt; EMPTY)
+		&apos;	EMPTY,VALUE,TEXT,FORMULA
+
+	&apos;// if there is something in the Debits column; the Debits move to Credits		
+	if bMoveDebits then	&apos;// set range to debits column
+		oTargetCellAddress.Column = COLCREDIT
+		oCOARange.StartColumn = COLDEBIT
+		oCOARange.EndColumn = COLDEBIT
+	else				&apos;// otherwise, the Credits move to Debits
+		oTargetCellAddress.Column = COLDEBIT
+		oCOARange.StartColumn = COLCREDIT
+		oCOARange.EndColumn = COLCREDIT
+	endif	&apos;// end move Debits conditional
+
+&apos;// ErrLogGetSheet - Get sheet index from error log globals.
+&apos;// ErrLogSetSheet - Set sheet index in error log globals.
+ErrLogSetCellInfo(oTargetCellAddress.Column, oTargetCellAddress.Row)
+
+	&apos;// move the column containing values to opposing column
+	oCat2Sheet.moveRange(oTargetCellAddress, oCOARange)
+
+		
+	&apos;// set .formula on COLACCT of last line to
+	&apos;//	 &quot;=SUM()&quot; previous cells above in either Debit or Credit
+
+ErrLogSetCellInfo(COLACCT, lSplitEnd-1)
+
+	&apos;// row is now lSplitEnd-1 since Total row deleted	
+	oFormulaCell = oCat2Sheet.getCellByPosition(COLACCT, lSplitEnd-1)
+		
+	&apos;// Always force SUM formula into last row COLACCT field
+&apos;	if oFormulaCell.Type = FORMULA then
+
+	&apos;// set up RangeAddress object for SetSumFormula
+dim oNewSplitRange as new com.sun.star.table.CellRangeAddress
+	oNewSplitRange.Sheet = oCat2Sheet.RangeAddress.Sheet
+	oNewSplitRange.StartRow = lCat2InsRow		&apos;// first &quot;split&quot; row
+	oNewSplitRange.EndRow = lSplitEnd-1			&apos;// last &quot;split&quot; row (minus 1, row deleted)
+	oNewSplitRange.StartColumn = COLDATE		&apos;// Date column
+	oNewSplitRange.EndColumn = COLREF			&apos;// Reference column
+	sFormula = oFormulaCell.String			&apos;// just for kicks
+
+ErrLogSetSheet(oCat2Sheet.RangeAddress.Sheet)
+ErrLogSetCellInfo(COLACCT, oNewSplitRange.EndRow)
+			
+	sFormula = SetSumFormula(oNewSplitRange, bMoveDebits)		
+	oFormulaCell.String = sFormula			&apos;// set formula in cell
+	oFormulaCell.setFormula(sFormula)
+	&apos;// loop changing Date fields&apos; color to LTGREEN
+ErrLogSetSheet(oCat2Sheet.RangeAddress.Sheet)
+ErrLogSetCellInfo(COLDATE, oNewSplitRange.StartRow)
+	lRowCount = oNewSplitRange.EndRow - oNewSplitRange.StartRow + 1
+	lCat2CurrRow = oNewSplitRange.StartRow
+	for li = 0 to lRowCount-1
+		oDateCell = oCat2Sheet.getCellByPosition(COLDATE, lCat2CurrRow)
+		oDateCell.CellBackColor = LTGREEN
+		lCat2CurrRow = lCat2CurrRow + 1	
+	next li					
+
+&apos;// add code to remove superfluous row at bottom
+	&apos;// row to remove is at lSplitEnd								&apos;// mod070820
+	&apos;// use removeCells to remove extraneous						&apos;// mod070820
+	&apos;// uses same parameters as insertCells; only change Row range	&apos;// mod070820
+	oCOARange.Sheet = oTargetCellAddress.Sheet						&apos;// mod070820
+	oCOARange.StartRow = lSplitEnd	&apos;// blank row					&apos;// mod070820
+	oCOARange.EndRow = lSplitEnd									&apos;// mod070820
+	
+ErrLogSetSheet(oCat2Sheet.RangeAddress.Sheet)						&apos;// mod070820
+ErrLogSetCellInfo(COLDATE, lSplitEnd)								&apos;// mod070820	
+	oCat2Sheet.removeRange(oCOARange,_
+						com.sun.star.sheet.CellDeleteMode.ROWS) 		&apos;// mod070820
+
+		&apos;// update sheet modified date cell							&apos;// mod060620
+		oCOARange.Sheet = oCat2Sheet.RangeAddress.Sheet				&apos;// mod060620
+		Call SetSheetDate(oCOARange, MMDDYY)						&apos;// mod060620
+		oDateCell = oCat2Sheet.getCellByPosition(COLDEBIT, DATEROW)	&apos;// mod060620
+		oDateCell.CellBackColor = LTGREEN							&apos;// mod060620
+
+	GoTo NormalExit
+
+ErrHandler:
+	&apos;// here because insertion row returned &lt;0; unable to insert rows
+	&apos;// iStatus is bad value returned
+	iRetValue = iStatus
+	Select Case iStatus
+	Case ERRCOANOTFOUND
+		sErrCode = csERRCOANOTFOUND
+		sErrMsg = &quot;Account &quot;+sBadCOA2+&quot; not found&quot;
+	Case ERROUTOFROOM
+		sErrCode = csERROUTOFROOM
+		sErrMsg = &quot;Account &quot;+sBadCOA2+&quot; month &quot;+sMonth+&quot; not enough rows&quot;_
+					+&quot; to insert&quot;
+	Case ERRCOACHANGED
+		sErrCode = csCOACHANGED
+		sErrMsg = &quot;Account &quot;+sBadCOA2+&quot; month &quot;+sMonth+&quot; not found&quot;
+	Case else
+		sErrCode = csERRUNKNOWN
+		sErrMsg = &quot;Account &quot;+sBadCOA2+&quot;Undocumented error&quot;
+	end Select
+
+	Call LogError(sErrCode, sErrMsg)			
+	
+&apos;//-----------------end PlaceSplitTotal here----------------------------
+NormalExit:
+	&apos;//*-----------------restore error handling for caller-----------
+	&apos;// restore entry error settings.
+	ErrLogSetModule(sErrCallerMod)
+	ErrLogSetSheet(iErrSheetIx)
+	ErrLogSetCellInfo(lErrColumn, lErrRow)
+	&apos;//*----------end error handling restore----------------------------
+
+	&apos;// iStatus = 0, no error
+	&apos;//				ERRCONTINUE (-1) - error; continue with next transaction
+	&apos;//				ERRSTOP (-2) - error; stop processing transactions
+
+	PlaceSplitTotal = iRetValue
+
+end function		&apos;// end PlaceSplitTotal		4/19/25.
+&apos;/**/

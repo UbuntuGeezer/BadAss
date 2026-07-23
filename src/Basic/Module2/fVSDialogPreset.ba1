@@ -1,0 +1,163 @@
+&apos;// fVSDialogPreset.bas
+&apos;//---------------------------------------------------------------
+&apos;// fVSDialogPreset - Preset fields in VS dialog.
+&apos;//		6/27/20.	wmk.	08:45
+&apos;//---------------------------------------------------------------
+
+public function fVSDialogPreset() As Integer	
+
+&apos;//	Usage.	iVar = fVSDialogPreset()
+&apos;//
+&apos;// Entry.	gsSTDescs() = descriptions array
+&apos;//			gdSTAmts() = split amounts array
+&apos;//			gsSTCOAs() = COA accounts array
+&apos;//			gsSTRefs() = references array
+&apos;//			gbSplitCredits = true if gdSTAmts are Credits;
+&apos;//							 false if gdSTAmts are Debits
+&apos;//			gdSTTotalAmt = split total
+&apos;//			VSDialog fields:
+&apos;// DebitTotRB - Debit is total radio button
+&apos;// CreditTotRB - Credit is total radio button
+&apos;// TotalAmt - total transaction amount text box (numeric, read-only)
+&apos;//	TotalAcctFld - account COA transaction being split from
+&apos;// DescFld1 - description field 1
+&apos;// ...
+&apos;// DescFld10 - description field 10
+&apos;//	AmtFld1 - split amount field 1	(numeric)
+&apos;// ...
+&apos;// AmtFld10 - split amount field 10 (numeric)
+&apos;// AcctFld1 - COA account field 1
+&apos;//	...
+&apos;// AcctFld10 - COA account field 10
+&apos;// DoneBtn - [Done] button
+&apos;// EditBtn - [Reset Form] button
+&apos;//
+&apos;//	Exit.	iVar = 0 - no error in preset
+&apos;//				 &lt; 0 - error in preset
+&apos;//
+&apos;// Calls.
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/26/20.	wmk.	original code
+&apos;//	6/27/20.	wmk.	initial bug fixes; inactive cell backgrounds to MEDGRAY
+&apos;//
+&apos;//	Notes.
+
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim iRetValue As Integer
+dim oVSDlgCtrl 	As Object
+dim oVSDlgCtrl1 As Object		&apos;// 2nd control for when needed
+dim i			As Integer		&apos;// loop index
+dim iActiveLimit	As Integer	&apos;// active index limit in arrays
+dim sFldNum		As String		&apos;// field number
+dim sCTrlName	As String		&apos;// control name
+dim oVSStyle	As Object		&apos;// to access FieldColor
+
+	&apos;// code.
+	
+	iRetValue = -1
+	ON ERROR GOTO ErrorHandler
+
+	&apos;// set State of Debit/Credit radio buttons based on gbSTSplitCredits
+	oVSDlgCtrl = puoVSDialog.getControl(&quot;DebitTotRB&quot;)
+	oVSDlgCtrl1 = puoVSDialog.getControl(&quot;CreditTotRB&quot;)
+	if gbSTSplitCredits then
+		oVSDlgCtrl.State = true
+		oVSDlgCtrl1.Model.Enabled = false
+	else
+		oVSDlgCtrl.State = false
+		oVSDlgCtrl.Model.Enabled = false
+		oVSDlgCtrl1.Model.Enabled = true
+	endif
+	
+	&apos;// set Total field to gdSTTotalAmt
+	oVSDlgCtrl = puoVSDialog.getControl(&quot;TotalAmt&quot;)
+	oVSDlgCtrl.Value = gdSTTotalAmt
+
+	&apos;// set account split from field
+	oVSDlgCtrl = puoVSDialog.getControl(&quot;TotalAcctFld&quot;)
+	if gbSTSplitCredits then
+		oVSDlgCtrl.Text = gsETAcct1	&apos;// debit account
+	else
+		oVSDlgCtrl.Text = gsETAcct2	&apos;// credit account
+	endif
+	
+	&apos;//	set all active Description, Amount, and COA fields for all
+	&apos;// array values up to subscript UBound and set fields enabled
+	&apos;// so easily visible. All fields are read-only.
+	&apos;// set all inactive Description, Amount, and COA fields empty
+	&apos;// and set Enabled to false to darken fields
+	iActiveLimit = uBound(gdSTAmts)
+	for i = 0 to iActiveLimit
+		sFldNum = Trim(Str(i+1))
+		sCtrlName = &quot;DescFld&quot; + sFldNum
+		oVSDlgCtrl = puoVSDialog.getControl(sCtrlName)
+		oVSDlgCtrl.Text = gsSTDescs(i)
+		oVSDlgCtrl.Model.Enabled = true
+		
+		sCtrlName = &quot;AmtFld&quot; + sFldNum
+		oVSDlgCtrl = puoVSDialog.getControl(sCtrlName)
+		oVSDlgCtrl.Text = Str(gdSTAmts(i))
+		oVSDlgCtrl.setValue(gdSTAmts(i))
+		oVSDlgCtrl.Model.Enabled = true
+		
+		sCtrlName = &quot;AcctFld&quot; + sFldNum
+		oVSDlgCtrl = puoVSDialog.getControl(sCtrlName)
+		oVSDlgCtrl.Text = gsSTCOAs(i)
+		oVSDlgCtrl.Model.Enabled = true
+		
+		sCtrlName = &quot;RefFld&quot; + sFldNum
+		oVSDlgCtrl = puoVSDialog.getControl(sCtrlName)
+		oVSDlgCtrl.Text = gsSTRefs(i)
+		oVSDlgCtrl.Model.Enabled = true
+		
+	next i	&apos;// advance to next control name for each field
+
+	&apos;// set remaining fields Enabled = false with no data
+	if iActiveLimit &lt; 9 then
+		for i = iActiveLimit+1 to 9
+			sFldNum = Trim(Str(i+1))
+			sCtrlName = &quot;DescFld&quot; + sFldNum
+			oVSDlgCtrl = puoVSDialog.getControl(sCtrlName)
+			oVSStyle = oVSDlgCtrl.StyleSettings
+			oVSDlgCtrl.Model.Enabled = false
+			oVSStyle.FieldColor = MEDGRAY
+
+			sCtrlName = &quot;AmtFld&quot; + sFldNum
+			oVSDlgCtrl = puoVSDialog.getControl(sCtrlName)
+			oVSStyle = oVSDlgCtrl.StyleSettings
+			oVSDlgCtrl.Model.Enabled = false
+			oVSStyle.FieldColor = MEDGRAY
+		
+			sCtrlName = &quot;AcctFld&quot; + sFldNum
+			oVSDlgCtrl = puoVSDialog.getControl(sCtrlName)
+			oVSStyle = oVSDlgCtrl.StyleSettings
+			oVSDlgCtrl.Model.Enabled = false
+			oVSStyle.FieldColor = MEDGRAY
+		
+			sCtrlName = &quot;RefFld&quot; + sFldNum
+			oVSDlgCtrl = puoVSDialog.getControl(sCtrlName)
+			oVSStyle = oVSDlgCtrl.StyleSettings
+			oVSDlgCtrl.Model.Enabled = false
+			oVSStyle.FieldColor = MEDGRAY
+		next i
+		
+	endif		&apos;// end active limit &lt; 9 conditional
+	
+
+	iRetValue = 0	&apos;// normal return
+	
+NormalExit:	
+	fVSDialogPreset = iRetValue
+	exit function
+	
+ErrorHandler:
+	msgBox(&quot;fVSDialogPreset - i = &quot; + i + &quot; unprocessed error.&quot;)
+	GoTo NormalExit
+	
+end function 	&apos;// end fVSDialogPreset	6/27/20
+&apos;/**/

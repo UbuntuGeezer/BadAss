@@ -1,0 +1,50 @@
+&apos;// ETDescListener.bas
+&apos;//---------------------------------------------------------------------
+&apos;// ETDescListener - Event handler &lt;description&gt; from Enter Transaction.
+&apos;//		6/17/20.	wmk.	10:15
+&apos;//---------------------------------------------------------------------
+
+public sub ETDescListener()
+
+&apos;//	Usage.	macro call or
+&apos;//			call ETDescListener()
+&apos;//
+&apos;// Entry.	normal entry from event handler for dialogue where
+&apos;//			user changed the &lt;description&gt; field in Enter Transaction
+&apos;//			puoETDialog = Enter Transaction dialog object
+&apos;//
+&apos;//	Exit.	gsETDescription = entered transaction description
+&apos;//			gbETDescEntered = true if nonempty string
+&apos;//
+&apos;// Calls.	ETCheckComplete
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/15/20.	wmk.	original code
+&apos;//	6/17/20.	wmk.	bug fix enabling Select button
+&apos;//
+&apos;//	Notes. This sub is the linked macro to the changed status event linked
+&apos;// to the &lt;date&gt; text field in the Enter Transaction dialog.
+
+&apos;//	constants.
+dim bFormComplete	As Boolean		&apos;// all fields complete flag
+dim oETDescText		As Object		&apos;// Desc text field
+dim oETRecordBtn	As Object		&apos;// Record &amp;&apos; Finish button
+dim oETRecordCont	As Object		&apos;// Record &amp;&apos; Continue button
+
+&apos;//	local variables.
+
+	&apos;// code.
+	oETDescText = puoETDialog.getControl(&quot;DescField&quot;)
+	gsETDescription = oETDescText.Text
+	gbETDescEntered = (Len(gsETDescription)&gt;0)
+	bFormComplete = ETCheckComplete()
+	if bFormComplete then
+		oETRecordBtn = puoETDialog.getControl(&quot;RecordBtn&quot;)
+		oETRecordBtn.Model.Enabled = true
+		oETRecordCont = puoETDialog.getControl(&quot;RecordContBtn&quot;)
+		oETRecordCont.Model.Enabled = true
+	endif	
+
+end sub		&apos;// end ETDescListener	6/17/20
+&apos;/**/

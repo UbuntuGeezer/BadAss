@@ -1,0 +1,63 @@
+&apos;// STCredRBListener.bas
+&apos;//---------------------------------------------------------------
+&apos;// STCredRBListener - ST [Credit] radio button event handler.
+&apos;//		6/26/20.	wmk.	12:00
+&apos;//---------------------------------------------------------------
+
+public sub STCredRBListener()
+
+&apos;//	Usage.	macro call or
+&apos;//			call STCredRBListener()
+&apos;//
+&apos;// Entry.	User clicked [Credit] radio button control
+&apos;//			gbSTSplitCredits = current split credits state
+&apos;//			gsETAcct1 = Debit account	
+&apos;//			gsETAcct2 = Credit account
+&apos;//
+&apos;//	Exit.	if clicked ON
+&apos;//			gbSTSplitCredits set false
+&apos;//			gbETDebitIsTotal set false
+&apos;//			if OFF, gbSTSplitCredits set true
+&apos;//			gbETDebitIsTotal set true
+&apos;//
+&apos;// Calls.
+&apos;//
+&apos;//	Modification history.
+&apos;//	---------------------
+&apos;//	6/18/20.		wmk.	original code
+&apos;//`6/26/20.	wmk.	gsSTAcct1 or gsSTAcct2 used to set &quot;TotalAcctFld&quot;
+&apos;//						in ST dialog to display account being split
+&apos;//
+&apos;//	Notes.
+
+&apos;//	constants.
+
+&apos;//	local variables.
+dim oSTCredRB		As Object		&apos;// {Credit} radio button object
+dim bState			As Boolean		&apos;// .State of button
+dim oSTDlgCtrl		As Object		&apos;// control from &quot;TotalAcctFld&quot; in ST
+
+	&apos;// code.
+	ON ERROR GOTO ErrorHandler
+	oSTCredRB = puoSTDialog.getControl(&quot;CreditTotRB&quot;)
+	oSTDlgCtrl = puoSTDialog.getControl(&quot;TotalAcctFld&quot;)
+	bState = oSTCredRB.State
+	if bState then	&apos;// Credit button selected
+		gbSTSplitCredits = false
+		gbETDebitIsTotal = false
+		oSTDlgCtrl.Text = gsETAcct2
+	else
+		gbSTSplitCredits = true
+		gbETDebitIsTotal = true
+		oSTDlgCtrl.Text = gsETAcct1
+	endif	&apos;// end Credit Total button State conditional
+
+NormalExit:
+	exit sub
+
+ErrorHandler:
+	msgBox(&quot;STCredRBListener - unprocessed error.&quot;)
+	GoTo NormalExit
+
+end sub		&apos;// end STCredRBListener	6/26/20
+&apos;/**/
