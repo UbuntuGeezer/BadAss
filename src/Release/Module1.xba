@@ -5065,7 +5065,7 @@ end function 	&apos;// end StoreTrans	6/11/20
 &apos;// ToDo.bas
 &apos;//---------------------------------------------------------------
 &apos;// ToDo - move user into ToDo sheet, if exists.
-&apos;//		16/26.	wmk.
+&apos;//		7/4/26.	wmk.
 &apos;//---------------------------------------------------------------
 
 public function ToDo() As String
@@ -5082,14 +5082,20 @@ public function ToDo() As String
 &apos;// a comment (thus avoiding recursion if AutoCalc is on).
 &apos;//
 
+&apos;// local variables.
+dim nlineNo     As Integer      &apos;// line number for error tracking
+
 &apos;// code.
 	ON ERROR GOTO ErrHandler
-	MoveToSheet(&quot;ToDo&quot;)
+    nLineNo = 26
+    MoveToSheet(&quot;ToDo&quot;)
 
 NormalReturn:
 	ToDo = &quot;&apos;=ToDo()&quot;
 	exit function
-	
-end function		&apos;// end ToDo	1/6/26.
+
+ErrHandler:
+    msgbox (&quot;ToDo - (line &quot; + nLineNo + &quot; unprocessed error.&quot;)
+end function		&apos;// end ToDo	7/24/26.
 &apos;/**/
 </script:module>

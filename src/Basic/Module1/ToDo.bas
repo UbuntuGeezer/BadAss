@@ -1,7 +1,7 @@
 '// ToDo.bas
 '//---------------------------------------------------------------
 '// ToDo - move user into ToDo sheet, if exists.
-'//		16/26.	wmk.
+'//		7/4/26.	wmk.
 '//---------------------------------------------------------------
 
 public function ToDo() As String
@@ -18,13 +18,19 @@ public function ToDo() As String
 '// a comment (thus avoiding recursion if AutoCalc is on).
 '//
 
+'// local variables.
+dim nlineNo     As Integer      '// line number for error tracking
+
 '// code.
 	ON ERROR GOTO ErrHandler
-	MoveToSheet("ToDo")
+    nLineNo = 26
+    MoveToSheet("ToDo")
 
 NormalReturn:
 	ToDo = "'=ToDo()"
 	exit function
-	
-end function		'// end ToDo	1/6/26.
+
+ErrHandler:
+    msgbox ("ToDo - (line " + nLineNo + " unprocessed error.")
+end function		'// end ToDo	7/24/26.
 '/**/

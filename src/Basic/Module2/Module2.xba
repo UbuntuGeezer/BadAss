@@ -6,6 +6,7 @@
 &apos;// 
 &apos;// Modification History.
 &apos;// ---------------------
+&apos;// 7/23/26.	wmk.	&quot;manuak&quot; mods; erroneous dot bas references removed.
 &apos;// 4/20/25.	wmk.	&quot;in library&quot; mods; superfluous dot bas references removed.
 &apos;// 7/5/20.		wmk.	Module2 subs/function index added.
 &apos;//
@@ -19,7 +20,7 @@
 &apos;// ETAmountListener - Event handler &lt;amount&gt; from Enter Transaction.
 &apos;// ETPubVarsReset - Reset all ET dialog public vars and flags
 &apos;// ETCancelListener - Event handler &lt;Cancel&gt; from Enter Transaction.
-&apos;//
+&apos;//   end hdr Module2hdr
 &apos;/**/
 &apos;// publics2.bas
 &apos;//---------------publics_2---------------------------------
@@ -110,14 +111,14 @@ public puoCOASelectBtn	As Object	&apos;// &lt;Select&gt; button
 &apos;// vars for dialogues interface to accounting package
 
 public puoCOAListBox As Object		&apos;// COA list box object in active form
-public pusCOASelected As String		&apos;// COA selected from list box (..Listener.bas)
+public pusCOASelected As String		&apos;// COA selected from list box (..Listener)
 public pbETActive	 AS Boolean		&apos;// ET dialog active flag
 public pbETDebitList	As Boolean	&apos;// debit list COA button
 public pbETCreditList	As Boolean	&apos;// credit list COA button
 
 OPTION EXPLICIT				&apos;// code protection
 
-&apos;//--------------end publics_2.bas----7/6/20--------------------------
+&apos;//--------------end hdr publics_2----7/6/20--------------------------
 &apos;/**/
 &apos;// Main.bas
 &apos;// COPY CODE FROM MAIN TO COASelectListener, COACancelListener
@@ -2638,7 +2639,7 @@ public sub H()
 &apos;//	---------------------
 &apos;//	6/18/20.	wmk.	original code; adapted from G. bas.
 &apos;//	6/23/20.	wmk.	change to use fDialogReset.
-&apos;// 8/26/22.	wmk.	add intervening space to G. bas and H .bas in comments.
+&apos;// 8/26/22.	wmk.	add intervening space to G. bas and H. bas in comments.
 &apos;//
 &apos;//	Notes.
 &apos;//
