@@ -1,23 +1,24 @@
 '// publics2.bas
 '//---------------publics_2---------------------------------
 '// Module2 public vars and constants
-'//		7/6/20.		wmk.	07:15
+'//		7/24/26.		wmk.	07:15
 '//
 '//	Modification History.
 '// ---------------------
-'//	6/17/20.	wmk.	arrays added for splitting transactions
-'//	6/18/20.	wmk.	publics added for SplitDialog handling
-'// 6/20/20.	wmk.	gsSTRefs added for reference field support;
-'//						gsSTObjFocus added to attempt code generalization
-'//	6/24/20.	wmk		gdETAmount added; gsETAmount deleted for numeric
-'//						field support on data entry; gbETSplitTrans 
-'//						spelling corrected
-'//	6/26/20.	wmk.	VS dialog support added
-'//	6/27/20.	wmk.	MEDGRAY color constant added; gbSTEditMode flag
-'//						added to initialize with public vars set from
-'//						previous dialog instance
-'//	7/5/20.		wmk.	subs/functions documentation added to header
-'//	7/6/20.		wmk.	const COA_COLROWS added
+'// 7/24/26.	wmk.	(automated) Modification History sorted.
+'// 7/6/20.     wmk.	const COA_COLROWS added. 
+'// 7/5/20.     wmk.	subs/functions documentation added to header. 
+'// 6/27/20.	wmk.	MEDGRAY color constant added; gbSTEditMode flag 
+'// 6/27/20.	 added to initialize with public vars set from 
+'// 6/27/20.	 previous dialog instance. 
+'// 6/26/20.	wmk.	VS dialog support added. 
+'// 6/24/20.	wmk.	gdETAmount added; gsETAmount deleted for numeric 
+'// 6/24/20.	 field support on data entry; gbETSplitTrans 
+'// 6/24/20.	 spelling corrected. 
+'// 6/20/20.	wmk.	gsSTRefs added for reference field support; 
+'// 6/20/20.	wmk.	gsSTObjFocus added to attempt code generalization. 
+'// 6/18/20.	wmk.	publics added for SplitDialog handling. 
+'// 6/17/20.	wmk.	arrays added for splitting transactions. 
 
 '// color constants.
 public const MEDGRAY=13421722
@@ -94,5 +95,5 @@ public pbETCreditList	As Boolean	'// credit list COA button
 
 OPTION EXPLICIT				'// code protection
 
-'//--------------end publics_2.bas----7/6/20--------------------------
+'//--------------end hdr publics_2----7/24/26.--------------------------
 '/**/

@@ -1,3 +1,3 @@
 # sedextbas.tmp - extract .bas module from .xba file.
 #   8/13/23.   wmk.
-/fVSDialogPreset.bas/,/\/\*\*\//p
+/fSTAmtLostFocus.bas/,/\/\*\*\//p

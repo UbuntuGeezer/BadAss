@@ -3,6 +3,7 @@
 '// 
 '// Modification History.
 '// ---------------------
+'// 7/24/26.    wmk.    hdr end added.
 '// 4/20/25.	wmk.	"in library" mods; superfluous dot bas references removed.
 '// 7/5/20.		wmk.	Module2 subs/function index added.
 '//
@@ -17,4 +18,5 @@
 '// ETPubVarsReset - Reset all ET dialog public vars and flags
 '// ETCancelListener - Event handler <Cancel> from Enter Transaction.
 '//
+'// end hdr     '// end Module2Hdr  7/24/26.
 '/**/

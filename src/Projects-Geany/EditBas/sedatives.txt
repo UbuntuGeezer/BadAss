@@ -1,2 +1,2 @@
-s?<basmodule>?fVSDialogPreset?g
+s?<basmodule>?fSTAmtLostFocus?g
 s?<xbafile>?Module2?g

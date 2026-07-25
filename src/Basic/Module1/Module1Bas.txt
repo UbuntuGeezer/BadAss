@@ -1,5 +1,4 @@
 Module1Hdr
-errhandling
 publics
 Main
 CheckDoubleEntry
@@ -7,7 +6,6 @@ CheckInserts
 CheckSplitTrans
 CreateReverseTrans
 D
-DayName
 E
 ErrLogDisable
 ErrLogGetCellInfo
@@ -40,3 +38,4 @@ SetSumFormula
 SplitOutCOAs
 StoreTrans
 ToDo
+errhandling
