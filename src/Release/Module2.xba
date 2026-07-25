@@ -855,7 +855,7 @@ end sub		&apos;// end ETDescListener	6/17/20
 &apos;// ETDialogRecord.bas
 &apos;//---------------------------------------------------------------
 &apos;// ETDialogRecord - Record entered fields from ET Dialog.
-&apos;//		6/27/20.	wmk.	21:30
+&apos;//		7/24/26.	wmk.	22:35
 &apos;//---------------------------------------------------------------
 
 public function ETDialogRecord() As Integer
@@ -875,13 +875,14 @@ public function ETDialogRecord() As Integer
 &apos;//
 &apos;//	Modification history.
 &apos;//	---------------------
-&apos;//	6/16/20.	wmk.	original code; stub
-&apos;//	6/17/20.	wmk.	code fleshed out gradually
+&apos;// 7/24/26.    wmk.    DEC2 set to 0 for Windows/LibreOffice.
+&apos;//	6/16/20.	wmk.	original code; stub.
+&apos;//	6/17/20.	wmk.	code fleshed out gradually.
 &apos;//	6/24/20.	wmk.	change to record numeric debit and credit amount
-&apos;//						from gdETAmount
+&apos;//	6/24/20.			from gdETAmount.
 &apos;//	6/25/20.	wmk.	bug fix eliminating gsETAmount which was replaced by
-&apos;//						gdETAmount 6/24
-&apos;// 6/27/20.	wmk.	ensure background in all but date fields is NOFILL
+&apos;//	6/25/20				gdETAmount 6/24.
+&apos;// 6/27/20.	wmk.	ensure background in all but date fields is NOFILL.
 &apos;//
 &apos;//	Notes. When the ET dialog completes, either the DebitField or CreditField
 &apos;// may have been set to &quot;split&quot;. If that is the case, ETDlgSplitRecord will
@@ -904,7 +905,7 @@ const COLACCT=4		&apos;// COA Account - column E
 const COLREF=5		&apos;// Reference - column F
 
 &apos;// cell formatting constants.
-const DEC2=123		&apos;// number format for (x,xxx.yy)			&apos;// mod052020
+const DEC2=0		&apos;// number format for (x,xxx.yy)			&apos;// mod072426
 const MMDDYY=37		&apos;// date format mm/dd/y						&apos;// mod052020
 const FMTDATETIME=50	&apos;// date/time format mm/dd/yyy hh:mm:ss 	&apos;// mod060620
 const LJUST=1		&apos;// left-justify HoriJustify				&apos;// mod052020
@@ -1035,7 +1036,7 @@ ErrorHandler:
 	GoTo NormalExit
 	
 
-end function 	&apos;// end ETDialogRecord	6/25/20
+end function 	&apos;// end ETDialogRecord	7/24/26..
 &apos;/**/
 &apos;// ETDialogReset.bas
 &apos;//---------------------------------------------------------------

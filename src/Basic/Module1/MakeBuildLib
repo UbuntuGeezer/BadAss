@@ -1,5 +1,5 @@
 # MakeBuildLib.tmp - Makefile (template) for BadAss MakeBuildLib.
-#	4/19/25.	wmk.
+#	7/23/26.	wmk.
 #
 # MakeBuildLib takes the list of .bas blocks and
 # creates a <module>.xba from those blocks. 
@@ -13,6 +13,9 @@
 #
 # Modification History.
 # ---------------------
+# 7/23/26.	wmk.	modified for Windows 11; *libbase added internally
+# 7/23/26.	 to compensate for Windows.
+# 7/23/26.	wmk.	(automated) UnKill to reinstate makefile.
 # 4/19/25.	wmk.	(automated) Modification History sorted.
 # 1/13/24.	wmk.	(automated) UnKill to reinstate makefile. 
 # 11/13/23.	wmk.	(automated) Version 3.0.9 *libbase support added. 
@@ -41,31 +44,32 @@
 # 3/7/22.	wmk.	original makefile; adapted from MakeAnySHtoSQL. 
 
 ifndef AWK
- AWK = mawk
+ AWK = gawk
 endif
 
 .PHONY : Always JustDoIt
 .ONESHELL : ;
 
+libbase = C:/Users/vncwm/linux/BadAss
  projpath = $(libbase)/src/Projects-Geany/EditBas
  srcpath = $(libbase)/src/Basic/Module1
  targpath = $(libbase)/src/Release
 
 #insertbaslist
-baslist =   Module1Hdr.bas  errhandling.bas  publics.bas\
-  Main.bas  CheckDoubleEntry.bas  CheckInserts.bas\
-  CheckSplitTrans.bas  CreateReverseTrans.bas  D.bas\
-  DayName.bas  E.bas  ErrLogDisable.bas\
-  ErrLogGetCellInfo.bas  ErrLogGetCellName.bas  ErrLogGetDisplay.bas\
-  ErrLogGetModule.bas  ErrLogGetRecording.bas  ErrLogGetSheet.bas\
-  ErrLogMakeEntry.bas  ErrLogSetCellInfo.bas  ErrLogSetDisplay.bas\
-  ErrLogSetModule.bas  ErrLogSetRecording.bas  ErrLogSetSheet.bas\
-  ErrLogSetup.bas  GetInsRow.bas  GetMonthName.bas\
-  GetTransSheetName.bas  LogError.bas  MoveToSheet.bas\
-  PlaceSplitTotal.bas  PlaceSplitTrans.bas  PlaceTransM.bas\
-  ReverseDETrans.bas  ReverseSplitTrans.bas  ReverseTrans.bas\
-  SetProcessed.bas  SetSheetDate.bas  SetSumFormula.bas\
-  SplitOutCOAs.bas  StoreTrans.bas  ToDo.bas
+baslist =   Module1Hdr.bas  publics.bas  Main.bas\
+  CheckDoubleEntry.bas  CheckInserts.bas  CheckSplitTrans.bas\
+  CreateReverseTrans.bas  D.bas  E.bas\
+  ErrLogDisable.bas  ErrLogGetCellInfo.bas  ErrLogGetCellName.bas\
+  ErrLogGetDisplay.bas  ErrLogGetModule.bas  ErrLogGetRecording.bas\
+  ErrLogGetSheet.bas  ErrLogMakeEntry.bas  ErrLogSetCellInfo.bas\
+  ErrLogSetDisplay.bas  ErrLogSetModule.bas  ErrLogSetRecording.bas\
+  ErrLogSetSheet.bas  ErrLogSetup.bas  GetInsRow.bas\
+  GetMonthName.bas  GetTransSheetName.bas  LogError.bas\
+  MoveToSheet.bas  PlaceSplitTotal.bas  PlaceSplitTrans.bas\
+  PlaceTransM.bas  ReverseDETrans.bas  ReverseSplitTrans.bas\
+  ReverseTrans.bas  SetProcessed.bas  SetSheetDate.bas\
+  SetSumFormula.bas  SplitOutCOAs.bas  StoreTrans.bas\
+  ToDo.bas  errhandling.bas
 
 # <filepath>/<filebase>.sql
 #=======================================================

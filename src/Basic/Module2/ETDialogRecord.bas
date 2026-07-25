@@ -1,7 +1,7 @@
 '// ETDialogRecord.bas
 '//---------------------------------------------------------------
 '// ETDialogRecord - Record entered fields from ET Dialog.
-'//		6/27/20.	wmk.	21:30
+'//		7/24/26.	wmk.	22:35
 '//---------------------------------------------------------------
 
 public function ETDialogRecord() As Integer
@@ -21,13 +21,14 @@ public function ETDialogRecord() As Integer
 '//
 '//	Modification history.
 '//	---------------------
-'//	6/16/20.	wmk.	original code; stub
-'//	6/17/20.	wmk.	code fleshed out gradually
+'// 7/24/26.    wmk.    DEC2 set to 0 for Windows/LibreOffice.
+'//	6/16/20.	wmk.	original code; stub.
+'//	6/17/20.	wmk.	code fleshed out gradually.
 '//	6/24/20.	wmk.	change to record numeric debit and credit amount
-'//						from gdETAmount
+'//	6/24/20.			from gdETAmount.
 '//	6/25/20.	wmk.	bug fix eliminating gsETAmount which was replaced by
-'//						gdETAmount 6/24
-'// 6/27/20.	wmk.	ensure background in all but date fields is NOFILL
+'//	6/25/20				gdETAmount 6/24.
+'// 6/27/20.	wmk.	ensure background in all but date fields is NOFILL.
 '//
 '//	Notes. When the ET dialog completes, either the DebitField or CreditField
 '// may have been set to "split". If that is the case, ETDlgSplitRecord will
@@ -50,7 +51,7 @@ const COLACCT=4		'// COA Account - column E
 const COLREF=5		'// Reference - column F
 
 '// cell formatting constants.
-const DEC2=123		'// number format for (x,xxx.yy)			'// mod052020
+const DEC2=0		'// number format for (x,xxx.yy)			'// mod072426
 const MMDDYY=37		'// date format mm/dd/y						'// mod052020
 const FMTDATETIME=50	'// date/time format mm/dd/yyy hh:mm:ss 	'// mod060620
 const LJUST=1		'// left-justify HoriJustify				'// mod052020
@@ -181,5 +182,5 @@ ErrorHandler:
 	GoTo NormalExit
 	
 
-end function 	'// end ETDialogRecord	6/25/20
+end function 	'// end ETDialogRecord	7/24/26..
 '/**/

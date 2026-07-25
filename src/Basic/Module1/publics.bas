@@ -1,12 +1,13 @@
 '// publics.bas
 '//---------------------------publics.bas----------------------------------------------
-'//		12/16/25.	wmk.
+'//		7/24/26.	wmk.
 '// publics.bas - module-wide vars for Module1 code in accounts sheets
 '// module-wide constants. (used in processing bank download sheets)
 '// (mirrored in file publics.bas)
 
 '// Modification History.
 '// ---------------------
+'// 7/24/26.    wmk.    DEC2 set to 0 for Windows/LibreOffice calc.
 '// 12/16/25.	wmk.	TIMEFORMATID added for formatting date/time cells.
 '// 8/20/24.	wmk.	const BLACK added for background color.
 '//	5/??/20.	wmk.	Original code
@@ -70,7 +71,7 @@ public const COLREF=5		'// Reference - column F
 public const DATEROW=1		'// Sheet date row index					'// mod060620
 
 '// cell formatting constants.
-public const DEC2=123		'// number format for (x,xxx.yy)			'// mod052020
+public const DEC2=0		    '// number format for (x,xxx.yy)			'// mod072426
 public const MMDDYY=37		'// date format mm/dd/y						'// mod052020
 public const FMTDATETIME=50	'// date/time format mm/dd/yyy hh:mm:ss 	'// mod060620
 public const LJUST=1		'// left-justify HoriJustify				'// mod052020
@@ -78,5 +79,5 @@ public const CJUST=2		'// center HoriJustify						'// mod052020
 public const RJUST=3		'// right-justify HoriJustify				'// mod052320
 public const MAXTRANSL=50	'// maximum transaction text length			'// mod052020
 public const TIMEFORMATID=577	'// time format ID with date time		'// mod121625
-'// end hdr		'// end publics	12/16/25.
+'// end hdr		'// end publics	7/24/26.
 '/**/
