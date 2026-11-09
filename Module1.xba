@@ -14,81 +14,16 @@ REM  *****  BASIC  *****
 &apos;// 12/17/25.	wmk.	macro block bracketing lines added.
 &apos;// end hdr		&apos;// end Module1Hdr.bas
 &apos;/**/
-&apos;// errhandling.bas
-&apos;//---------------------------------------------------------------
-&apos;// errhandling - Definitions for development error handling.
-&apos;//		wmk. 5/26/20.	17:30
-&apos;//---------------------------------------------------------------
-&apos;//
-&apos;// Header Description.
-&apos;// -------------------
-&apos;//	errhandling contains definitions that may be inserted in any
-&apos;// OOoBasic Module for handing error conditions. This is intended for
-&apos;// use with development modules, and should be removed for Production
-&apos;// spreadsheets. This will ensure clean code released into the
-&apos;// Production environment.
-&apos;//
-&apos;// error handling interface methods.
-&apos;// ErrLogSetup - set up error logging (gbErrLogging, goCellRangeAddress, gsErrModule)
-&apos;// ErrLogDisable() - disable error logging by setting gbErrLogging = false
-&apos;// ErrLogGetCellInfo(lColumn, lRow) - get error focus cell column, row
-&apos;// ErrLogSetCellInfo(lColumn, lRow) - set error focus cell column, row
-&apos;//	ErrLogGetCellName() - get error focus cell alphanumeric name
-&apos;//	ErrLogGetDisplay() - get error message box enabled status
-&apos;//	ErrLogSetDisplay(bDisplayOn) - set error message box enabled status
-&apos;//	ErrLogGetModule() - get current module name gsErrModule
-&apos;// ErrLogSetModule(sName) - set current module name gsErrModule
-&apos;// ErrLogGetRecording - Get error recording status from error log globals
-&apos;// ErrLogSetRecording - Set error recording status in error log globals
-&apos;// ErrLogGetSheet - Get sheet index from error log globals.
-&apos;// ErrLogSetSheet - Set sheet index in error log globals.
-&apos;// LogError - make error log entry([goCellRangeAddress], psErrName, psErrMsg)
-
-&apos;// global constants.
-
-&apos;// public constants.
-public const ERRLOGSHEET=&quot;Error Log&quot;			&apos;// error logging sheet name
-public const ERRLOGINSROW=5						&apos;// insertion row for log messages
-&apos;// global variables.
-&apos;// global variables.
-global gbErrDisplay	As Boolean					&apos;// msgBox on/off flag
-global gbErrLogging as Boolean					&apos;// logging on/off flag; LogSetup sets/clears
-global gbErrRecording As Boolean				&apos;// log sheet recording on/off flag
-global gsErrSheet As String						&apos;// name of sheet error thrown on
-global gsErrModule As String					&apos;// sub/function throwing error
-global gsErrName As String						&apos;// name of error code
-global gsErrMsg As String						&apos;// error message
-global goErrRangeAddress As Object				&apos;// cell range address
-
-&apos;// public variables.
-&apos;//
-
-&apos;// error handling interface methods.
-&apos;// ErrLogSetup - set up error logging (gbErrLogging, goCellRangeAddress, gsErrModule)
-&apos;// ErrLogDisable() - disable error logging by setting gbErrLogging = false
-&apos;// ErrLogGetCellInfo(lColumn, lRow) - get error focus cell column, row
-&apos;// ErrLogSetCellInfo(lColumn, lRow) - set error focus cell column, row
-&apos;//	ErrLogGetCellName() - get error focus cell alphanumeric name
-&apos;//	ErrLogGetDisplay() - get error message box enabled status
-&apos;//	ErrLogSetDisplay(bDisplayOn) - set error message box enabled status
-&apos;//	ErrLogGetModule() - get current module name gsErrModule
-&apos;// ErrLogSetModule(sName) - set current module name gsErrModule
-&apos;// ErrLogGetRecording - Get error recording status from error log globals
-&apos;// ErrLogSetRecording - Set error recording status in error log globals
-&apos;// ErrLogGetSheet - Get sheet index from error log globals.
-&apos;// ErrLogSetSheet - Set sheet index in error log globals.
-&apos;// LogError - make error log entry([goCellRangeAddress], psErrName, psErrMsg)
-&apos;// end hdr		&apos;// end errhandling		12/17/25.
-&apos;/**/
 &apos;// publics.bas
 &apos;//---------------------------publics.bas----------------------------------------------
-&apos;//		12/16/25.	wmk.
+&apos;//		7/24/26.	wmk.
 &apos;// publics.bas - module-wide vars for Module1 code in accounts sheets
 &apos;// module-wide constants. (used in processing bank download sheets)
 &apos;// (mirrored in file publics.bas)
 
 &apos;// Modification History.
 &apos;// ---------------------
+&apos;// 7/24/26.    wmk.    DEC2 set to 0 for Windows/LibreOffice calc.
 &apos;// 12/16/25.	wmk.	TIMEFORMATID added for formatting date/time cells.
 &apos;// 8/20/24.	wmk.	const BLACK added for background color.
 &apos;//	5/??/20.	wmk.	Original code
@@ -152,7 +87,7 @@ public const COLREF=5		&apos;// Reference - column F
 public const DATEROW=1		&apos;// Sheet date row index					&apos;// mod060620
 
 &apos;// cell formatting constants.
-public const DEC2=123		&apos;// number format for (x,xxx.yy)			&apos;// mod052020
+public const DEC2=0		    &apos;// number format for (x,xxx.yy)			&apos;// mod072426
 public const MMDDYY=37		&apos;// date format mm/dd/y						&apos;// mod052020
 public const FMTDATETIME=50	&apos;// date/time format mm/dd/yyy hh:mm:ss 	&apos;// mod060620
 public const LJUST=1		&apos;// left-justify HoriJustify				&apos;// mod052020
@@ -160,7 +95,7 @@ public const CJUST=2		&apos;// center HoriJustify						&apos;// mod052020
 public const RJUST=3		&apos;// right-justify HoriJustify				&apos;// mod052320
 public const MAXTRANSL=50	&apos;// maximum transaction text length			&apos;// mod052020
 public const TIMEFORMATID=577	&apos;// time format ID with date time		&apos;// mod121625
-&apos;// end hdr		&apos;// end publics	12/16/25.
+&apos;// end hdr		&apos;// end publics	7/24/26.
 &apos;/**/
 &apos;// Main.bas
 &apos;//---------------------------------------------------------------
@@ -1504,45 +1439,6 @@ iBrkpt=1
 iBrkPt=1
 				
 end function	&apos;// end D
-&apos;/**/
-&apos;// DayName.bas
-&apos;// DayName - Return text name of day from week day number
-public Function DayName(nDay as integer) as string
-
-&apos;//	Modification history.
-&apos;//	---------------------
-&apos;//	12/8/15.	wmk.	Added &quot;??&quot; return value if nDay type is unkown.
-
-&apos;DayName = &quot;Monday&quot;
-dim strDay as string
-
-&apos;//	Code.
-
-select case nDay
-
-case 1
-	strDay = &quot;Sunday&quot;
-case 2
-	strDay =&quot;Monday&quot;
-case 3
-	strDay = &quot;Tuesday&quot;
-case 4
-	strDay = &quot;Wednesday&quot;
-case 5
-	strDay = &quot;Thursday&quot;
-case 6
-	strDay = &quot;Friday&quot;
-case 7
-	strDay = &quot;Saturday&quot;
-	
-case else
-	strDay = &quot;??&quot;
-	
-end select
-
-
-DayName = strDay
-end function	&apos;// end Dayname
 &apos;/**/
 &apos;// E.bas
 &apos;//------------------------------------------------------------------
@@ -5097,5 +4993,71 @@ NormalReturn:
 ErrHandler:
     msgbox (&quot;ToDo - (line &quot; + nLineNo + &quot; unprocessed error.&quot;)
 end function		&apos;// end ToDo	7/24/26.
+&apos;/**/
+&apos;// errhandling.bas
+&apos;//---------------------------------------------------------------
+&apos;// errhandling - Definitions for development error handling.
+&apos;//		wmk. 5/26/20.	17:30
+&apos;//---------------------------------------------------------------
+&apos;//
+&apos;// Header Description.
+&apos;// -------------------
+&apos;//	errhandling contains definitions that may be inserted in any
+&apos;// OOoBasic Module for handing error conditions. This is intended for
+&apos;// use with development modules, and should be removed for Production
+&apos;// spreadsheets. This will ensure clean code released into the
+&apos;// Production environment.
+&apos;//
+&apos;// error handling interface methods.
+&apos;// ErrLogSetup - set up error logging (gbErrLogging, goCellRangeAddress, gsErrModule)
+&apos;// ErrLogDisable() - disable error logging by setting gbErrLogging = false
+&apos;// ErrLogGetCellInfo(lColumn, lRow) - get error focus cell column, row
+&apos;// ErrLogSetCellInfo(lColumn, lRow) - set error focus cell column, row
+&apos;//	ErrLogGetCellName() - get error focus cell alphanumeric name
+&apos;//	ErrLogGetDisplay() - get error message box enabled status
+&apos;//	ErrLogSetDisplay(bDisplayOn) - set error message box enabled status
+&apos;//	ErrLogGetModule() - get current module name gsErrModule
+&apos;// ErrLogSetModule(sName) - set current module name gsErrModule
+&apos;// ErrLogGetRecording - Get error recording status from error log globals
+&apos;// ErrLogSetRecording - Set error recording status in error log globals
+&apos;// ErrLogGetSheet - Get sheet index from error log globals.
+&apos;// ErrLogSetSheet - Set sheet index in error log globals.
+&apos;// LogError - make error log entry([goCellRangeAddress], psErrName, psErrMsg)
+
+&apos;// global constants.
+
+&apos;// public constants.
+public const ERRLOGSHEET=&quot;Error Log&quot;			&apos;// error logging sheet name
+public const ERRLOGINSROW=5						&apos;// insertion row for log messages
+&apos;// global variables.
+&apos;// global variables.
+global gbErrDisplay	As Boolean					&apos;// msgBox on/off flag
+global gbErrLogging as Boolean					&apos;// logging on/off flag; LogSetup sets/clears
+global gbErrRecording As Boolean				&apos;// log sheet recording on/off flag
+global gsErrSheet As String						&apos;// name of sheet error thrown on
+global gsErrModule As String					&apos;// sub/function throwing error
+global gsErrName As String						&apos;// name of error code
+global gsErrMsg As String						&apos;// error message
+global goErrRangeAddress As Object				&apos;// cell range address
+
+&apos;// public variables.
+&apos;//
+
+&apos;// error handling interface methods.
+&apos;// ErrLogSetup - set up error logging (gbErrLogging, goCellRangeAddress, gsErrModule)
+&apos;// ErrLogDisable() - disable error logging by setting gbErrLogging = false
+&apos;// ErrLogGetCellInfo(lColumn, lRow) - get error focus cell column, row
+&apos;// ErrLogSetCellInfo(lColumn, lRow) - set error focus cell column, row
+&apos;//	ErrLogGetCellName() - get error focus cell alphanumeric name
+&apos;//	ErrLogGetDisplay() - get error message box enabled status
+&apos;//	ErrLogSetDisplay(bDisplayOn) - set error message box enabled status
+&apos;//	ErrLogGetModule() - get current module name gsErrModule
+&apos;// ErrLogSetModule(sName) - set current module name gsErrModule
+&apos;// ErrLogGetRecording - Get error recording status from error log globals
+&apos;// ErrLogSetRecording - Set error recording status in error log globals
+&apos;// ErrLogGetSheet - Get sheet index from error log globals.
+&apos;// ErrLogSetSheet - Set sheet index in error log globals.
+&apos;// LogError - make error log entry([goCellRangeAddress], psErrName, psErrMsg)
+&apos;// end hdr		&apos;// end errhandling		12/17/25.
 &apos;/**/
 </script:module>
