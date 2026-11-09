@@ -1,7 +1,7 @@
 '// RunCOADlg.bas
 '//---------------------------------------------------------------
 '// RunCOADlg - Run COA Dialog.
-'//		7/5/20.	wmk.	15:00
+'//		11/9/26.	wmk.	11:25
 '//---------------------------------------------------------------
 
 public sub RunCOADlg()
@@ -56,18 +56,26 @@ dim iCOACount As Integer
 	iCOACount = LoadCOAs()
 	puoCOAListBox.addItems(pusCOAList, 0)
 
+	'// debugging messages.
 	Select Case puoCOADialog.Execute()
 	Case 2		'// Select clicked
+	if 1=0 then
 		msgBox("Select clicked in Chart of Accounts")
+	endif
 	Case 0		'// Cancel
 		pusCOASelected = ""		'// since cancel, Execute() event skipped
+	if 1=0 then
 		msgBox("Cancel or FormClose clicked")
+	endif
 	Case else
 		msgBox("unevaluated dialog return")
 	End Select
-	msgBox("In Module2/F" + CHR(13)+CHR(10) _
-    	    + "'"+pusCOASelected+"'" + " selected")
 
+	if 1=0 then
+	msgBox("In Module2/RunCOADlg" + CHR(13)+CHR(10) _
+    	    + "'"+pusCOASelected+"'" + " selected")
+	endif	'// end debugging messages
+	
 NormalExit:
 	puoCOAListBox.dispose()
 	exit sub
@@ -76,5 +84,5 @@ ErrorHandler:
 	msgBox("RunCOADlg - unprocessed error.")
 	GoTo NormalExit
 	
-end sub		'// end RunCOADlg	7/5/20
+end sub		'// end RunCOADlg	11/9/26.
 '/**/

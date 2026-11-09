@@ -21,7 +21,6 @@ ErrLogSetModule
 ErrLogSetRecording
 ErrLogSetSheet
 ErrLogSetup
-F
 GetInsRow
 GetMonthName
 GetTransSheetName
